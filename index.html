@@ -9,7 +9,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -25,7 +25,7 @@
       --alpha-red: #ef4444;
       --border: #1e293b;
       
-      --font-serif: 'Playfair Display', serif;
+      /* Unified Font Stacks */
       --font-sans: 'Plus Jakarta Sans', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -83,7 +83,8 @@
     .brand-area { display: flex; align-items: center; gap: 10px; }
     
     .page-title {
-      font-family: var(--font-serif);
+      font-family: var(--font-sans); /* Unified Font */
+      font-weight: 700;
       font-size: 1.1rem;
       color: var(--accent);
       margin: 0;
@@ -206,7 +207,14 @@
       height: 22px;
       flex-shrink: 0;
     }
-    .asset-title { font-size: 0.65rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+    .asset-title { 
+      font-family: var(--font-sans); /* Unified Font */
+      font-size: 0.65rem; 
+      font-weight: 700; 
+      color: var(--accent); 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em; 
+    }
 
     .asset-row {
       display: flex;
@@ -253,7 +261,8 @@
     }
 
     .market-col h2 {
-      font-family: var(--font-serif);
+      font-family: var(--font-sans); /* Unified Font */
+      font-weight: 600;
       font-size: 0.85rem;
       color: var(--primary);
       margin-bottom: 0.5rem;
@@ -421,7 +430,7 @@
     <!-- ROW 3 -->
     <div class="stocks-section">
       <div class="asset-header" style="margin-bottom:0.25rem">
-        <span class="asset-title">Stocks Watch (24)</span>
+        <span class="asset-title">Stocks Watch (32)</span>
       </div>
       <div class="stocks-grid" id="stocks-grid-container">
         <!-- JS Generated -->
@@ -431,7 +440,6 @@
   </div>
 
   <script>
-    // CHANGED: 10 minutes = 600 seconds
     const REFRESH_INTERVAL = 600;
     let timeLeft = REFRESH_INTERVAL;
 
@@ -444,6 +452,7 @@
     }
 
     // --- Config & Data ---
+    // Added 8 more stocks to make it 32 (8 rows x 4 cols)
     const STOCK_LIST = [
       { sym: "ANGELONE.NS", name: "Angel One" }, { sym: "VBL.NS", name: "Varun Bev" },
       { sym: "EMAMILTD.NS", name: "Emami Ltd" }, { sym: "HERITFOODS.NS", name: "Heritage" },
@@ -456,7 +465,12 @@
       { sym: "MARUTI.NS", name: "Maruti" }, { sym: "ZOMATO.NS", name: "Zomato" },
       { sym: "TITAN.NS", name: "Titan" }, { sym: "BAJFINANCE.NS", name: "Bajaj Fin" },
       { sym: "ADANIENT.NS", name: "Adani Ent" }, { sym: "SUNPHARMA.NS", name: "Sun Pharma" },
-      { sym: "JSWSTEEL.NS", name: "JSW Steel" }, { sym: "POWERGRID.NS", name: "Power Grid" }
+      { sym: "JSWSTEEL.NS", name: "JSW Steel" }, { sym: "POWERGRID.NS", name: "Power Grid" },
+      // NEW ADDITIONS
+      { sym: "ICICIBANK.NS", name: "ICICI Bank" }, { sym: "AXISBANK.NS", name: "Axis Bank" },
+      { sym: "HINDUNILVR.NS", name: "HUL" }, { sym: "ASIANPAINT.NS", name: "Asian Paint" },
+      { sym: "HCLTECH.NS", name: "HCL Tech" }, { sym: "NTPC.NS", name: "NTPC" },
+      { sym: "ONGC.NS", name: "ONGC" }, { sym: "COALINDIA.NS", name: "Coal India" }
     ];
 
     async function updateMarketData() {
@@ -477,7 +491,6 @@
       
       const container = document.getElementById('stocks-grid-container');
       
-      // Even if data is partial, we render the structure so no "blank" issue occurs
       let html = '';
       const cols = [[], [], [], []];
       STOCK_LIST.forEach((stock, i) => { cols[i % 4].push(stock); });
@@ -485,7 +498,6 @@
       cols.forEach(colData => {
         let colHtml = '<div class="stock-col">';
         colData.forEach(stock => {
-          // Default values if data not loaded yet
           let price = "---";
           let chg = 0.00;
           let color = "";
@@ -516,7 +528,8 @@
 
     // --- Indices Fetcher ---
     async function fetchRealIndices() {
-      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI", "^KS11"];
+      // Removed ^KS11 (KOSPI)
+      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI"];
       const nseSyms1 = ["^NSEI", "^CNX100", "^NSEMDCP150", "^CNXSMLC250", "^CRSLDX", "NIFTY_MICROCAP250.NS", "NIFTY_TOTAL_MKT.NS"];
       const nseSyms2 = ["^NSEBANK", "^CNXIT", "^CNXPHARMA", "^CNXREALTY", "^CNXFIN", "^CNXAUTO", "^CNXFMCG"];
       
@@ -530,7 +543,7 @@
         { name: "🇺🇸 S&P 500", sym: "^GSPC" }, { name: "🇺🇸 Nasdaq 100", sym: "^IXIC" },
         { name: "🇺🇸 Dow Jones", sym: "^DJI" }, { name: "🇯🇵 Nikkei 225", sym: "^N225" },
         { name: "🇩🇪 DAX", sym: "^GDAXI" }, { name: "🇬🇧 FTSE 100", sym: "^FTSE" },
-        { name: "🇭🇰 Hang Seng", sym: "^HSI" }, { name: "🇰🇷 KOSPI", sym: "^KS11" }
+        { name: "🇭🇰 Hang Seng", sym: "^HSI" }
       ], globalData);
 
       renderTable('nse-indices-body-1', [
