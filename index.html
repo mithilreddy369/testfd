@@ -37,7 +37,7 @@
       --primary: #0f172a;
       --secondary: #475569;
       --tertiary: #94a3b8;
-      --accent: #0f172a; /* Dark Blue as accent for light mode */
+      --accent: #0f172a;
       --accent-glow: rgba(15, 23, 42, 0.05);
       --border: #e2e8f0;
     }
@@ -50,9 +50,10 @@
       color: var(--primary);
       line-height: 1.3;
       -webkit-font-smoothing: antialiased;
-      height: 100vh; /* Fixed viewport height */
+      /* Force 100vh and no page scroll */
+      height: 100vh; 
       width: 100vw;
-      overflow: hidden; /* Prevent body scroll */
+      overflow: hidden; 
       display: flex;
       flex-direction: column;
       transition: background-color 0.3s, color 0.3s;
@@ -62,22 +63,21 @@
     .container {
       width: 100%;
       height: 100%;
-      padding: 0.5rem 1rem; /* Compact padding */
+      padding: 0.5rem 1rem;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem; /* Tighter gaps */
+      gap: 0.5rem; /* Consistent gap */
     }
 
     /* --- Top Bar --- */
     .dashboard-header {
-      padding: 0.25rem 0;
+      /* Fixed small height */
+      flex: 0 0 40px; 
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-shrink: 0; 
-      height: 40px;
     }
 
     .brand-area { display: flex; align-items: center; gap: 10px; }
@@ -119,7 +119,7 @@
       padding: 2px 6px;
       border-radius: 4px;
       border: 1px solid rgba(16, 185, 129, 0.2);
-      min-width: 90px;
+      min-width: 100px;
       text-align: center;
     }
 
@@ -148,8 +148,11 @@
       color: var(--primary);
       font-size: 0.7rem !important;
       display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .u-symbol img { display: block; }
+    .u-symbol img { display: block; flex-shrink: 0; }
     
     .u-price {
       font-family: var(--font-mono);
@@ -171,13 +174,14 @@
 
     /* --- LAYOUT GRID --- */
     
-    /* ROW 1: Top Assets (Fixed Height) */
+    /* ROW 1: Assets (Forex/Commodities/Crypto) */
     .asset-grid-custom {
       display: grid;
       grid-template-columns: 1fr 1fr 2fr; 
       gap: 0.5rem;
-      flex-shrink: 0; 
-      height: 250px; /* Fits 6 rows + header perfectly */
+      /* Optimized fixed height to save space for stocks */
+      flex: 0 0 230px; 
+      min-height: 230px;
     }
 
     .asset-box {
@@ -208,11 +212,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 34px; 
-      border-bottom: 1px solid var(--border);
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-      border-bottom-color: rgba(128,128,128,0.1);
+      flex: 1; /* Distribute space evenly */
+      border-bottom: 1px solid rgba(128,128,128,0.1);
       width: 100%;
     }
     .asset-row:last-child { border-bottom: none; }
@@ -223,14 +224,20 @@
       gap: 1rem;
       height: 100%;
     }
+    .crypto-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
     
-    /* ROW 2: Indices (Calculated Height to fit 8 rows no scroll) */
+    /* ROW 2: Indices */
     .market-split {
       display: grid;
       grid-template-columns: 1fr 2fr;
       gap: 0.5rem;
-      flex-shrink: 0;
-      height: 300px; /* Header + 8 rows * 32px ~ 280px. */
+      /* Optimized fixed height */
+      flex: 0 0 270px; 
+      min-height: 270px;
     }
 
     .market-col {
@@ -263,35 +270,37 @@
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
       height: 100%;
-      overflow: hidden; /* No Scroll requested */
+      overflow: hidden;
     }
 
-    .custom-market-table { width: 100%; border-collapse: collapse; }
+    .custom-market-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
     .custom-market-table th {
       text-align: left; color: var(--tertiary); font-weight: 500;
       padding-bottom: 0.25rem; font-size: 0.65rem;
       border-bottom: 1px solid var(--border);
     }
     .custom-market-table td {
-      padding: 0; height: 32px; /* Tighter rows to fit 8 items in space */
+      padding: 0; 
+      height: 29px; /* Tighter rows */
       border-bottom: 1px solid rgba(128,128,128,0.1);
       vertical-align: middle;
+      white-space: nowrap;
     }
     .custom-market-table td:last-child { text-align: right; }
     .custom-market-table td:nth-child(2) { text-align: right; }
 
     /* ROW 3: Stocks (Fills remaining space) */
     .stocks-section {
-      flex: 1; 
-      min-height: 0;
+      flex: 1 1 auto; /* Grow and shrink */
+      min-height: 0; /* Crucial for nested flex scrolling */
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 0.5rem 0.75rem;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
       transition: background 0.3s;
+      overflow: hidden; /* Contain inner scroll */
     }
     
     .stocks-grid {
@@ -299,23 +308,31 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       height: 100%;
-      overflow-y: auto;
+      overflow-y: auto; /* Scroll ONLY here if needed */
       padding-top: 0.25rem;
-      scrollbar-width: thin;
+      scrollbar-width: thin; /* Firefox thin scrollbar */
+      scrollbar-color: var(--tertiary) transparent;
     }
+    
+    /* Webkit Scrollbar Styling for Stocks */
+    .stocks-grid::-webkit-scrollbar { width: 6px; }
+    .stocks-grid::-webkit-scrollbar-track { background: transparent; }
+    .stocks-grid::-webkit-scrollbar-thumb { background-color: var(--tertiary); border-radius: 3px; }
 
-    .stock-col { display: flex; flex-direction: column; }
+    .stock-col { display: flex; flex-direction: column; gap: 0; }
+    .stock-col .asset-row { height: auto; padding: 6px 0; }
 
     /* --- Responsive --- */
     @media (max-width: 1024px) {
-      body { height: auto; overflow-y: auto; }
+      /* On mobile/tablets, we MUST allow body scroll or content clips */
+      body { height: auto; overflow-y: auto; display: block; }
       .container { height: auto; display: block; padding-bottom: 2rem; }
       .asset-grid-custom { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
       .asset-box:nth-child(3) { grid-column: span 2; }
-      .market-split { display: block; height: auto; }
+      .market-split { display: block; height: auto; margin-bottom: 1rem; }
       .market-col { height: 350px; margin-bottom: 1rem; }
-      .stocks-section { height: 500px; }
-      .stocks-grid { grid-template-columns: 1fr 1fr; }
+      .stocks-section { height: 500px; display: block; }
+      .stocks-grid { grid-template-columns: 1fr 1fr; height: 100%; overflow-y: visible; }
     }
   </style>
 </head>
@@ -338,7 +355,7 @@
           <svg id="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           <svg id="icon-sun" style="display:none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
         </button>
-        <div class="reload-timer" id="countdown">Auto-refresh: 60s</div>
+        <div class="reload-timer" id="countdown">Next: 10m 00s</div>
         <div class="last-updated"><span class="live-dot"></span><span id="update-time">Syncing...</span></div>
       </div>
     </div>
@@ -414,7 +431,8 @@
   </div>
 
   <script>
-    const REFRESH_INTERVAL = 60;
+    // CHANGED: 10 minutes = 600 seconds
+    const REFRESH_INTERVAL = 600;
     let timeLeft = REFRESH_INTERVAL;
 
     // --- Theme Toggle ---
@@ -437,7 +455,6 @@
       { sym: "LT.NS", name: "L&T" }, { sym: "BHARTIARTL.NS", name: "Airtel" },
       { sym: "MARUTI.NS", name: "Maruti" }, { sym: "ZOMATO.NS", name: "Zomato" },
       { sym: "TITAN.NS", name: "Titan" }, { sym: "BAJFINANCE.NS", name: "Bajaj Fin" },
-      // Added 4 more
       { sym: "ADANIENT.NS", name: "Adani Ent" }, { sym: "SUNPHARMA.NS", name: "Sun Pharma" },
       { sym: "JSWSTEEL.NS", name: "JSW Steel" }, { sym: "POWERGRID.NS", name: "Power Grid" }
     ];
@@ -458,23 +475,29 @@
       const symbols = STOCK_LIST.map(s => s.sym);
       const data = await fetchYahooData(symbols);
       
-      if (!data || Object.keys(data).length === 0) return;
-
       const container = document.getElementById('stocks-grid-container');
       
+      // Even if data is partial, we render the structure so no "blank" issue occurs
       let html = '';
-      // 24 stocks / 4 columns = 6 rows per column
       const cols = [[], [], [], []];
       STOCK_LIST.forEach((stock, i) => { cols[i % 4].push(stock); });
 
       cols.forEach(colData => {
         let colHtml = '<div class="stock-col">';
         colData.forEach(stock => {
-          const d = data[stock.sym];
-          const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
-          const chg = d ? d.chg : 0;
-          const color = chg >= 0 ? "text-green" : "text-red";
-          const sign = chg > 0 ? "+" : "";
+          // Default values if data not loaded yet
+          let price = "---";
+          let chg = 0.00;
+          let color = "";
+          let sign = "";
+
+          if (data && data[stock.sym]) {
+             const d = data[stock.sym];
+             price = d.price.toLocaleString(undefined, {maximumFractionDigits: 2});
+             chg = d.chg;
+             color = chg >= 0 ? "text-green" : "text-red";
+             sign = chg > 0 ? "+" : "";
+          }
 
           colHtml += `
             <div class="asset-row">
@@ -503,48 +526,32 @@
         fetchYahooData(nseSyms2)
       ]);
 
-      if (Object.keys(globalData).length > 0) {
-        renderTable('global-indices-body', [
-          { name: "🇺🇸 S&P 500", sym: "^GSPC", data: globalData["^GSPC"] },
-          { name: "🇺🇸 Nasdaq 100", sym: "^IXIC", data: globalData["^IXIC"] },
-          { name: "🇺🇸 Dow Jones", sym: "^DJI", data: globalData["^DJI"] },
-          { name: "🇯🇵 Nikkei 225", sym: "^N225", data: globalData["^N225"] },
-          { name: "🇩🇪 DAX", sym: "^GDAXI", data: globalData["^GDAXI"] },
-          { name: "🇬🇧 FTSE 100", sym: "^FTSE", data: globalData["^FTSE"] },
-          { name: "🇭🇰 Hang Seng", sym: "^HSI", data: globalData["^HSI"] },
-          { name: "🇰🇷 KOSPI", sym: "^KS11", data: globalData["^KS11"] }
-        ]);
-      }
+      renderTable('global-indices-body', [
+        { name: "🇺🇸 S&P 500", sym: "^GSPC" }, { name: "🇺🇸 Nasdaq 100", sym: "^IXIC" },
+        { name: "🇺🇸 Dow Jones", sym: "^DJI" }, { name: "🇯🇵 Nikkei 225", sym: "^N225" },
+        { name: "🇩🇪 DAX", sym: "^GDAXI" }, { name: "🇬🇧 FTSE 100", sym: "^FTSE" },
+        { name: "🇭🇰 Hang Seng", sym: "^HSI" }, { name: "🇰🇷 KOSPI", sym: "^KS11" }
+      ], globalData);
 
-      if (Object.keys(nseData1).length > 0) {
-        renderTable('nse-indices-body-1', [
-          { name: "🇮🇳 Nifty 50", sym: "^NSEI", data: nseData1["^NSEI"] },
-          { name: "🇮🇳 Nifty 100", sym: "^CNX100", data: nseData1["^CNX100"] },
-          { name: "🇮🇳 Midcap 150", sym: "^NSEMDCP150", data: nseData1["^NSEMDCP150"] },
-          { name: "🇮🇳 Smallcap 250", sym: "^CNXSMLC250", data: nseData1["^CNXSMLC250"] },
-          { name: "🇮🇳 Nifty 500", sym: "^CRSLDX", data: nseData1["^CRSLDX"] },
-          { name: "🇮🇳 Microcap 250", sym: "NIFTY_MICROCAP250.NS", data: nseData1["NIFTY_MICROCAP250.NS"] },
-          { name: "🇮🇳 Total Mkt", sym: "NIFTY_TOTAL_MKT.NS", data: nseData1["NIFTY_TOTAL_MKT.NS"] }
-        ]);
-      }
+      renderTable('nse-indices-body-1', [
+        { name: "🇮🇳 Nifty 50", sym: "^NSEI" }, { name: "🇮🇳 Nifty 100", sym: "^CNX100" },
+        { name: "🇮🇳 Midcap 150", sym: "^NSEMDCP150" }, { name: "🇮🇳 Smallcap 250", sym: "^CNXSMLC250" },
+        { name: "🇮🇳 Nifty 500", sym: "^CRSLDX" }, { name: "🇮🇳 Microcap 250", sym: "NIFTY_MICROCAP250.NS" },
+        { name: "🇮🇳 Total Mkt", sym: "NIFTY_TOTAL_MKT.NS" }
+      ], nseData1);
 
-      if (Object.keys(nseData2).length > 0) {
-        renderTable('nse-indices-body-2', [
-          { name: "🏦 Nifty Bank", sym: "^NSEBANK", data: nseData2["^NSEBANK"] },
-          { name: "💻 Nifty IT", sym: "^CNXIT", data: nseData2["^CNXIT"] },
-          { name: "💊 Nifty Pharma", sym: "^CNXPHARMA", data: nseData2["^CNXPHARMA"] },
-          { name: "🏗️ Nifty Realty", sym: "^CNXREALTY", data: nseData2["^CNXREALTY"] },
-          { name: "💰 Fin Service", sym: "^CNXFIN", data: nseData2["^CNXFIN"] },
-          { name: "🚗 Nifty Auto", sym: "^CNXAUTO", data: nseData2["^CNXAUTO"] },
-          { name: "🛒 Nifty FMCG", sym: "^CNXFMCG", data: nseData2["^CNXFMCG"] }
-        ]);
-      }
+      renderTable('nse-indices-body-2', [
+        { name: "🏦 Nifty Bank", sym: "^NSEBANK" }, { name: "💻 Nifty IT", sym: "^CNXIT" },
+        { name: "💊 Nifty Pharma", sym: "^CNXPHARMA" }, { name: "🏗️ Nifty Realty", sym: "^CNXREALTY" },
+        { name: "💰 Fin Service", sym: "^CNXFIN" }, { name: "🚗 Nifty Auto", sym: "^CNXAUTO" },
+        { name: "🛒 Nifty FMCG", sym: "^CNXFMCG" }
+      ], nseData2);
     }
 
-    function renderTable(elementId, items) {
+    function renderTable(elementId, items, dataSrc) {
       let html = '';
       items.forEach(item => {
-        const d = item.data;
+        let d = dataSrc ? dataSrc[item.sym] : null;
         const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
         const chg = d ? d.chg : 0;
         const color = chg >= 0 ? "text-green" : "text-red";
@@ -612,7 +619,7 @@
         updateUI('p-audusd', 'c-audusd', 1/fxData.rates.AUD, 0.05, '$');
         
         const dxyData = await fetchYahooData(["DX-Y.NYB"]);
-        if(dxyData["DX-Y.NYB"]) updateUI('p-dxy', 'c-dxy', dxyData["DX-Y.NYB"].price, dxyData["DX-Y.NYB"].chg, '');
+        if(dxyData && dxyData["DX-Y.NYB"]) updateUI('p-dxy', 'c-dxy', dxyData["DX-Y.NYB"].price, dxyData["DX-Y.NYB"].chg, '');
       } catch (e) {}
     }
 
@@ -620,8 +627,10 @@
       const symbols = ["GC=F", "SI=F", "CL=F", "BZ=F", "HG=F", "NG=F"];
       const data = await fetchYahooData(symbols);
       const map = { "GC=F": "gold", "SI=F": "silver", "CL=F": "wti", "BZ=F": "brent", "HG=F": "copper", "NG=F": "ng" };
-      for (const [sym, id] of Object.entries(map)) {
-        if(data[sym]) updateUI(`p-${id}`, `c-${id}`, data[sym].price, data[sym].chg, '$');
+      if(data) {
+        for (const [sym, id] of Object.entries(map)) {
+          if(data[sym]) updateUI(`p-${id}`, `c-${id}`, data[sym].price, data[sym].chg, '$');
+        }
       }
     }
 
@@ -658,8 +667,14 @@
     }
 
     function timerLoop() {
-      if (timeLeft <= 0) { updateMarketData(); } 
-      else { document.getElementById('countdown').innerText = "Auto-refresh: " + timeLeft + "s"; timeLeft--; }
+      if (timeLeft <= 0) { 
+        updateMarketData(); 
+      } else { 
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        document.getElementById('countdown').innerText = `Next: ${m}m ${s < 10 ? '0'+s : s}s`; 
+        timeLeft--; 
+      }
     }
 
     updateMarketData();
