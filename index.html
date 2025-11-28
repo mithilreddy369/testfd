@@ -3,563 +3,667 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Global Market Pulse | Terminal</title>
-  <meta name="description" content="Real-time institutional dashboard for Global Indices, Commodities, Forex, and Crypto." />
+  <title>Market Pulse | Professional</title>
+  <meta name="description" content="Real-time dashboard for Global Indices, NSE Sectors, Commodities, Forex, and Stocks." />
 
-  <!-- Fonts: Inter (UI) + JetBrains Mono (Data) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      /* Theme: Deep Obsidian (High Contrast Dark Mode) */
-      --bg-body: #000000;
-      --bg-panel: #0a0a0a;
-      --bg-header: #050505;
+      /* Dark Theme (Default) */
+      --bg-body: #05080f;
+      --bg-card: #0b1221;
+      --primary: #f1f5f9;
+      --secondary: #94a3b8;
+      --tertiary: #64748b;
+      --accent: #D4AF37;        
+      --accent-glow: rgba(212, 175, 55, 0.15);
+      --alpha-green: #10b981;
+      --alpha-red: #ef4444;
+      --border: #1e293b;
       
-      --text-main: #e5e5e5;
-      --text-muted: #737373;
-      --text-accent: #d4d4d4;
-      
-      /* Accents */
-      --accent-gold: #D4AF37;
-      --accent-blue: #3b82f6;
-      
-      /* Data Colors */
-      --up: #10b981;
-      --down: #ef4444;
-      
-      --border: #262626;
-      
-      --font-ui: 'Inter', sans-serif;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* Light Theme Override */
+    .light-mode {
+      --bg-body: #f1f5f9;
+      --bg-card: #ffffff;
+      --primary: #0f172a;
+      --secondary: #475569;
+      --tertiary: #94a3b8;
+      --accent: #0f172a; /* Dark Blue as accent for light mode */
+      --accent-glow: rgba(15, 23, 42, 0.05);
+      --border: #e2e8f0;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      font-family: var(--font-ui);
+      font-family: var(--font-sans);
       background-color: var(--bg-body);
-      color: var(--text-main);
-      height: 100vh;
+      color: var(--primary);
+      line-height: 1.3;
+      -webkit-font-smoothing: antialiased;
+      height: 100vh; /* Fixed viewport height */
       width: 100vw;
-      overflow: hidden; /* Force fixed layout on desktop */
+      overflow: hidden; /* Prevent body scroll */
       display: flex;
       flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    /* --- Header (Ultra Compact) --- */
-    .terminal-header {
-      height: 40px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-header);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--text-main);
-      text-transform: uppercase;
-      font-size: 0.85rem;
-    }
-    .brand svg { color: var(--accent-gold); }
-
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .refresh-badge {
-      color: var(--accent-blue);
-      background: rgba(59, 130, 246, 0.1);
-      padding: 2px 6px;
-      border-radius: 3px;
-    }
-
-    /* --- Layout Grid (The Core Structure) --- */
-    .dashboard-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* TOP SECTION: Data Grid (40% Height) */
-    .data-grid-section {
-      height: 40%;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      /* 5 Columns: Forex(1) | Comm(1) | Crypto(3) */
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-      divide-x: 1px solid var(--border); /* Visual separators */
-    }
-    
-    /* Using divide-x utility logic manually for grid columns */
-    .data-col {
-      padding: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--border);
-      background: var(--bg-panel);
-      overflow: hidden;
-    }
-    .data-col:last-child { border-right: none; }
-
-    .col-header {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      padding-bottom: 0.25rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    /* Ticker Rows */
-    .ticker-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      font-size: 0.8rem;
-    }
-    .ticker-row:last-child { border-bottom: none; }
-
-    .t-symbol { font-weight: 600; color: var(--text-accent); }
-    .t-sub { font-size: 0.65rem; color: var(--text-muted); margin-left: 4px; }
-    
-    .t-data { text-align: right; font-family: var(--font-mono); }
-    .t-price { color: var(--text-main); font-weight: 500; }
-    .t-chg { font-size: 0.7rem; margin-left: 6px; }
-    
-    .up { color: var(--up); }
-    .down { color: var(--down); }
-
-    /* BOTTOM SECTION: Charts (Rest of Height) */
-    .charts-section {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      /* Remove gap for cleaner 'terminal' look */
-    }
-
-    .chart-col {
-      border-right: 1px solid var(--border);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .chart-col:last-child { border-right: none; }
-
-    .chart-header {
-      background: var(--bg-header);
-      padding: 4px 8px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--accent-gold);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tv-embed {
-      flex: 1;
+    /* --- Main Container --- */
+    .container {
       width: 100%;
       height: 100%;
+      padding: 0.5rem 1rem; /* Compact padding */
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem; /* Tighter gaps */
+    }
+
+    /* --- Top Bar --- */
+    .dashboard-header {
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0; 
+      height: 40px;
+    }
+
+    .brand-area { display: flex; align-items: center; gap: 10px; }
+    
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin: 0;
+      line-height: 1;
+    }
+
+    .system-status {
+      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--secondary);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .theme-btn:hover { background: var(--border); color: var(--primary); }
+
+    .reload-timer {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--alpha-green);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .last-updated {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--tertiary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .live-dot {
+      width: 5px; height: 5px;
+      background: var(--alpha-green);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--alpha-green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    /* --- TEXT UTILITIES --- */
+    .u-symbol {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.7rem !important;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .u-symbol img { display: block; }
+    
+    .u-price {
+      font-family: var(--font-mono);
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 0.8rem !important;
+      display: block; line-height: 1.1;
+    }
+
+    .u-change {
+      font-family: var(--font-mono);
+      font-size: 0.65rem !important;
+      display: block; line-height: 1.1; margin-top: 1px;
+    }
+    
+    .u-sub { font-size: 0.6rem !important; color: var(--tertiary); margin-left: 4px; }
+    .text-green { color: var(--alpha-green); }
+    .text-red { color: var(--alpha-red); }
+
+    /* --- LAYOUT GRID --- */
+    
+    /* ROW 1: Top Assets (Fixed Height) */
+    .asset-grid-custom {
+      display: grid;
+      grid-template-columns: 1fr 1fr 2fr; 
+      gap: 0.5rem;
+      flex-shrink: 0; 
+      height: 250px; /* Fits 6 rows + header perfectly */
+    }
+
+    .asset-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
       overflow: hidden;
+      transition: background 0.3s;
     }
 
-    /* Override TradingView widget sizing */
-    .tradingview-widget-container {
-      width: 100% !important;
-      height: 100% !important;
+    .asset-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.25rem;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .asset-title { font-size: 0.65rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .asset-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 34px; 
+      border-bottom: 1px solid var(--border);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: rgba(128,128,128,0.1);
+      width: 100%;
+    }
+    .asset-row:last-child { border-bottom: none; }
+
+    .crypto-split-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      height: 100%;
+    }
+    
+    /* ROW 2: Indices (Calculated Height to fit 8 rows no scroll) */
+    .market-split {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      height: 300px; /* Header + 8 rows * 32px ~ 280px. */
     }
 
-    /* --- RESPONSIVE MOBILE (Switch to Scroll) --- */
+    .market-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .market-col h2 {
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      border-left: 3px solid var(--accent);
+      padding-left: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .nse-indices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      height: 100%;
+      overflow: hidden; /* No Scroll requested */
+    }
+
+    .custom-market-table { width: 100%; border-collapse: collapse; }
+    .custom-market-table th {
+      text-align: left; color: var(--tertiary); font-weight: 500;
+      padding-bottom: 0.25rem; font-size: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .custom-market-table td {
+      padding: 0; height: 32px; /* Tighter rows to fit 8 items in space */
+      border-bottom: 1px solid rgba(128,128,128,0.1);
+      vertical-align: middle;
+    }
+    .custom-market-table td:last-child { text-align: right; }
+    .custom-market-table td:nth-child(2) { text-align: right; }
+
+    /* ROW 3: Stocks (Fills remaining space) */
+    .stocks-section {
+      flex: 1; 
+      min-height: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s;
+    }
+    
+    .stocks-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      height: 100%;
+      overflow-y: auto;
+      padding-top: 0.25rem;
+      scrollbar-width: thin;
+    }
+
+    .stock-col { display: flex; flex-direction: column; }
+
+    /* --- Responsive --- */
     @media (max-width: 1024px) {
       body { height: auto; overflow-y: auto; }
-      
-      .data-grid-section {
-        height: auto;
-        grid-template-columns: 1fr; /* Stack everything */
-        border-bottom: none;
-      }
-      
-      .data-col {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        min-height: auto;
-      }
-
-      /* On Mobile: Group Crypto into a 2-col grid inside the block to save space */
-      .crypto-mobile-wrapper {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .charts-section {
-        grid-template-columns: 1fr;
-        height: auto;
-      }
-      
-      .chart-col {
-        height: 500px;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-      }
+      .container { height: auto; display: block; padding-bottom: 2rem; }
+      .asset-grid-custom { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+      .asset-box:nth-child(3) { grid-column: span 2; }
+      .market-split { display: block; height: auto; }
+      .market-col { height: 350px; margin-bottom: 1rem; }
+      .stocks-section { height: 500px; }
+      .stocks-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="terminal-header">
-    <a href="index.html" class="brand" style="text-decoration:none;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-      </svg>
-      GLOBAL MARKET PULSE
-    </a>
-    <div class="status-bar">
-      <span class="refresh-badge" id="countdown">Reload: 120s</span>
-      <span id="time-display">--:--:--</span>
-    </div>
-  </header>
-
-  <!-- DASHBOARD CONTAINER -->
-  <div class="dashboard-container">
+  <div class="container">
     
-    <!-- TOP: DATA GRID (40% Height) -->
-    <div class="data-grid-section">
-      
-      <!-- COL 1: FOREX (5 Assets) -->
-      <div class="data-col">
-        <div class="col-header">FOREX MARKETS (5)</div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">USD/INR</span></div>
-          <div class="t-data"><span class="t-price" id="fx-usdinr">--</span><span class="t-chg" id="chg-usdinr">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">EUR/USD</span></div>
-          <div class="t-data"><span class="t-price" id="fx-eurusd">--</span><span class="t-chg" id="chg-eurusd">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">GBP/INR</span></div>
-          <div class="t-data"><span class="t-price" id="fx-gbpinr">--</span><span class="t-chg" id="chg-gbpinr">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">JPY/INR</span></div>
-          <div class="t-data"><span class="t-price" id="fx-jpyinr">--</span><span class="t-chg" id="chg-jpyinr">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">AUD/USD</span></div>
-          <div class="t-data"><span class="t-price" id="fx-audusd">--</span><span class="t-chg" id="chg-audusd">--</span></div>
-        </div>
+    <!-- HEADER -->
+    <div class="dashboard-header">
+      <div class="brand-area">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--alpha-green)">
+          <path d="M22 7 L13.5 15.5 L8.5 10.5 L2 17" />
+          <path d="M16 7 L22 7 L22 13" />
+        </svg>
+        <h1 class="page-title">Market Pulse</h1>
       </div>
-
-      <!-- COL 2: COMMODITIES (5 Assets) -->
-      <div class="data-col">
-        <div class="col-header">COMMODITIES (5)</div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">Gold</span><span class="t-sub">XAU</span></div>
-          <div class="t-data"><span class="t-price" id="com-gold">--</span><span class="t-chg" id="chg-gold">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">Silver</span><span class="t-sub">XAG</span></div>
-          <div class="t-data"><span class="t-price" id="com-silver">--</span><span class="t-chg" id="chg-silver">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">WTI Crude</span></div>
-          <div class="t-data"><span class="t-price" id="com-wti">--</span><span class="t-chg" id="chg-wti">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">Brent Oil</span></div>
-          <div class="t-data"><span class="t-price" id="com-brent">--</span><span class="t-chg" id="chg-brent">--</span></div>
-        </div>
-        <div class="ticker-row">
-          <div><span class="t-symbol">Copper</span></div>
-          <div class="t-data"><span class="t-price" id="com-copper">--</span><span class="t-chg" id="chg-copper">--</span></div>
-        </div>
+      <div class="system-status">
+        <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+          <!-- Sun Icon (Default hidden in dark, handled by JS) -->
+          <svg id="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg id="icon-sun" style="display:none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <div class="reload-timer" id="countdown">Auto-refresh: 60s</div>
+        <div class="last-updated"><span class="live-dot"></span><span id="update-time">Syncing...</span></div>
       </div>
-
-      <!-- COLS 3, 4, 5: CRYPTO (15 Assets) -->
-      <!-- We use 3 separate divs to create the columns in the main grid -->
-      
-      <!-- Crypto Col A -->
-      <div class="data-col" id="crypto-col-1">
-        <div class="col-header">DIGITAL ASSETS A</div>
-        <!-- Injected via JS -->
-      </div>
-
-      <!-- Crypto Col B -->
-      <div class="data-col" id="crypto-col-2">
-        <div class="col-header">DIGITAL ASSETS B</div>
-        <!-- Injected via JS -->
-      </div>
-
-      <!-- Crypto Col C -->
-      <div class="data-col" id="crypto-col-3">
-        <div class="col-header">DIGITAL ASSETS C</div>
-        <!-- Injected via JS -->
-      </div>
-
     </div>
 
-    <!-- BOTTOM: CHARTS (60% Height) -->
-    <div class="charts-section">
-      
-      <!-- Chart 1 -->
-      <div class="chart-col">
-        <div class="chart-header">GLOBAL BENCHMARKS (LIVE)</div>
-        <div class="tv-embed">
-          <!-- TradingView Widget BEGIN -->
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-            {
-            "colorTheme": "dark",
-            "dateRange": "12M",
-            "showChart": true,
-            "locale": "en",
-            "largeChartUrl": "",
-            "isTransparent": true,
-            "showSymbolLogo": true,
-            "showFloatingTooltip": false,
-            "width": "100%",
-            "height": "100%",
-            "plotLineColorGrowing": "rgba(16, 185, 129, 1)",
-            "plotLineColorFalling": "rgba(239, 68, 68, 1)",
-            "gridLineColor": "rgba(255, 255, 255, 0)",
-            "scaleFontColor": "rgba(120, 120, 120, 1)",
-            "belowLineFillColorGrowing": "rgba(16, 185, 129, 0.12)",
-            "belowLineFillColorFalling": "rgba(239, 68, 68, 0.12)",
-            "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-            "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-            "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-            "tabs": [
-              {
-                "title": "Global Indices",
-                "symbols": [
-                  { "s": "NSEIX:GIFTNIFTY", "d": "GIFT Nifty" },
-                  { "s": "CBOT:YM1!", "d": "Dow Futures" },
-                  { "s": "DJ:DJI", "d": "Dow Jones" },
-                  { "s": "SP:SPX", "d": "S&P 500" },
-                  { "s": "TVC:NI225", "d": "Nikkei 225" },
-                  { "s": "TVC:HSI", "d": "Hang Seng" },
-                  { "s": "XETR:DAX", "d": "DAX" },
-                  { "s": "EURONEXT:PX1", "d": "CAC 40" },
-                  { "s": "TVC:KOSPI", "d": "KOSPI" },
-                  { "s": "TVC:UKX", "d": "FTSE 100" }
-                ]
-              }
-            ]
-          }
-          </script>
-          </div>
-        </div>
+    <!-- ROW 1 -->
+    <div class="asset-grid-custom">
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Forex</span></div>
+        <div class="asset-row"><span class="u-symbol">🇺🇸 USD/INR</span><div style="text-align:right"><span class="u-price" id="p-usdinr">--</span><span class="u-change" id="c-usdinr">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇪🇺 EUR/USD</span><div style="text-align:right"><span class="u-price" id="p-eurusd">--</span><span class="u-change" id="c-eurusd">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇬🇧 GBP/INR</span><div style="text-align:right"><span class="u-price" id="p-gbpinr">--</span><span class="u-change" id="c-gbpinr">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇯🇵 JPY/INR</span><div style="text-align:right"><span class="u-price" id="p-jpyinr">--</span><span class="u-change" id="c-jpyinr">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇦🇺 AUD/USD</span><div style="text-align:right"><span class="u-price" id="p-audusd">--</span><span class="u-change" id="c-audusd">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">💵 DXY Index</span><div style="text-align:right"><span class="u-price" id="p-dxy">--</span><span class="u-change" id="c-dxy">--</span></div></div>
       </div>
 
-      <!-- Chart 2 -->
-      <div class="chart-col">
-        <div class="chart-header">NSE INDIA BROAD MARKET</div>
-        <div class="tv-embed">
-          <!-- TradingView Widget BEGIN -->
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-            {
-            "colorTheme": "dark",
-            "dateRange": "12M",
-            "showChart": true,
-            "locale": "in",
-            "largeChartUrl": "",
-            "isTransparent": true,
-            "showSymbolLogo": false,
-            "showFloatingTooltip": false,
-            "width": "100%",
-            "height": "100%",
-            "plotLineColorGrowing": "rgba(16, 185, 129, 1)",
-            "plotLineColorFalling": "rgba(239, 68, 68, 1)",
-            "gridLineColor": "rgba(255, 255, 255, 0)",
-            "scaleFontColor": "rgba(120, 120, 120, 1)",
-            "belowLineFillColorGrowing": "rgba(16, 185, 129, 0.12)",
-            "belowLineFillColorFalling": "rgba(239, 68, 68, 0.12)",
-            "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-            "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-            "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-            "tabs": [
-              {
-                "title": "NSE Indices",
-                "symbols": [
-                  { "s": "NSE:NIFTY", "d": "Nifty 50" },
-                  { "s": "NSE:CNX100", "d": "Nifty 100" },
-                  { "s": "NSE:NIFTY500", "d": "Nifty 500" },
-                  { "s": "NSE:BANKNIFTY", "d": "Bank Nifty" },
-                  { "s": "NSE:NIFTYMIDCAP100", "d": "Midcap 100" },
-                  { "s": "NSE:NIFTYMIDCAP150", "d": "Midcap 150" },
-                  { "s": "NSE:CNXSMALLCAP", "d": "Smallcap 250" },
-                  { "s": "NSE:INDIAVIX", "d": "India VIX" },
-                  { "s": "NSE:CNXIT", "d": "Nifty IT" },
-                  { "s": "NSE:CNXAUTO", "d": "Nifty Auto" }
-                ]
-              }
-            ]
-          }
-          </script>
-          </div>
-        </div>
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Commodities</span></div>
+        <div class="asset-row"><span class="u-symbol">🌕 Gold <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-gold">--</span><span class="u-change" id="c-gold">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">⚪ Silver <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-silver">--</span><span class="u-change" id="c-silver">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🛢️ WTI Crude</span><div style="text-align:right"><span class="u-price" id="p-wti">--</span><span class="u-change" id="c-wti">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🛢️ Brent Oil</span><div style="text-align:right"><span class="u-price" id="p-brent">--</span><span class="u-change" id="c-brent">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🥉 Copper</span><div style="text-align:right"><span class="u-price" id="p-copper">--</span><span class="u-change" id="c-copper">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🔥 Nat Gas</span><div style="text-align:right"><span class="u-price" id="p-ng">--</span><span class="u-change" id="c-ng">--</span></div></div>
       </div>
 
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Digital Assets</span></div>
+        <div class="crypto-split-container">
+          <div class="crypto-col" id="crypto-col-1"><!-- JS --></div>
+          <div class="crypto-col" id="crypto-col-2"><!-- JS --></div>
+        </div>
+      </div>
     </div>
+
+    <!-- ROW 2 -->
+    <div class="market-split">
+      <div class="market-col">
+        <h2>Global Benchmarks</h2>
+        <!-- No fixed height overflow, sized by parent container -->
+        <table class="custom-market-table">
+          <thead><tr><th>Instrument</th><th>Price</th><th>Change</th></tr></thead>
+          <tbody id="global-indices-body"></tbody>
+        </table>
+      </div>
+      <div class="market-col">
+        <h2>NSE India Broad Market</h2>
+        <div class="nse-indices-grid">
+           <!-- Col 1: Broad Market -->
+           <table class="custom-market-table">
+            <thead><tr><th>Broad Market</th><th>Price</th><th>Change</th></tr></thead>
+            <tbody id="nse-indices-body-1"></tbody>
+           </table>
+           <!-- Col 2: Sectoral -->
+           <table class="custom-market-table">
+            <thead><tr><th>Sectoral</th><th>Price</th><th>Change</th></tr></thead>
+            <tbody id="nse-indices-body-2"></tbody>
+           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="stocks-section">
+      <div class="asset-header" style="margin-bottom:0.25rem">
+        <span class="asset-title">Stocks Watch (24)</span>
+      </div>
+      <div class="stocks-grid" id="stocks-grid-container">
+        <!-- JS Generated -->
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // --- 1. Data Logic ---
-    async function updateData() {
-      const now = new Date();
-      document.getElementById('time-display').innerText = now.toLocaleTimeString();
+    const REFRESH_INTERVAL = 60;
+    let timeLeft = REFRESH_INTERVAL;
 
-      // A. Forex (Frankfurter API)
+    // --- Theme Toggle ---
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      document.getElementById('icon-moon').style.display = isLight ? 'none' : 'block';
+      document.getElementById('icon-sun').style.display = isLight ? 'block' : 'none';
+    }
+
+    // --- Config & Data ---
+    const STOCK_LIST = [
+      { sym: "ANGELONE.NS", name: "Angel One" }, { sym: "VBL.NS", name: "Varun Bev" },
+      { sym: "EMAMILTD.NS", name: "Emami Ltd" }, { sym: "HERITFOODS.NS", name: "Heritage" },
+      { sym: "WONDERLA.NS", name: "Wonderla" }, { sym: "BSE.NS", name: "BSE Ltd" },
+      { sym: "AUBANK.NS", name: "AU Bank" }, { sym: "HDFCBANK.NS", name: "HDFC Bank" },
+      { sym: "RELIANCE.NS", name: "Reliance" }, { sym: "TCS.NS", name: "TCS" },
+      { sym: "INFY.NS", name: "Infosys" }, { sym: "SBIN.NS", name: "SBI" },
+      { sym: "ITC.NS", name: "ITC" }, { sym: "TATAMOTORS.NS", name: "Tata Motors" },
+      { sym: "LT.NS", name: "L&T" }, { sym: "BHARTIARTL.NS", name: "Airtel" },
+      { sym: "MARUTI.NS", name: "Maruti" }, { sym: "ZOMATO.NS", name: "Zomato" },
+      { sym: "TITAN.NS", name: "Titan" }, { sym: "BAJFINANCE.NS", name: "Bajaj Fin" },
+      // Added 4 more
+      { sym: "ADANIENT.NS", name: "Adani Ent" }, { sym: "SUNPHARMA.NS", name: "Sun Pharma" },
+      { sym: "JSWSTEEL.NS", name: "JSW Steel" }, { sym: "POWERGRID.NS", name: "Power Grid" }
+    ];
+
+    async function updateMarketData() {
+      timeLeft = REFRESH_INTERVAL;
+      document.getElementById('update-time').innerText = new Date().toLocaleTimeString();
+      
+      fetchForex();
+      fetchCrypto();
+      fetchRealCommodities();
+      fetchRealIndices();
+      fetchStocks();
+    }
+
+    // --- Stocks Fetcher ---
+    async function fetchStocks() {
+      const symbols = STOCK_LIST.map(s => s.sym);
+      const data = await fetchYahooData(symbols);
+      
+      if (!data || Object.keys(data).length === 0) return;
+
+      const container = document.getElementById('stocks-grid-container');
+      
+      let html = '';
+      // 24 stocks / 4 columns = 6 rows per column
+      const cols = [[], [], [], []];
+      STOCK_LIST.forEach((stock, i) => { cols[i % 4].push(stock); });
+
+      cols.forEach(colData => {
+        let colHtml = '<div class="stock-col">';
+        colData.forEach(stock => {
+          const d = data[stock.sym];
+          const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
+          const chg = d ? d.chg : 0;
+          const color = chg >= 0 ? "text-green" : "text-red";
+          const sign = chg > 0 ? "+" : "";
+
+          colHtml += `
+            <div class="asset-row">
+              <span class="u-symbol">${stock.name}</span>
+              <div style="text-align:right">
+                <span class="u-price">${price}</span>
+                <span class="u-change ${color}">${sign}${chg.toFixed(2)}%</span>
+              </div>
+            </div>`;
+        });
+        colHtml += '</div>';
+        html += colHtml;
+      });
+      container.innerHTML = html;
+    }
+
+    // --- Indices Fetcher ---
+    async function fetchRealIndices() {
+      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI", "^KS11"];
+      const nseSyms1 = ["^NSEI", "^CNX100", "^NSEMDCP150", "^CNXSMLC250", "^CRSLDX", "NIFTY_MICROCAP250.NS", "NIFTY_TOTAL_MKT.NS"];
+      const nseSyms2 = ["^NSEBANK", "^CNXIT", "^CNXPHARMA", "^CNXREALTY", "^CNXFIN", "^CNXAUTO", "^CNXFMCG"];
+      
+      const [globalData, nseData1, nseData2] = await Promise.all([
+        fetchYahooData(globalSyms),
+        fetchYahooData(nseSyms1),
+        fetchYahooData(nseSyms2)
+      ]);
+
+      if (Object.keys(globalData).length > 0) {
+        renderTable('global-indices-body', [
+          { name: "🇺🇸 S&P 500", sym: "^GSPC", data: globalData["^GSPC"] },
+          { name: "🇺🇸 Nasdaq 100", sym: "^IXIC", data: globalData["^IXIC"] },
+          { name: "🇺🇸 Dow Jones", sym: "^DJI", data: globalData["^DJI"] },
+          { name: "🇯🇵 Nikkei 225", sym: "^N225", data: globalData["^N225"] },
+          { name: "🇩🇪 DAX", sym: "^GDAXI", data: globalData["^GDAXI"] },
+          { name: "🇬🇧 FTSE 100", sym: "^FTSE", data: globalData["^FTSE"] },
+          { name: "🇭🇰 Hang Seng", sym: "^HSI", data: globalData["^HSI"] },
+          { name: "🇰🇷 KOSPI", sym: "^KS11", data: globalData["^KS11"] }
+        ]);
+      }
+
+      if (Object.keys(nseData1).length > 0) {
+        renderTable('nse-indices-body-1', [
+          { name: "🇮🇳 Nifty 50", sym: "^NSEI", data: nseData1["^NSEI"] },
+          { name: "🇮🇳 Nifty 100", sym: "^CNX100", data: nseData1["^CNX100"] },
+          { name: "🇮🇳 Midcap 150", sym: "^NSEMDCP150", data: nseData1["^NSEMDCP150"] },
+          { name: "🇮🇳 Smallcap 250", sym: "^CNXSMLC250", data: nseData1["^CNXSMLC250"] },
+          { name: "🇮🇳 Nifty 500", sym: "^CRSLDX", data: nseData1["^CRSLDX"] },
+          { name: "🇮🇳 Microcap 250", sym: "NIFTY_MICROCAP250.NS", data: nseData1["NIFTY_MICROCAP250.NS"] },
+          { name: "🇮🇳 Total Mkt", sym: "NIFTY_TOTAL_MKT.NS", data: nseData1["NIFTY_TOTAL_MKT.NS"] }
+        ]);
+      }
+
+      if (Object.keys(nseData2).length > 0) {
+        renderTable('nse-indices-body-2', [
+          { name: "🏦 Nifty Bank", sym: "^NSEBANK", data: nseData2["^NSEBANK"] },
+          { name: "💻 Nifty IT", sym: "^CNXIT", data: nseData2["^CNXIT"] },
+          { name: "💊 Nifty Pharma", sym: "^CNXPHARMA", data: nseData2["^CNXPHARMA"] },
+          { name: "🏗️ Nifty Realty", sym: "^CNXREALTY", data: nseData2["^CNXREALTY"] },
+          { name: "💰 Fin Service", sym: "^CNXFIN", data: nseData2["^CNXFIN"] },
+          { name: "🚗 Nifty Auto", sym: "^CNXAUTO", data: nseData2["^CNXAUTO"] },
+          { name: "🛒 Nifty FMCG", sym: "^CNXFMCG", data: nseData2["^CNXFMCG"] }
+        ]);
+      }
+    }
+
+    function renderTable(elementId, items) {
+      let html = '';
+      items.forEach(item => {
+        const d = item.data;
+        const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
+        const chg = d ? d.chg : 0;
+        const color = chg >= 0 ? "text-green" : "text-red";
+        html += `
+          <tr>
+            <td><span class="u-symbol">${item.name}</span></td>
+            <td><span class="u-price">${price}</span></td>
+            <td><span class="u-change ${color}">${d ? (chg>0?"+":"") + chg.toFixed(2) + "%" : "--"}</span></td>
+          </tr>`;
+      });
+      document.getElementById(elementId).innerHTML = html;
+    }
+
+    // --- Crypto Fetcher ---
+    async function fetchCrypto() {
       try {
-        const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR,EUR,GBP,JPY,AUD');
-        const fx = await fxRes.json();
-        
-        updateTicker('fx-usdinr', 'chg-usdinr', fx.rates.INR, '₹');
-        updateTicker('fx-eurusd', 'chg-eurusd', 1/fx.rates.EUR, '$'); // Inverted
-        updateTicker('fx-gbpinr', 'chg-gbpinr', (1/fx.rates.GBP)*fx.rates.INR, '₹');
-        updateTicker('fx-jpyinr', 'chg-jpyinr', (1/fx.rates.JPY)*fx.rates.INR, '₹');
-        updateTicker('fx-audusd', 'chg-audusd', 1/fx.rates.AUD, '$'); // Inverted
-
-      } catch(e) { console.log("FX Error"); }
-
-      // B. Commodities (Simulation as placehoder for robust API)
-      // Base: Gold 2650, Silver 31, WTI 68, Brent 72, Copper 4.15
-      simulateRealtime('com-gold', 'chg-gold', 2650.00, 2, '$');
-      simulateRealtime('com-silver', 'chg-silver', 31.20, 2, '$');
-      simulateRealtime('com-wti', 'chg-wti', 68.50, 2, '$');
-      simulateRealtime('com-brent', 'chg-brent', 72.10, 2, '$');
-      simulateRealtime('com-copper', 'chg-copper', 4.15, 2, '$');
-
-      // C. Crypto (CoinGecko - 15 Assets)
-      try {
-        const coins = [
-          {id:'bitcoin', s:'BTC'}, {id:'ethereum', s:'ETH'}, {id:'solana', s:'SOL'},
-          {id:'binancecoin', s:'BNB'}, {id:'ripple', s:'XRP'}, {id:'cardano', s:'ADA'},
-          {id:'avalanche-2', s:'AVAX'}, {id:'dogecoin', s:'DOGE'}, {id:'polkadot', s:'DOT'},
-          {id:'chainlink', s:'LINK'}, {id:'tron', s:'TRX'}, {id:'matic-network', s:'MATIC'},
-          {id:'shiba-inu', s:'SHIB'}, {id:'litecoin', s:'LTC'}, {id:'uniswap', s:'UNI'}
-        ];
-        
-        const ids = coins.map(c => c.id).join(',');
-        const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+        const ids = "bitcoin,ethereum,binancecoin,solana,ripple,dogecoin,cardano,avalanche-2,shiba-inu,polkadot,chainlink,litecoin";
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=12&page=1&sparkline=false`);
         const data = await res.json();
+        
+        if (!data || data.length === 0) return;
 
-        // Distribute into 3 columns (5 items each)
         const col1 = document.getElementById('crypto-col-1');
         const col2 = document.getElementById('crypto-col-2');
-        const col3 = document.getElementById('crypto-col-3');
-        
-        // Clear previous to prevent dupes if reloading function
-        if (col1.children.length > 1) { /* simple check to avoid clearing header */
-           // Ideally we build string then inject, but for now strictly mapping:
-        }
-        
-        // Helper to generate HTML
-        const renderRow = (coin) => {
-          const info = data[coin.id];
-          if(!info) return '';
-          const p = info.usd;
-          const c = info.usd_24h_change;
-          const color = c >= 0 ? 'up' : 'down';
-          const sign = c >= 0 ? '+' : '';
+        let html1 = '', html2 = '';
+
+        data.forEach((item, index) => {
+          const price = item.current_price;
+          const chg = item.price_change_percentage_24h;
+          const color = chg >= 0 ? "text-green" : "text-red";
+          const sign = chg > 0 ? "+" : "";
           
-          // Format price based on size
-          let pStr = p > 1 ? p.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) : p.toFixed(4);
-
-          return `
-            <div class="ticker-row">
-              <div><span class="t-symbol">${coin.s}</span></div>
-              <div class="t-data">
-                <span class="t-price">$${pStr}</span>
-                <span class="t-chg ${color}">${sign}${c.toFixed(2)}%</span>
+          const rowHtml = `
+            <div class="asset-row">
+              <span class="u-symbol">
+                <img src="${item.image}" width="14" height="14" alt="" style="border-radius:50%"> 
+                ${item.symbol.toUpperCase()}
+              </span>
+              <div style="text-align:right">
+                <span class="u-price">$${price < 1 ? price.toFixed(4) : price.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                <span class="u-change ${color}">${sign}${chg.toFixed(2)}%</span>
               </div>
-            </div>
-          `;
-        };
+            </div>`;
+          
+          if (index < 6) html1 += rowHtml; else html2 += rowHtml;
+        });
+        
+        col1.innerHTML = html1;
+        col2.innerHTML = html2;
 
-        // Inject
-        let h1 = '<div class="col-header">DIGITAL ASSETS A</div>';
-        let h2 = '<div class="col-header">DIGITAL ASSETS B</div>';
-        let h3 = '<div class="col-header">DIGITAL ASSETS C</div>';
-
-        coins.slice(0, 5).forEach(c => h1 += renderRow(c));
-        coins.slice(5, 10).forEach(c => h2 += renderRow(c));
-        coins.slice(10, 15).forEach(c => h3 += renderRow(c));
-
-        col1.innerHTML = h1;
-        col2.innerHTML = h2;
-        col3.innerHTML = h3;
-
-      } catch(e) { console.log("Crypto Error"); }
+      } catch (e) { /* keep old data */ }
     }
 
-    // --- Helpers ---
-    function updateTicker(pid, cid, val, sym) {
-      // Add random jitter for 'Live' feel on static API data
-      const noise = (Math.random() - 0.5) * (val * 0.0005);
-      const price = val + noise;
-      const pct = (Math.random() - 0.5) * 0.5; // Simulate daily %
-      
-      const elP = document.getElementById(pid);
-      const elC = document.getElementById(cid);
-      
-      elP.innerText = sym + price.toFixed(4);
-      elC.innerText = (pct>=0?'+':'') + pct.toFixed(2) + '%';
-      elC.className = "t-chg " + (pct>=0?'up':'down');
+    // --- Forex/Cmdty Logic ---
+    async function fetchForex() {
+      try {
+        const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR,EUR,GBP,JPY,AUD');
+        const fxData = await fxRes.json();
+        if(!fxData) return;
+
+        updateUI('p-usdinr', 'c-usdinr', fxData.rates.INR, 0.02, '₹');
+        updateUI('p-eurusd', 'c-eurusd', 1/fxData.rates.EUR, 0.05, '$');
+        updateUI('p-gbpinr', 'c-gbpinr', (1/fxData.rates.GBP) * fxData.rates.INR, 0.02, '₹');
+        updateUI('p-jpyinr', 'c-jpyinr', (1/fxData.rates.JPY) * fxData.rates.INR, 0.02, '₹');
+        updateUI('p-audusd', 'c-audusd', 1/fxData.rates.AUD, 0.05, '$');
+        
+        const dxyData = await fetchYahooData(["DX-Y.NYB"]);
+        if(dxyData["DX-Y.NYB"]) updateUI('p-dxy', 'c-dxy', dxyData["DX-Y.NYB"].price, dxyData["DX-Y.NYB"].chg, '');
+      } catch (e) {}
     }
 
-    function simulateRealtime(pid, cid, base, prec, sym) {
-      // Simulate live movement
-      const move = (Math.random() - 0.5) * (base * 0.005);
-      const price = base + move;
-      const pct = (move / base) * 100;
-      
-      document.getElementById(pid).innerText = sym + price.toFixed(prec);
-      const elC = document.getElementById(cid);
-      elC.innerText = (pct>=0?'+':'') + pct.toFixed(2) + '%';
-      elC.className = "t-chg " + (pct>=0?'up':'down');
+    async function fetchRealCommodities() {
+      const symbols = ["GC=F", "SI=F", "CL=F", "BZ=F", "HG=F", "NG=F"];
+      const data = await fetchYahooData(symbols);
+      const map = { "GC=F": "gold", "SI=F": "silver", "CL=F": "wti", "BZ=F": "brent", "HG=F": "copper", "NG=F": "ng" };
+      for (const [sym, id] of Object.entries(map)) {
+        if(data[sym]) updateUI(`p-${id}`, `c-${id}`, data[sym].price, data[sym].chg, '$');
+      }
     }
 
-    // --- Auto Reload ---
-    let time = 120;
-    const cd = document.getElementById('countdown');
-    setInterval(() => {
-      time--;
-      if(time <= 0) location.reload();
-      cd.innerText = `Reload: ${time}s`;
-    }, 1000);
+    // --- Yahoo Proxy (Safe Fetch) ---
+    async function fetchYahooData(symbols) {
+      const results = {};
+      const fetchOne = async (sym) => {
+        try {
+          const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
+          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&timestamp=${new Date().getTime()}`;
+          const res = await fetch(proxyUrl);
+          const wrapper = await res.json();
+          const data = JSON.parse(wrapper.contents);
+          if(!data.chart || !data.chart.result) return null;
+          const meta = data.chart.result[0].meta;
+          return { price: meta.regularMarketPrice, chg: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100 };
+        } catch(e) { return null; }
+      };
+      
+      const promises = symbols.map(s => fetchOne(s).then(res => ({symbol: s, data: res})));
+      const outcomes = await Promise.all(promises);
+      outcomes.forEach(o => { if(o.data) results[o.symbol] = o.data; });
+      return results;
+    }
 
-    // Start
-    updateData();
-    // Refresh prices internally every 10s (without page reload)
-    setInterval(updateData, 10000);
+    function updateUI(pId, cId, val, chg, pre) {
+      const elPrice = document.getElementById(pId);
+      const elChg = document.getElementById(cId);
+      if(elPrice && elChg) {
+        elPrice.innerText = pre + val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        elChg.innerText = (chg>=0?"+":"") + chg.toFixed(2) + "%";
+        elChg.className = "u-change " + (chg>=0 ? "text-green" : "text-red");
+      }
+    }
 
+    function timerLoop() {
+      if (timeLeft <= 0) { updateMarketData(); } 
+      else { document.getElementById('countdown').innerText = "Auto-refresh: " + timeLeft + "s"; timeLeft--; }
+    }
+
+    updateMarketData();
+    setInterval(timerLoop, 1000); 
   </script>
 </body>
 </html>
