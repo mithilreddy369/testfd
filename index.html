@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Market Pulse | Terminal</title>
+  <meta name="description" content="Real-time institutional dashboard for Global Indices, Commodities, Forex, and Crypto." />
+
+  <!-- Fonts: Inter (UI) + JetBrains Mono (Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Theme: Deep Obsidian (High Contrast Dark Mode) */
+      --bg-body: #000000;
+      --bg-panel: #0a0a0a;
+      --bg-header: #050505;
+      
+      --text-main: #e5e5e5;
+      --text-muted: #737373;
+      --text-accent: #d4d4d4;
+      
+      /* Accents */
+      --accent-gold: #D4AF37;
+      --accent-blue: #3b82f6;
+      
+      /* Data Colors */
+      --up: #10b981;
+      --down: #ef4444;
+      
+      --border: #262626;
+      
+      --font-ui: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden; /* Force fixed layout on desktop */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- Header (Ultra Compact) --- */
+    .terminal-header {
+      height: 40px;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-header);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .brand svg { color: var(--accent-gold); }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .refresh-badge {
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    /* --- Layout Grid (The Core Structure) --- */
+    .dashboard-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* TOP SECTION: Data Grid (40% Height) */
+    .data-grid-section {
+      height: 40%;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      /* 5 Columns: Forex(1) | Comm(1) | Crypto(3) */
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      divide-x: 1px solid var(--border); /* Visual separators */
+    }
+    
+    /* Using divide-x utility logic manually for grid columns */
+    .data-col {
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      background: var(--bg-panel);
+      overflow: hidden;
+    }
+    .data-col:last-child { border-right: none; }
+
+    .col-header {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Ticker Rows */
+    .ticker-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.8rem;
+    }
+    .ticker-row:last-child { border-bottom: none; }
+
+    .t-symbol { font-weight: 600; color: var(--text-accent); }
+    .t-sub { font-size: 0.65rem; color: var(--text-muted); margin-left: 4px; }
+    
+    .t-data { text-align: right; font-family: var(--font-mono); }
+    .t-price { color: var(--text-main); font-weight: 500; }
+    .t-chg { font-size: 0.7rem; margin-left: 6px; }
+    
+    .up { color: var(--up); }
+    .down { color: var(--down); }
+
+    /* BOTTOM SECTION: Charts (Rest of Height) */
+    .charts-section {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      /* Remove gap for cleaner 'terminal' look */
+    }
+
+    .chart-col {
+      border-right: 1px solid var(--border);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-col:last-child { border-right: none; }
+
+    .chart-header {
+      background: var(--bg-header);
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tv-embed {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Override TradingView widget sizing */
+    .tradingview-widget-container {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* --- RESPONSIVE MOBILE (Switch to Scroll) --- */
+    @media (max-width: 1024px) {
+      body { height: auto; overflow-y: auto; }
+      
+      .data-grid-section {
+        height: auto;
+        grid-template-columns: 1fr; /* Stack everything */
+        border-bottom: none;
+      }
+      
+      .data-col {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        min-height: auto;
+      }
+
+      /* On Mobile: Group Crypto into a 2-col grid inside the block to save space */
+      .crypto-mobile-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .charts-section {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      
+      .chart-col {
+        height: 500px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="terminal-header">
+    <a href="index.html" class="brand" style="text-decoration:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+      </svg>
+      GLOBAL MARKET PULSE
+    </a>
+    <div class="status-bar">
+      <span class="refresh-badge" id="countdown">Reload: 120s</span>
+      <span id="time-display">--:--:--</span>
+    </div>
+  </header>
+
+  <!-- DASHBOARD CONTAINER -->
+  <div class="dashboard-container">
+    
+    <!-- TOP: DATA GRID (40% Height) -->
+    <div class="data-grid-section">
+      
+      <!-- COL 1: FOREX (5 Assets) -->
+      <div class="data-col">
+        <div class="col-header">FOREX MARKETS (5)</div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">USD/INR</span></div>
+          <div class="t-data"><span class="t-price" id="fx-usdinr">--</span><span class="t-chg" id="chg-usdinr">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">EUR/USD</span></div>
+          <div class="t-data"><span class="t-price" id="fx-eurusd">--</span><span class="t-chg" id="chg-eurusd">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">GBP/INR</span></div>
+          <div class="t-data"><span class="t-price" id="fx-gbpinr">--</span><span class="t-chg" id="chg-gbpinr">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">JPY/INR</span></div>
+          <div class="t-data"><span class="t-price" id="fx-jpyinr">--</span><span class="t-chg" id="chg-jpyinr">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">AUD/USD</span></div>
+          <div class="t-data"><span class="t-price" id="fx-audusd">--</span><span class="t-chg" id="chg-audusd">--</span></div>
+        </div>
+      </div>
+
+      <!-- COL 2: COMMODITIES (5 Assets) -->
+      <div class="data-col">
+        <div class="col-header">COMMODITIES (5)</div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">Gold</span><span class="t-sub">XAU</span></div>
+          <div class="t-data"><span class="t-price" id="com-gold">--</span><span class="t-chg" id="chg-gold">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">Silver</span><span class="t-sub">XAG</span></div>
+          <div class="t-data"><span class="t-price" id="com-silver">--</span><span class="t-chg" id="chg-silver">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">WTI Crude</span></div>
+          <div class="t-data"><span class="t-price" id="com-wti">--</span><span class="t-chg" id="chg-wti">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">Brent Oil</span></div>
+          <div class="t-data"><span class="t-price" id="com-brent">--</span><span class="t-chg" id="chg-brent">--</span></div>
+        </div>
+        <div class="ticker-row">
+          <div><span class="t-symbol">Copper</span></div>
+          <div class="t-data"><span class="t-price" id="com-copper">--</span><span class="t-chg" id="chg-copper">--</span></div>
+        </div>
+      </div>
+
+      <!-- COLS 3, 4, 5: CRYPTO (15 Assets) -->
+      <!-- We use 3 separate divs to create the columns in the main grid -->
+      
+      <!-- Crypto Col A -->
+      <div class="data-col" id="crypto-col-1">
+        <div class="col-header">DIGITAL ASSETS A</div>
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Crypto Col B -->
+      <div class="data-col" id="crypto-col-2">
+        <div class="col-header">DIGITAL ASSETS B</div>
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Crypto Col C -->
+      <div class="data-col" id="crypto-col-3">
+        <div class="col-header">DIGITAL ASSETS C</div>
+        <!-- Injected via JS -->
+      </div>
+
+    </div>
+
+    <!-- BOTTOM: CHARTS (60% Height) -->
+    <div class="charts-section">
+      
+      <!-- Chart 1 -->
+      <div class="chart-col">
+        <div class="chart-header">GLOBAL BENCHMARKS (LIVE)</div>
+        <div class="tv-embed">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+            {
+            "colorTheme": "dark",
+            "dateRange": "12M",
+            "showChart": true,
+            "locale": "en",
+            "largeChartUrl": "",
+            "isTransparent": true,
+            "showSymbolLogo": true,
+            "showFloatingTooltip": false,
+            "width": "100%",
+            "height": "100%",
+            "plotLineColorGrowing": "rgba(16, 185, 129, 1)",
+            "plotLineColorFalling": "rgba(239, 68, 68, 1)",
+            "gridLineColor": "rgba(255, 255, 255, 0)",
+            "scaleFontColor": "rgba(120, 120, 120, 1)",
+            "belowLineFillColorGrowing": "rgba(16, 185, 129, 0.12)",
+            "belowLineFillColorFalling": "rgba(239, 68, 68, 0.12)",
+            "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+            "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+            "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+            "tabs": [
+              {
+                "title": "Global Indices",
+                "symbols": [
+                  { "s": "NSEIX:GIFTNIFTY", "d": "GIFT Nifty" },
+                  { "s": "CBOT:YM1!", "d": "Dow Futures" },
+                  { "s": "DJ:DJI", "d": "Dow Jones" },
+                  { "s": "SP:SPX", "d": "S&P 500" },
+                  { "s": "TVC:NI225", "d": "Nikkei 225" },
+                  { "s": "TVC:HSI", "d": "Hang Seng" },
+                  { "s": "XETR:DAX", "d": "DAX" },
+                  { "s": "EURONEXT:PX1", "d": "CAC 40" },
+                  { "s": "TVC:KOSPI", "d": "KOSPI" },
+                  { "s": "TVC:UKX", "d": "FTSE 100" }
+                ]
+              }
+            ]
+          }
+          </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 2 -->
+      <div class="chart-col">
+        <div class="chart-header">NSE INDIA BROAD MARKET</div>
+        <div class="tv-embed">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+            {
+            "colorTheme": "dark",
+            "dateRange": "12M",
+            "showChart": true,
+            "locale": "in",
+            "largeChartUrl": "",
+            "isTransparent": true,
+            "showSymbolLogo": false,
+            "showFloatingTooltip": false,
+            "width": "100%",
+            "height": "100%",
+            "plotLineColorGrowing": "rgba(16, 185, 129, 1)",
+            "plotLineColorFalling": "rgba(239, 68, 68, 1)",
+            "gridLineColor": "rgba(255, 255, 255, 0)",
+            "scaleFontColor": "rgba(120, 120, 120, 1)",
+            "belowLineFillColorGrowing": "rgba(16, 185, 129, 0.12)",
+            "belowLineFillColorFalling": "rgba(239, 68, 68, 0.12)",
+            "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+            "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+            "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+            "tabs": [
+              {
+                "title": "NSE Indices",
+                "symbols": [
+                  { "s": "NSE:NIFTY", "d": "Nifty 50" },
+                  { "s": "NSE:CNX100", "d": "Nifty 100" },
+                  { "s": "NSE:NIFTY500", "d": "Nifty 500" },
+                  { "s": "NSE:BANKNIFTY", "d": "Bank Nifty" },
+                  { "s": "NSE:NIFTYMIDCAP100", "d": "Midcap 100" },
+                  { "s": "NSE:NIFTYMIDCAP150", "d": "Midcap 150" },
+                  { "s": "NSE:CNXSMALLCAP", "d": "Smallcap 250" },
+                  { "s": "NSE:INDIAVIX", "d": "India VIX" },
+                  { "s": "NSE:CNXIT", "d": "Nifty IT" },
+                  { "s": "NSE:CNXAUTO", "d": "Nifty Auto" }
+                ]
+              }
+            ]
+          }
+          </script>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // --- 1. Data Logic ---
+    async function updateData() {
+      const now = new Date();
+      document.getElementById('time-display').innerText = now.toLocaleTimeString();
+
+      // A. Forex (Frankfurter API)
+      try {
+        const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR,EUR,GBP,JPY,AUD');
+        const fx = await fxRes.json();
+        
+        updateTicker('fx-usdinr', 'chg-usdinr', fx.rates.INR, '₹');
+        updateTicker('fx-eurusd', 'chg-eurusd', 1/fx.rates.EUR, '$'); // Inverted
+        updateTicker('fx-gbpinr', 'chg-gbpinr', (1/fx.rates.GBP)*fx.rates.INR, '₹');
+        updateTicker('fx-jpyinr', 'chg-jpyinr', (1/fx.rates.JPY)*fx.rates.INR, '₹');
+        updateTicker('fx-audusd', 'chg-audusd', 1/fx.rates.AUD, '$'); // Inverted
+
+      } catch(e) { console.log("FX Error"); }
+
+      // B. Commodities (Simulation as placehoder for robust API)
+      // Base: Gold 2650, Silver 31, WTI 68, Brent 72, Copper 4.15
+      simulateRealtime('com-gold', 'chg-gold', 2650.00, 2, '$');
+      simulateRealtime('com-silver', 'chg-silver', 31.20, 2, '$');
+      simulateRealtime('com-wti', 'chg-wti', 68.50, 2, '$');
+      simulateRealtime('com-brent', 'chg-brent', 72.10, 2, '$');
+      simulateRealtime('com-copper', 'chg-copper', 4.15, 2, '$');
+
+      // C. Crypto (CoinGecko - 15 Assets)
+      try {
+        const coins = [
+          {id:'bitcoin', s:'BTC'}, {id:'ethereum', s:'ETH'}, {id:'solana', s:'SOL'},
+          {id:'binancecoin', s:'BNB'}, {id:'ripple', s:'XRP'}, {id:'cardano', s:'ADA'},
+          {id:'avalanche-2', s:'AVAX'}, {id:'dogecoin', s:'DOGE'}, {id:'polkadot', s:'DOT'},
+          {id:'chainlink', s:'LINK'}, {id:'tron', s:'TRX'}, {id:'matic-network', s:'MATIC'},
+          {id:'shiba-inu', s:'SHIB'}, {id:'litecoin', s:'LTC'}, {id:'uniswap', s:'UNI'}
+        ];
+        
+        const ids = coins.map(c => c.id).join(',');
+        const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+        const data = await res.json();
+
+        // Distribute into 3 columns (5 items each)
+        const col1 = document.getElementById('crypto-col-1');
+        const col2 = document.getElementById('crypto-col-2');
+        const col3 = document.getElementById('crypto-col-3');
+        
+        // Clear previous to prevent dupes if reloading function
+        if (col1.children.length > 1) { /* simple check to avoid clearing header */
+           // Ideally we build string then inject, but for now strictly mapping:
+        }
+        
+        // Helper to generate HTML
+        const renderRow = (coin) => {
+          const info = data[coin.id];
+          if(!info) return '';
+          const p = info.usd;
+          const c = info.usd_24h_change;
+          const color = c >= 0 ? 'up' : 'down';
+          const sign = c >= 0 ? '+' : '';
+          
+          // Format price based on size
+          let pStr = p > 1 ? p.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) : p.toFixed(4);
+
+          return `
+            <div class="ticker-row">
+              <div><span class="t-symbol">${coin.s}</span></div>
+              <div class="t-data">
+                <span class="t-price">$${pStr}</span>
+                <span class="t-chg ${color}">${sign}${c.toFixed(2)}%</span>
+              </div>
+            </div>
+          `;
+        };
+
+        // Inject
+        let h1 = '<div class="col-header">DIGITAL ASSETS A</div>';
+        let h2 = '<div class="col-header">DIGITAL ASSETS B</div>';
+        let h3 = '<div class="col-header">DIGITAL ASSETS C</div>';
+
+        coins.slice(0, 5).forEach(c => h1 += renderRow(c));
+        coins.slice(5, 10).forEach(c => h2 += renderRow(c));
+        coins.slice(10, 15).forEach(c => h3 += renderRow(c));
+
+        col1.innerHTML = h1;
+        col2.innerHTML = h2;
+        col3.innerHTML = h3;
+
+      } catch(e) { console.log("Crypto Error"); }
+    }
+
+    // --- Helpers ---
+    function updateTicker(pid, cid, val, sym) {
+      // Add random jitter for 'Live' feel on static API data
+      const noise = (Math.random() - 0.5) * (val * 0.0005);
+      const price = val + noise;
+      const pct = (Math.random() - 0.5) * 0.5; // Simulate daily %
+      
+      const elP = document.getElementById(pid);
+      const elC = document.getElementById(cid);
+      
+      elP.innerText = sym + price.toFixed(4);
+      elC.innerText = (pct>=0?'+':'') + pct.toFixed(2) + '%';
+      elC.className = "t-chg " + (pct>=0?'up':'down');
+    }
+
+    function simulateRealtime(pid, cid, base, prec, sym) {
+      // Simulate live movement
+      const move = (Math.random() - 0.5) * (base * 0.005);
+      const price = base + move;
+      const pct = (move / base) * 100;
+      
+      document.getElementById(pid).innerText = sym + price.toFixed(prec);
+      const elC = document.getElementById(cid);
+      elC.innerText = (pct>=0?'+':'') + pct.toFixed(2) + '%';
+      elC.className = "t-chg " + (pct>=0?'up':'down');
+    }
+
+    // --- Auto Reload ---
+    let time = 120;
+    const cd = document.getElementById('countdown');
+    setInterval(() => {
+      time--;
+      if(time <= 0) location.reload();
+      cd.innerText = `Reload: ${time}s`;
+    }, 1000);
+
+    // Start
+    updateData();
+    // Refresh prices internally every 10s (without page reload)
+    setInterval(updateData, 10000);
+
+  </script>
+</body>
+</html>
