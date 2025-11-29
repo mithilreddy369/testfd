@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Market Pulse | India Command Center</title>
+  <meta name="description" content="Indian Market Dashboard 3x3 Grid View" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Dark Theme (Default) */
+      --bg-body: #05080f;
+      --bg-card: #0b1221;
+      --primary: #f1f5f9;
+      --secondary: #94a3b8;
+      --tertiary: #64748b;
+      --accent: #D4AF37;        
+      --alpha-green: #10b981;
+      --alpha-red: #ef4444;
+      --border: #1e293b;
+      --table-stripe: rgba(255, 255, 255, 0.02);
+      
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* Light Theme Override */
+    .light-mode {
+      --bg-body: #f1f5f9;
+      --bg-card: #ffffff;
+      --primary: #0f172a;
+      --secondary: #475569;
+      --tertiary: #94a3b8;
+      --accent: #0f172a; 
+      --border: #cbd5e1;
+      --table-stripe: rgba(0, 0, 0, 0.02);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--primary);
+      height: 100vh; /* Fixed Height */
+      width: 100vw;
+      overflow: hidden; /* NO SCROLLING */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- Top Bar (Compact) --- */
+    .dashboard-header {
+      height: 35px; /* Ultra compact */
+      padding: 0 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      background: var(--bg-body);
+      font-size: 0.8rem;
+    }
+
+    .brand-area { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--accent); }
+    .system-status { display: flex; gap: 8px; font-size: 0.65rem; color: var(--tertiary); align-items: center; }
+
+    /* --- MAIN GRID (3x3 Fixed) --- */
+    .grid-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+      grid-template-rows: repeat(3, 1fr);    /* 3 Rows */
+      gap: 2px; /* Minimal gap */
+      padding: 2px;
+      height: calc(100vh - 35px);
+    }
+
+    .data-table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .card-header {
+      padding: 2px 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Table Structure */
+    .table-wrapper {
+      flex: 1;
+      width: 100%;
+      overflow: hidden; 
+      position: relative;
+    }
+
+    table {
+      width: 100%;
+      height: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead {
+      background: var(--bg-card);
+      display: table-header-group;
+    }
+    
+    tbody {
+      display: table-row-group;
+    }
+
+    tr {
+      height: 12.5%;
+    }
+
+    th, td {
+      padding: 0 2px; /* Tight padding */
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.6rem; /* Small default */
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip; /* Clip instead of ellipsis to show max numbers */
+      letter-spacing: -0.5px; /* Condense text */
+    }
+
+    /* Symbol Column */
+    th:first-child, td:first-child {
+      text-align: left;
+      font-weight: 600;
+      width: 28%; 
+      border-right: 1px solid var(--border);
+      color: var(--secondary);
+      text-overflow: ellipsis;
+    }
+    
+    /* Price Column */
+    td:nth-child(2) { 
+        color: var(--primary); 
+        font-family: var(--font-mono); 
+        font-weight: 600; 
+        text-align: right;
+    }
+
+    /* Header styling */
+    th { font-weight: 600; color: var(--tertiary); font-size: 0.55rem; text-align: right; }
+    th:first-child { text-align: left; }
+    
+    /* Alternating Stripes */
+    tr:nth-child(even) td { background-color: var(--table-stripe); }
+
+    .val-cell { font-family: var(--font-mono); }
+    .text-green { color: var(--alpha-green); }
+    .text-red { color: var(--alpha-red); }
+
+    /* Theme Toggle */
+    .theme-btn {
+      background: none; border: 1px solid var(--border); color: var(--secondary);
+      cursor: pointer; padding: 2px 6px; border-radius: 4px; display: flex; font-size: 0.6rem;
+    }
+
+    /* --- Responsive Logic --- */
+
+    /* TABLET / DESKTOP (Width > 768px) */
+    @media (min-width: 769px) {
+        /* Show more columns on desktop */
+        th, td { font-size: 0.65rem; padding: 0 4px; }
+        /* Maybe hide 1Y/YTD if really tight, but show most */
+    }
+
+    /* MOBILE (Width <= 768px) */
+    @media (max-width: 768px) {
+       /* AGGRESSIVE SPACE SAVING */
+       
+       /* Hide everything except Symbol (1), Price (2), and 1D (3) */
+       th:nth-child(n+4), td:nth-child(n+4) {
+          display: none; 
+       }
+       
+       /* Adjust widths for the remaining 3 columns */
+       th:first-child, td:first-child { width: 35%; } /* Symbol */
+       th:nth-child(2), td:nth-child(2) { width: 35%; } /* Price */
+       /* Remaining 30% for 1D % */
+
+       th, td { 
+           font-size: 10px; /* Explicit pixel size for consistency */
+           padding: 0 2px;
+       }
+       
+       .card-header { font-size: 10px; padding: 2px; }
+       .dashboard-header { height: 30px; }
+       .grid-container { height: calc(100vh - 30px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="dashboard-header">
+    <div class="brand-area">
+      <span>🇮🇳 MARKET PULSE</span>
+    </div>
+    <div class="system-status">
+      <span id="update-time">--:--</span>
+      <button class="theme-btn" onclick="document.body.classList.toggle('light-mode')">
+        Theme
+      </button>
+    </div>
+  </div>
+
+  <!-- 3x3 GRID (9 Tables) -->
+  <div class="grid-container" id="main-grid">
+     <!-- Filled by JS -->
+  </div>
+
+  <script>
+    // --- DATA DEFINITION (9 Tables, 7 Rows each) ---
+    const TABLES = [
+      {
+        id: "broad", title: "1. NSE Broad",
+        symbols: [
+          { s: "^NSEI", n: "Nifty 50" }, { s: "^CNX100", n: "Nifty 100" },
+          { s: "^NSEMDCP150", n: "Midcap 150" }, { s: "^CNXSMLC250", n: "Small 250" },
+          { s: "^CRSLDX", n: "Nifty 500" }, { s: "NIFTY_MICROCAP250.NS", n: "Micro 250" },
+          { s: "NIFTY_TOTAL_MKT.NS", n: "Total Mkt" }
+        ]
+      },
+      {
+        id: "sector", title: "2. Sectors",
+        symbols: [
+          { s: "^NSEBANK", n: "Bank Nifty" }, { s: "^CNXIT", n: "Nifty IT" },
+          { s: "^CNXPHARMA", n: "Pharma" }, { s: "^CNXREALTY", n: "Realty" },
+          { s: "^CNXFIN", n: "Fin Svcs" }, { s: "^CNXAUTO", n: "Auto" },
+          { s: "^CNXFMCG", n: "FMCG" }
+        ]
+      },
+      {
+        id: "capital", title: "3. Cap Markets",
+        symbols: [
+          { s: "BSE.NS", n: "BSE" }, { s: "CDSL.NS", n: "CDSL" },
+          { s: "ANGELONE.NS", n: "Angel One" }, { s: "MCX.NS", n: "MCX" },
+          { s: "CAMS.NS", n: "CAMS" }, { s: "HDFCAMC.NS", n: "HDFC AMC" },
+          { s: "NAM-INDIA.NS", n: "Nippon" }
+        ]
+      },
+      {
+        id: "banks", title: "4. Banks",
+        symbols: [
+          { s: "HDFCBANK.NS", n: "HDFC Bk" }, { s: "ICICIBANK.NS", n: "ICICI Bk" },
+          { s: "SBIN.NS", n: "SBI" }, { s: "AXISBANK.NS", n: "Axis Bk" },
+          { s: "KOTAKBANK.NS", n: "Kotak Bk" }, { s: "INDUSINDBK.NS", n: "IndusInd" },
+          { s: "PNB.NS", n: "PNB" }
+        ]
+      },
+      {
+        id: "nbfc", title: "5. NBFCs",
+        symbols: [
+          { s: "BAJFINANCE.NS", n: "Bajaj Fin" }, { s: "JIOFIN.NS", n: "Jio Fin" },
+          { s: "PFC.NS", n: "PFC" }, { s: "REC.NS", n: "REC" },
+          { s: "IREDA.NS", n: "IREDA" }, { s: "SHRIRAMFIN.NS", n: "Shriram" },
+          { s: "CHOLAFIN.NS", n: "Chola" }
+        ]
+      },
+      {
+        id: "auto", title: "6. Auto",
+        symbols: [
+          { s: "MARUTI.NS", n: "Maruti" }, { s: "TATAMOTORS.NS", n: "Tata Mtrs" },
+          { s: "M&M.NS", n: "M&M" }, { s: "BAJAJ-AUTO.NS", n: "Bajaj Auto" },
+          { s: "EICHERMOT.NS", n: "Eicher" }, { s: "TVSMOTOR.NS", n: "TVS" },
+          { s: "HEROMOTOCO.NS", n: "Hero" }
+        ]
+      },
+      {
+        id: "it", title: "7. IT Tech",
+        symbols: [
+          { s: "TCS.NS", n: "TCS" }, { s: "INFY.NS", n: "Infosys" },
+          { s: "HCLTECH.NS", n: "HCL Tech" }, { s: "WIPRO.NS", n: "Wipro" },
+          { s: "LTIM.NS", n: "LTIM" }, { s: "TECHM.NS", n: "TechM" },
+          { s: "PERSISTENT.NS", n: "Persist" }
+        ]
+      },
+      {
+        id: "semi", title: "8. Semi/EMS",
+        symbols: [
+          { s: "DIXON.NS", n: "Dixon" }, { s: "KAYNES.NS", n: "Kaynes" },
+          { s: "MOSCHIP.BO", n: "Moschip" }, { s: "CGPOWER.NS", n: "CG Power" },
+          { s: "ASMTEC.NS", n: "ASM Tech" }, { s: "SPEL.BO", n: "SPEL" },
+          { s: "RIR.BO", n: "RIR" }
+        ]
+      },
+      {
+        id: "pharma", title: "9. Pharma/Cons",
+        symbols: [
+          { s: "SUNPHARMA.NS", n: "Sun Ph" }, { s: "CIPLA.NS", n: "Cipla" },
+          { s: "DIVISLAB.NS", n: "Divis" }, { s: "TITAN.NS", n: "Titan" },
+          { s: "TRENT.NS", n: "Trent" }, { s: "NESTLEIND.NS", n: "Nestle" },
+          { s: "ITC.NS", n: "ITC" }
+        ]
+      }
+    ];
+
+    // --- RENDER LOGIC ---
+    function init() {
+      const grid = document.getElementById('main-grid');
+      // Set time
+      const now = new Date();
+      document.getElementById('update-time').innerText = now.toLocaleTimeString();
+
+      // Build 9 Cards
+      TABLES.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'data-table-card';
+        card.innerHTML = `
+          <div class="card-header">${t.title}</div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sym</th>
+                  <th>Price</th>
+                  <th>1D%</th>
+                  <th>1W%</th>
+                  <th>1M%</th>
+                  <th>3M%</th>
+                  <th>6M%</th>
+                  <th>1Y%</th>
+                  <th>YTD%</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${t.symbols.map(s => `
+                  <tr id="row-${cleanId(s.s)}">
+                    <td>${s.n}</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                    <td class="val-cell">...</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      
+      // Start Data Fetch
+      fetchData();
+    }
+
+    // --- DATA LOGIC ---
+    async function fetchData() {
+      const allSyms = TABLES.flatMap(t => t.symbols.map(x => x.s));
+      const batchSize = 5;
+      for(let i=0; i<allSyms.length; i+=batchSize) {
+        await Promise.all(allSyms.slice(i, i+batchSize).map(fetchOne));
+      }
+    }
+
+    async function fetchOne(symbol) {
+      try {
+        // Yahoo Finance via Proxy
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=2y`;
+        const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+        const json = await res.json();
+        const data = JSON.parse(json.contents);
+        
+        if(!data.chart || !data.chart.result) return;
+        const resData = data.chart.result[0];
+        const closes = resData.indicators.quote[0].close;
+        const meta = resData.meta;
+        const currentPrice = meta.regularMarketPrice;
+        
+        if(!closes || closes.length < 2) return;
+
+        // Calc changes
+        const len = closes.length;
+        const calc = (days) => {
+           if(len <= days) return null;
+           const old = closes[len - 1 - days];
+           if(!old) return null;
+           return ((currentPrice - old)/old)*100;
+        };
+        
+        // YTD approx index
+        // Yahoo gives approx 252 trading days per year
+        const d1 = calc(1);
+        const w1 = calc(5);
+        const m1 = calc(21);
+        const m3 = calc(63);
+        const m6 = calc(126);
+        const y1 = calc(252);
+        
+        // Find YTD logic roughly
+        const timestamps = resData.timestamp;
+        const yearStartTs = new Date(new Date().getFullYear(), 0, 1).getTime()/1000;
+        let ytdIdx = timestamps.findIndex(ts => ts >= yearStartTs);
+        let ytdVal = null;
+        if(ytdIdx > 0) ytdVal = ((currentPrice - closes[ytdIdx-1])/closes[ytdIdx-1])*100;
+
+        updateRow(cleanId(symbol), currentPrice, [d1, w1, m1, m3, m6, y1, ytdVal]);
+
+      } catch(e) { console.log(e); }
+    }
+
+    function updateRow(id, price, changes) {
+      const row = document.getElementById("row-"+id);
+      if(!row) return;
+      const cells = row.querySelectorAll('td');
+      
+      // Price
+      cells[1].innerText = price ? price.toLocaleString('en-IN',{maximumFractionDigits:2}) : "--";
+      
+      // Changes
+      changes.forEach((val, i) => {
+         const cell = cells[i+2]; // Start at index 2
+         if(val === null || val === undefined) { cell.innerText = "--"; return; }
+         // On mobile, show only one decimal or even no decimal for space if needed
+         // Using 0.1% precision to save space
+         cell.innerHTML = `<span class="${val >= 0 ? 'text-green' : 'text-red'}">${val > 0 ? '+' : ''}${val.toFixed(1)}%</span>`;
+      });
+    }
+
+    function cleanId(s) { return s.replace(/[^a-zA-Z0-9]/g, ''); }
+
+    init();
+    setInterval(() => location.reload(), 300000); // 5m refresh
+
+  </script>
+</body>
+</html>
