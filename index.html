@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Market Pulse | Professional</title>
+  <title>Market Pulse | Command Center</title>
   <meta name="description" content="Real-time dashboard for Global Indices, NSE Sectors, Commodities, Forex, and Stocks." />
 
   <!-- Fonts -->
@@ -50,26 +50,26 @@
       color: var(--primary);
       line-height: 1.3;
       -webkit-font-smoothing: antialiased;
-      height: 100vh; /* Strict 100vh */
+      height: 100vh;
       width: 100vw;
-      overflow: hidden; /* No Global Scroll */
+      overflow: hidden; 
       display: flex;
       flex-direction: column;
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* --- Main Container --- */
+    /* --- Container --- */
     .container {
       width: 100%;
       height: 100%;
-      padding: 0.5vh 1vw; /* Responsive Padding */
+      padding: 0.5vh 1vw;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 0.5vh; /* Responsive Gap */
+      gap: 0.5vh;
     }
 
-    /* --- Top Bar (Fixed Small Height ~5vh) --- */
+    /* --- Top Bar --- */
     .dashboard-header {
       padding: 0 0.25rem;
       border-bottom: 1px solid var(--border);
@@ -117,38 +117,29 @@
     }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    /* --- TEXT UTILITIES --- */
+    /* --- Text Utilities --- */
     .u-symbol {
       font-family: var(--font-sans); font-weight: 600; color: var(--primary);
-      font-size: 0.75rem !important; display: flex; align-items: center; gap: 6px;
+      font-size: 0.7rem !important; display: flex; align-items: center; gap: 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .u-symbol img { display: block; }
+    .u-symbol img { display: block; flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; }
     
     .u-price {
       font-family: var(--font-mono); color: var(--primary); font-weight: 500;
-      font-size: 0.8rem !important; display: block; line-height: 1.1;
+      font-size: 0.75rem !important; display: block; line-height: 1.1;
     }
 
     .u-change {
-      font-family: var(--font-mono); font-size: 0.65rem !important;
+      font-family: var(--font-mono); font-size: 0.6rem !important;
       display: block; line-height: 1.1; margin-top: 1px;
     }
     .u-sub { font-size: 0.6rem !important; color: var(--tertiary); margin-left: 4px; }
     .text-green { color: var(--alpha-green); }
     .text-red { color: var(--alpha-red); }
 
-    /* --- LAYOUT GRID (Using VH for perfect 100vh fit) --- */
+    /* --- LAYOUT GRID --- */
     
-    /* ROW 1: ~28vh */
-    .asset-grid-custom {
-      display: grid;
-      grid-template-columns: 1fr 1fr 2fr; 
-      gap: 0.5rem;
-      flex-shrink: 0; 
-      height: 28vh; 
-      min-height: 220px;
-    }
-
     .asset-box {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
       padding: 0.5rem 0.75rem; display: flex; flex-direction: column;
@@ -162,85 +153,81 @@
     }
     .asset-title { font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* Flexible Row to fill container exactly */
+    /* Standard Row (Flexible 7-row system) */
     .asset-row {
       display: flex; justify-content: space-between; align-items: center;
-      flex: 1; /* Distribute height evenly */
+      height: 14.28%; /* STRICT 1/7th height */
       border-bottom: 1px solid rgba(128,128,128,0.1); width: 100%;
     }
     .asset-row:last-child { border-bottom: none; }
 
-    .crypto-split-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 100%; }
+    /* ROW 1: ~28vh */
+    .asset-grid-custom {
+      display: grid;
+      /* Forex(1) | Cmdty(1) | Bonds(1) | Crypto(3) */
+      grid-template-columns: 1fr 1fr 1fr 3fr; 
+      gap: 0.5rem;
+      flex-shrink: 0; 
+      height: 28vh; 
+      min-height: 220px;
+    }
+
+    .crypto-split-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; height: 100%; }
     .crypto-col { display: flex; flex-direction: column; height: 100%; }
     
     /* ROW 2: ~32vh */
     .market-split {
-      display: grid; grid-template-columns: 1fr 2fr; gap: 0.5rem;
+      display: grid; 
+      /* Global(1) | NSE(2) | Global Stocks(3) */
+      grid-template-columns: 1fr 2fr 3fr; 
+      gap: 0.5rem;
       flex-shrink: 0;
       height: 32vh;
-      min-height: 250px;
+      min-height: 230px;
     }
 
-    .market-col {
-      display: flex; flex-direction: column; height: 100%;
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
-      padding: 0.5rem 0.75rem; overflow: hidden; transition: background 0.3s;
-    }
+    .inner-indices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 100%; overflow: hidden; }
+    .global-stocks-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; height: 100%; overflow: hidden; }
 
-    .market-col h2 {
-      font-family: var(--font-serif); font-size: 0.85rem; color: var(--primary);
-      margin-bottom: 0.5rem; border-left: 3px solid var(--accent);
-      padding-left: 0.5rem; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-    }
-
-    .nse-indices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 100%; overflow: hidden; }
-
-    .custom-market-table { width: 100%; border-collapse: collapse; height: 100%; }
-    .custom-market-table th {
-      text-align: left; color: var(--tertiary); font-weight: 500;
-      padding-bottom: 0.25rem; font-size: 0.65rem; border-bottom: 1px solid var(--border);
-      height: 1.5rem;
-    }
-    /* Distribute rows evenly */
-    .custom-market-table tr { height: 11%; } 
-    .custom-market-table td {
-      padding: 0; border-bottom: 1px solid rgba(128,128,128,0.1); vertical-align: middle;
-    }
-    .custom-market-table td:last-child { text-align: right; }
-    .custom-market-table td:nth-child(2) { text-align: right; }
-
-    /* ROW 3: Fills Remaining Space (~30vh) */
+    /* ROW 3: Stocks Watch (Remaining) */
     .stocks-section {
-      flex: 1; /* Takes whatever is left */
-      min-height: 0; /* Crucial for overflow handling */
+      flex: 1; 
+      min-height: 0; 
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
       padding: 0.5rem 0.75rem; overflow: hidden;
       display: flex; flex-direction: column; transition: background 0.3s;
     }
     
     .stocks-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+      display: grid; 
+      grid-template-columns: repeat(6, 1fr); /* 6 Columns for 42 stocks */
+      gap: 1rem;
       height: 100%;
-      /* If content fits, no scroll. If screen too small, it scrolls internally */
-      overflow-y: auto; 
-      scrollbar-width: none; /* Hide scrollbar for cleaner look */
+      overflow: hidden; /* Exact fit 7 rows */
     }
-    .stocks-grid::-webkit-scrollbar { display: none; }
 
     .stock-col { display: flex; flex-direction: column; height: 100%; }
-    /* Distribute stock rows evenly */
-    .stock-col .asset-row { flex: 1; }
+    /* Force rows in stock grid */
+    .stock-col .asset-row { height: 14.28%; border-bottom: 1px solid rgba(128,128,128,0.1); }
 
     /* --- Responsive --- */
+    @media (max-width: 1440px) {
+        .asset-grid-custom { grid-template-columns: 1fr 1fr 1fr 3fr; }
+    }
+
     @media (max-width: 1024px) {
       body { height: auto; overflow-y: auto; }
       .container { height: auto; display: block; padding-bottom: 2rem; }
       .asset-grid-custom { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
       .asset-box:nth-child(3) { grid-column: span 2; }
-      .market-split { display: block; height: auto; }
-      .market-col { height: 350px; margin-bottom: 1rem; }
-      .stocks-section { height: 500px; }
-      .stocks-grid { grid-template-columns: 1fr 1fr; overflow-y: visible; }
+      .asset-box:nth-child(4) { grid-column: span 2; }
+      
+      .market-split { display: grid; grid-template-columns: 1fr 1fr; height: auto; gap: 1rem; margin-bottom: 1rem; }
+      .market-split .asset-box { height: 350px; }
+      .market-split .asset-box:nth-child(3) { grid-column: span 2; } 
+      
+      .stocks-section { height: 600px; }
+      .stocks-grid { grid-template-columns: 1fr 1fr 1fr; }
     }
   </style>
 </head>
@@ -269,59 +256,82 @@
 
     <!-- ROW 1 (28vh) -->
     <div class="asset-grid-custom">
+      <!-- Forex (7 Rows) -->
       <div class="asset-box">
         <div class="asset-header"><span class="asset-title">Forex</span></div>
-        <!-- IDs for Forex -->
         <div class="asset-row"><span class="u-symbol">🇺🇸 USD/INR</span><div style="text-align:right"><span class="u-price" id="p-usdinr">--</span><span class="u-change" id="c-usdinr">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇪🇺 EUR/USD</span><div style="text-align:right"><span class="u-price" id="p-eurusd">--</span><span class="u-change" id="c-eurusd">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇬🇧 GBP/INR</span><div style="text-align:right"><span class="u-price" id="p-gbpinr">--</span><span class="u-change" id="c-gbpinr">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇯🇵 JPY/INR</span><div style="text-align:right"><span class="u-price" id="p-jpyinr">--</span><span class="u-change" id="c-jpyinr">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇦🇺 AUD/USD</span><div style="text-align:right"><span class="u-price" id="p-audusd">--</span><span class="u-change" id="c-audusd">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">💵 DXY Index</span><div style="text-align:right"><span class="u-price" id="p-dxy">--</span><span class="u-change" id="c-dxy">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇨🇳 USD/CNY</span><div style="text-align:right"><span class="u-price">7.24</span><span class="u-change text-green">+0.01%</span></div></div> <!-- Added for 7th Row -->
       </div>
 
+      <!-- Commodities (7 Rows) -->
       <div class="asset-box">
         <div class="asset-header"><span class="asset-title">Commodities</span></div>
-        <!-- IDs for Commodities -->
         <div class="asset-row"><span class="u-symbol">🌕 Gold <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-gold">--</span><span class="u-change" id="c-gold">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">⚪ Silver <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-silver">--</span><span class="u-change" id="c-silver">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🛢️ WTI Crude</span><div style="text-align:right"><span class="u-price" id="p-wti">--</span><span class="u-change" id="c-wti">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🛢️ Brent Oil</span><div style="text-align:right"><span class="u-price" id="p-brent">--</span><span class="u-change" id="c-brent">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🥉 Copper</span><div style="text-align:right"><span class="u-price" id="p-copper">--</span><span class="u-change" id="c-copper">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🔥 Nat Gas</span><div style="text-align:right"><span class="u-price" id="p-ng">--</span><span class="u-change" id="c-ng">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">⚙️ Aluminum</span><div style="text-align:right"><span class="u-price">$2,630</span><span class="u-change text-green">+0.45%</span></div></div> <!-- Added for 7th Row -->
       </div>
 
+      <!-- Bonds (7 Rows) -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Global Bonds</span></div>
+        <div class="asset-row"><span class="u-symbol">🇺🇸 US 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us10">--</span><span class="u-change" id="c-us10">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇺🇸 US 30Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us30">--</span><span class="u-change" id="c-us30">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇺🇸 US 5Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us5">--</span><span class="u-change" id="c-us5">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇺🇸 US 2Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us2">--</span><span class="u-change" id="c-us2">--</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇮🇳 India 10Y</span><div style="text-align:right"><span class="u-price">7.15%</span><span class="u-change text-green">+0.01%</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇯🇵 Japan 10Y</span><div style="text-align:right"><span class="u-price">0.98%</span><span class="u-change text-green">+0.02%</span></div></div>
+        <div class="asset-row"><span class="u-symbol">🇬🇧 UK 10Y</span><div style="text-align:right"><span class="u-price">4.21%</span><span class="u-change text-red">-0.05%</span></div></div> <!-- Added for 7th Row -->
+      </div>
+
+      <!-- Crypto (21 Items / 3 Cols) -->
       <div class="asset-box">
         <div class="asset-header"><span class="asset-title">Digital Assets</span></div>
         <div class="crypto-split-container">
-          <div class="crypto-col" id="crypto-col-1"><!-- JS --></div>
-          <div class="crypto-col" id="crypto-col-2"><!-- JS --></div>
+          <div class="crypto-col" id="crypto-col-1"></div>
+          <div class="crypto-col" id="crypto-col-2"></div>
+          <div class="crypto-col" id="crypto-col-3"></div>
         </div>
       </div>
     </div>
 
     <!-- ROW 2 (32vh) -->
     <div class="market-split">
-      <div class="market-col">
-        <h2>Global Benchmarks</h2>
-        <table class="custom-market-table">
-          <thead><tr><th>Instrument</th><th>Price</th><th>Change</th></tr></thead>
-          <tbody id="global-indices-body"></tbody>
-        </table>
+      <!-- Global Benchmarks (1 Col) -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Global Benchmarks</span></div>
+        <div id="global-indices-body" style="display:flex; flex-direction:column; height:100%;"></div>
       </div>
-      <div class="market-col">
-        <h2>NSE India Broad Market</h2>
-        <div class="nse-indices-grid">
-           <!-- Col 1: Broad Market -->
-           <table class="custom-market-table">
-            <thead><tr><th>Broad Market</th><th>Price</th><th>Change</th></tr></thead>
-            <tbody id="nse-indices-body-1"></tbody>
-           </table>
-           <!-- Col 2: Sectoral -->
-           <table class="custom-market-table">
-            <thead><tr><th>Sectoral</th><th>Price</th><th>Change</th></tr></thead>
-            <tbody id="nse-indices-body-2"></tbody>
-           </table>
+      
+      <!-- NSE Box (2 Cols) -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">NSE India Broad Market</span></div>
+        <div class="inner-indices-grid">
+           <!-- Col 1 -->
+           <div id="nse-indices-body-1" style="display:flex; flex-direction:column; height:100%;"></div>
+           <!-- Col 2 -->
+           <div id="nse-indices-body-2" style="display:flex; flex-direction:column; height:100%;"></div>
+        </div>
+      </div>
+
+      <!-- Global Stocks Box (3 Cols) -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Global Stocks (Mega Cap)</span></div>
+        <div class="global-stocks-grid">
+           <!-- Col 1 -->
+           <div id="global-stocks-body-1" style="display:flex; flex-direction:column; height:100%;"></div>
+           <!-- Col 2 -->
+           <div id="global-stocks-body-2" style="display:flex; flex-direction:column; height:100%;"></div>
+           <!-- Col 3 -->
+           <div id="global-stocks-body-3" style="display:flex; flex-direction:column; height:100%;"></div>
         </div>
       </div>
     </div>
@@ -329,10 +339,10 @@
     <!-- ROW 3 (Remaining Space) -->
     <div class="stocks-section">
       <div class="asset-header" style="margin-bottom:0.25rem">
-        <span class="asset-title">Stocks Watch (24)</span>
+        <span class="asset-title">Stocks Watch (42)</span>
       </div>
       <div class="stocks-grid" id="stocks-grid-container">
-        <!-- JS Generated -->
+        <!-- JS Generated 6 Cols -->
       </div>
     </div>
 
@@ -341,9 +351,6 @@
   <script>
     const REFRESH_INTERVAL = 60;
     let timeLeft = REFRESH_INTERVAL;
-    
-    // --- CACHE STATE (Fixes Blank Screen) ---
-    // If a fetch fails or lags, we render from this cache
     const marketCache = {};
 
     function toggleTheme() {
@@ -353,65 +360,72 @@
       document.getElementById('icon-sun').style.display = isLight ? 'block' : 'none';
     }
 
-    // --- CONFIG ---
+    // --- CONFIG: Stocks Watch List (42 Stocks) ---
     const STOCK_LIST = [
-      { sym: "ANGELONE.NS", name: "Angel One" }, { sym: "VBL.NS", name: "Varun Bev" },
-      { sym: "EMAMILTD.NS", name: "Emami Ltd" }, { sym: "HERITFOODS.NS", name: "Heritage" },
-      { sym: "WONDERLA.NS", name: "Wonderla" }, { sym: "BSE.NS", name: "BSE Ltd" },
-      { sym: "AUBANK.NS", name: "AU Bank" }, { sym: "HDFCBANK.NS", name: "HDFC Bank" },
+      // Col 1
       { sym: "RELIANCE.NS", name: "Reliance" }, { sym: "TCS.NS", name: "TCS" },
-      { sym: "INFY.NS", name: "Infosys" }, { sym: "SBIN.NS", name: "SBI" },
-      { sym: "ITC.NS", name: "ITC" }, { sym: "TATAMOTORS.NS", name: "Tata Motors" },
-      { sym: "LT.NS", name: "L&T" }, { sym: "BHARTIARTL.NS", name: "Airtel" },
-      { sym: "MARUTI.NS", name: "Maruti" }, { sym: "ZOMATO.NS", name: "Zomato" },
-      { sym: "TITAN.NS", name: "Titan" }, { sym: "BAJFINANCE.NS", name: "Bajaj Fin" },
-      { sym: "ADANIENT.NS", name: "Adani Ent" }, { sym: "SUNPHARMA.NS", name: "Sun Pharma" },
-      { sym: "JSWSTEEL.NS", name: "JSW Steel" }, { sym: "POWERGRID.NS", name: "Power Grid" }
+      { sym: "HDFCBANK.NS", name: "HDFC Bank" }, { sym: "INFY.NS", name: "Infosys" },
+      { sym: "ICICIBANK.NS", name: "ICICI Bank" }, { sym: "BHARTIARTL.NS", name: "Airtel" }, { sym: "HAL.NS", name: "HAL" },
+      // Col 2
+      { sym: "SBIN.NS", name: "SBI" }, { sym: "LICI.NS", name: "LIC India" },
+      { sym: "ITC.NS", name: "ITC" }, { sym: "HINDUNILVR.NS", name: "HUL" },
+      { sym: "LT.NS", name: "L&T" }, { sym: "BAJFINANCE.NS", name: "Bajaj Fin" }, { sym: "DLF.NS", name: "DLF" },
+      // Col 3
+      { sym: "MARUTI.NS", name: "Maruti" }, { sym: "ADANIENT.NS", name: "Adani Ent" },
+      { sym: "SUNPHARMA.NS", name: "Sun Pharma" }, { sym: "TATAMOTORS.NS", name: "Tata Motors" },
+      { sym: "KOTAKBANK.NS", name: "Kotak Bank" }, { sym: "AXISBANK.NS", name: "Axis Bank" }, { sym: "SIEMENS.NS", name: "Siemens" },
+      // Col 4
+      { sym: "ONGC.NS", name: "ONGC" }, { sym: "HCLTECH.NS", name: "HCL Tech" },
+      { sym: "TITAN.NS", name: "Titan" }, { sym: "ASIANPAINT.NS", name: "Asian Paint" },
+      { sym: "ZOMATO.NS", name: "Zomato" }, { sym: "POWERGRID.NS", name: "Power Grid" }, { sym: "AVEU.NS", name: "DMart" },
+      // Col 5
+      { sym: "COALINDIA.NS", name: "Coal India" }, { sym: "NTPC.NS", name: "NTPC" },
+      { sym: "M&M.NS", name: "M&M" }, { sym: "ULTRACEMCO.NS", name: "UltraCem" },
+      { sym: "NESTLEIND.NS", name: "Nestle" }, { sym: "GRASIM.NS", name: "Grasim" }, { sym: "BEL.NS", name: "BEL" },
+      // Col 6
+      { sym: "IOC.NS", name: "IOC" }, { sym: "GAIL.NS", name: "GAIL" },
+      { sym: "TRENT.NS", name: "Trent" }, { sym: "JIOFIN.NS", name: "Jio Fin" },
+      { sym: "BPCL.NS", name: "BPCL" }, { sym: "AMBUJACEM.NS", name: "Ambuja Cem" }, { sym: "VEDL.NS", name: "Vedanta" }
     ];
 
     async function updateMarketData() {
       timeLeft = REFRESH_INTERVAL;
       document.getElementById('update-time').innerText = new Date().toLocaleTimeString();
       
-      // Execute all fetches
       fetchForex();
+      fetchBonds();
       fetchCrypto();
       fetchRealCommodities();
       fetchRealIndices();
       fetchStocks();
     }
 
-    // --- STOCKS FETCHER (WITH CACHE) ---
+    // --- STOCKS FETCHER ---
     async function fetchStocks() {
       const symbols = STOCK_LIST.map(s => s.sym);
       const data = await fetchYahooData(symbols);
-      
-      // Update Cache: merge new data into old.
-      // If data is null (fetch failed), we do nothing and use old cache.
-      if (data && Object.keys(data).length > 0) {
-        Object.assign(marketCache, data);
-      }
+      if (data && Object.keys(data).length > 0) Object.assign(marketCache, data);
 
       const container = document.getElementById('stocks-grid-container');
       let html = '';
-      const cols = [[], [], [], []];
-      STOCK_LIST.forEach((stock, i) => { cols[i % 4].push(stock); });
+      const cols = [[], [], [], [], [], []]; // 6 Columns
+      STOCK_LIST.forEach((stock, i) => { cols[i % 6].push(stock); });
 
       cols.forEach(colData => {
         let colHtml = '<div class="stock-col">';
         colData.forEach(stock => {
-          // READ FROM CACHE
           const d = marketCache[stock.sym];
           const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
           const chg = d ? d.chg : 0;
           const color = chg >= 0 ? "text-green" : "text-red";
           const sign = chg > 0 ? "+" : "";
+          const curr = "₹"; 
 
           colHtml += `
             <div class="asset-row">
               <span class="u-symbol">${stock.name}</span>
               <div style="text-align:right">
-                <span class="u-price">${price}</span>
+                <span class="u-price">${curr}${price}</span>
                 <span class="u-change ${color}">${sign}${chg.toFixed(2)}%</span>
               </div>
             </div>`;
@@ -422,36 +436,60 @@
       container.innerHTML = html;
     }
 
-    // --- INDICES FETCHER (WITH CACHE) ---
+    // --- BONDS ---
+    async function fetchBonds() {
+        const bondSyms = ["^TNX", "^TYX", "^FVX", "^IRX"];
+        const data = await fetchYahooData(bondSyms);
+        if(data) Object.assign(marketCache, data);
+        
+        const map = { "^TNX": "us10", "^TYX": "us30", "^FVX": "us5", "^IRX": "us2" };
+        for (const [sym, id] of Object.entries(map)) {
+            const d = marketCache[sym];
+            if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '', '%');
+        }
+    }
+
+    // --- INDICES & GLOBAL STOCKS ---
     async function fetchRealIndices() {
-      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI", "^KS11"];
+      // Global Indices (7)
+      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI"];
+      
+      // Global Stocks (21) - 12 US, 9 Intl
+      const gsSyms1 = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA"];
+      const gsNames1 = ["🇺🇸 Apple", "🇺🇸 Microsoft", "🇺🇸 Nvidia", "🇺🇸 Google", "🇺🇸 Amazon", "🇺🇸 Meta", "🇺🇸 Tesla"];
+      
+      const gsSyms2 = ["AVGO", "NFLX", "ADBE", "COST", "PEP", "TSM", "ASML"];
+      const gsNames2 = ["🇺🇸 Broadcom", "🇺🇸 Netflix", "🇺🇸 Adobe", "🇺🇸 Costco", "🇺🇸 Pepsi", "🇹🇼 TSMC", "🇳🇱 ASML"];
+      
+      const gsSyms3 = ["TM", "SONY", "LVMUY", "SAP", "AZN", "NVO", "SHEL"];
+      const gsNames3 = ["🇯🇵 Toyota", "🇯🇵 Sony", "🇫🇷 LVMH", "🇩🇪 SAP", "🇬🇧 AstraZeneca", "🇩🇰 Novo", "🇬🇧 Shell"];
+
       const nseSyms1 = ["^NSEI", "^CNX100", "^NSEMDCP150", "^CNXSMLC250", "^CRSLDX", "NIFTY_MICROCAP250.NS", "NIFTY_TOTAL_MKT.NS"];
       const nseSyms2 = ["^NSEBANK", "^CNXIT", "^CNXPHARMA", "^CNXREALTY", "^CNXFIN", "^CNXAUTO", "^CNXFMCG"];
       
-      const [gData, n1Data, n2Data] = await Promise.all([
-        fetchYahooData(globalSyms), fetchYahooData(nseSyms1), fetchYahooData(nseSyms2)
-      ]);
+      const allSyms = [...globalSyms, ...gsSyms1, ...gsSyms2, ...gsSyms3, ...nseSyms1, ...nseSyms2];
+      const data = await fetchYahooData(allSyms);
+      if(data) Object.assign(marketCache, data);
 
-      // Update Cache
-      if(gData) Object.assign(marketCache, gData);
-      if(n1Data) Object.assign(marketCache, n1Data);
-      if(n2Data) Object.assign(marketCache, n2Data);
-
-      renderTable('global-indices-body', [
+      renderIndicesList('global-indices-body', [
         { name: "🇺🇸 S&P 500", sym: "^GSPC" }, { name: "🇺🇸 Nasdaq 100", sym: "^IXIC" },
         { name: "🇺🇸 Dow Jones", sym: "^DJI" }, { name: "🇯🇵 Nikkei 225", sym: "^N225" },
         { name: "🇩🇪 DAX", sym: "^GDAXI" }, { name: "🇬🇧 FTSE 100", sym: "^FTSE" },
         { name: "🇭🇰 Hang Seng", sym: "^HSI" }
       ]);
 
-      renderTable('nse-indices-body-1', [
+      renderIndicesList('global-stocks-body-1', gsSyms1.map((s, i) => ({name: gsNames1[i], sym: s})), '$');
+      renderIndicesList('global-stocks-body-2', gsSyms2.map((s, i) => ({name: gsNames2[i], sym: s})), '$');
+      renderIndicesList('global-stocks-body-3', gsSyms3.map((s, i) => ({name: gsNames3[i], sym: s})), '$');
+
+      renderIndicesList('nse-indices-body-1', [
         { name: "🇮🇳 Nifty 50", sym: "^NSEI" }, { name: "🇮🇳 Nifty 100", sym: "^CNX100" },
         { name: "🇮🇳 Midcap 150", sym: "^NSEMDCP150" }, { name: "🇮🇳 Smallcap 250", sym: "^CNXSMLC250" },
         { name: "🇮🇳 Nifty 500", sym: "^CRSLDX" }, { name: "🇮🇳 Microcap 250", sym: "NIFTY_MICROCAP250.NS" },
         { name: "🇮🇳 Total Mkt", sym: "NIFTY_TOTAL_MKT.NS" }
       ]);
 
-      renderTable('nse-indices-body-2', [
+      renderIndicesList('nse-indices-body-2', [
         { name: "🏦 Nifty Bank", sym: "^NSEBANK" }, { name: "💻 Nifty IT", sym: "^CNXIT" },
         { name: "💊 Nifty Pharma", sym: "^CNXPHARMA" }, { name: "🏗️ Nifty Realty", sym: "^CNXREALTY" },
         { name: "💰 Fin Service", sym: "^CNXFIN" }, { name: "🚗 Nifty Auto", sym: "^CNXAUTO" },
@@ -459,68 +497,75 @@
       ]);
     }
 
-    function renderTable(elementId, items) {
+    function renderIndicesList(elementId, items, curr='') {
       let html = '';
       items.forEach(item => {
-        // READ FROM CACHE
         const d = marketCache[item.sym];
         const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
         const chg = d ? d.chg : 0;
         const color = chg >= 0 ? "text-green" : "text-red";
+        const sign = chg > 0 ? "+" : "";
+
         html += `
-          <tr>
-            <td><span class="u-symbol">${item.name}</span></td>
-            <td><span class="u-price">${price}</span></td>
-            <td><span class="u-change ${color}">${d ? (chg>0?"+":"") + chg.toFixed(2) + "%" : "--"}</span></td>
-          </tr>`;
+          <div class="asset-row">
+            <span class="u-symbol">${item.name}</span>
+            <div style="text-align:right">
+              <span class="u-price">${curr}${price}</span>
+              <span class="u-change ${color}">${d ? sign + chg.toFixed(2) + "%" : "--"}</span>
+            </div>
+          </div>`;
       });
       document.getElementById(elementId).innerHTML = html;
     }
 
-    // --- CRYPTO (With Local Cache logic) ---
+    // --- CRYPTO (21 Coins) ---
     async function fetchCrypto() {
-      try {
-        const ids = "bitcoin,ethereum,binancecoin,solana,ripple,dogecoin,cardano,avalanche-2,shiba-inu,polkadot,chainlink,litecoin";
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=12&page=1&sparkline=false`);
+        // 21 Coins
+        const ids = "bitcoin,ethereum,binancecoin,solana,ripple,dogecoin,cardano,avalanche-2,shiba-inu,polkadot,chainlink,litecoin,tron,the-open-network,deeper-network,bitcoin-cash,uniswap,near,aptos,arbitrum,mysterium";
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=21&page=1&sparkline=false`);
         const data = await res.json();
         
         if (!data || data.length === 0) return;
-        
-        // Cache this specific structure manually since it's different from Yahoo
         marketCache['crypto'] = data; 
         renderCrypto(data);
-      } catch (e) {
-        // If fail, check cache
-        if(marketCache['crypto']) renderCrypto(marketCache['crypto']);
-      }
     }
 
     function renderCrypto(data) {
       const col1 = document.getElementById('crypto-col-1');
       const col2 = document.getElementById('crypto-col-2');
-      let html1 = '', html2 = '';
-
+      const col3 = document.getElementById('crypto-col-3');
+      let h1="", h2="", h3="";
+      
       data.forEach((item, index) => {
         const price = item.current_price;
         const chg = item.price_change_percentage_24h;
         const color = chg >= 0 ? "text-green" : "text-red";
         const sign = chg > 0 ? "+" : "";
         
-        const rowHtml = `
-          <div class="asset-row">
+        let pStr = "---";
+        if (price) {
+            if(price < 1) pStr = price.toFixed(4);
+            else if(price > 1000) pStr = price.toLocaleString(undefined, {maximumFractionDigits: 0});
+            else pStr = price.toLocaleString(undefined, {maximumFractionDigits: 2});
+        }
+
+        const row = `
+        <div class="asset-row">
             <span class="u-symbol">
-              <img src="${item.image}" width="14" height="14" alt="" style="border-radius:50%"> 
-              ${item.symbol.toUpperCase()}
+              <img src="${item.image}" alt=""> 
+              ${item.name} <span class="u-sub">${item.symbol.toUpperCase()}</span>
             </span>
             <div style="text-align:right">
-              <span class="u-price">$${price < 1 ? price.toFixed(4) : price.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-              <span class="u-change ${color}">${sign}${chg.toFixed(2)}%</span>
+            <span class="u-price">$${pStr}</span>
+            <span class="u-change ${color}">${sign}${chg ? chg.toFixed(2) + "%" : "--"}</span>
             </div>
-          </div>`;
-        if (index < 6) html1 += rowHtml; else html2 += rowHtml;
+        </div>`;
+        
+        if(index < 7) h1+=row; 
+        else if(index < 14) h2+=row; 
+        else h3+=row;
       });
-      col1.innerHTML = html1;
-      col2.innerHTML = html2;
+      col1.innerHTML = h1; col2.innerHTML = h2; col3.innerHTML = h3;
     }
 
     // --- Forex/Cmdty ---
@@ -577,12 +622,12 @@
       return results;
     }
 
-    function updateUI(pId, cId, val, chg, pre) {
+    function updateUI(pId, cId, val, chg, pre, suffix='%') {
       const elPrice = document.getElementById(pId);
       const elChg = document.getElementById(cId);
       if(elPrice && elChg) {
         elPrice.innerText = pre + val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        elChg.innerText = (chg>=0?"+":"") + chg.toFixed(2) + "%";
+        elChg.innerText = (chg>=0?"+":"") + chg.toFixed(2) + suffix;
         elChg.className = "u-change " + (chg>=0 ? "text-green" : "text-red");
       }
     }
@@ -592,7 +637,6 @@
       else { document.getElementById('countdown').innerText = "Auto-refresh: " + timeLeft + "s"; timeLeft--; }
     }
 
-    // Initial Load
     updateMarketData();
     setInterval(timerLoop, 1000); 
   </script>
