@@ -104,7 +104,7 @@
       font-family: var(--font-mono); font-size: 0.65rem; color: var(--alpha-green);
       background: rgba(16, 185, 129, 0.1); padding: 2px 6px; border-radius: 4px;
       border: 1px solid rgba(16, 185, 129, 0.2); min-width: 90px; text-align: center;
-      display: block; /* Hidden on very small mobile if needed */
+      display: block; 
     }
 
     .last-updated {
@@ -177,7 +177,6 @@
     .crypto-col { display: flex; flex-direction: column; height: 100%; }
     
     /* ROW 2: ~32vh */
-    /* Updated for Split NSE: Global(1) | NSE Broad(1) | NSE Sector(1) | Global Stocks(3) */
     .market-split {
       display: grid; 
       grid-template-columns: 1fr 1fr 1fr 3fr; 
@@ -189,130 +188,85 @@
 
     .global-stocks-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; height: 100%; overflow: hidden; }
 
-    /* ROW 3: Stocks Watch (Remaining) */
-    .stocks-section {
-      flex: 1; 
-      min-height: 0; 
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
-      padding: 0.5rem 0.75rem; overflow: hidden;
-      display: flex; flex-direction: column; transition: background 0.3s;
+    /* ROW 3: Remaining Height - New Structure */
+    .row-3-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 3fr; /* 1+1+1+3 layout */
+        gap: 0.5rem;
+        flex: 1; /* Fills remaining vertical space */
+        min-height: 230px;
+        overflow: hidden;
     }
     
-    .stocks-grid {
+    .stocks-grid-3col {
       display: grid; 
-      grid-template-columns: repeat(6, 1fr); /* 6 Columns for 42 stocks */
+      grid-template-columns: repeat(3, 1fr); /* 3 Columns for 21 stocks */
       gap: 1rem;
       height: 100%;
-      overflow: hidden; /* Exact fit 7 rows */
+      overflow: hidden; 
     }
 
     .stock-col { display: flex; flex-direction: column; height: 100%; }
-    /* Force rows in stock grid */
     .stock-col .asset-row { height: 14.28%; border-bottom: 1px solid rgba(128,128,128,0.1); }
 
 
     /* --- RESPONSIVE DESIGN --- */
 
-    /* Small Laptops / Landscape Tablets */
     @media (max-width: 1440px) {
-        .asset-grid-custom { grid-template-columns: 1fr 1fr 1fr 3fr; }
-        .market-split { grid-template-columns: 1fr 1fr 1fr 3fr; }
+        .asset-grid-custom, .market-split, .row-3-split { grid-template-columns: 1fr 1fr 1fr 3fr; }
     }
 
-    /* Tablets / Small Desktops (iPad Pro, etc) */
     @media (max-width: 1024px) {
       body { height: auto; overflow-y: auto; }
       .container { height: auto; display: block; padding: 1rem; padding-bottom: 2rem; }
       
-      /* Row 1 wraps */
-      .asset-grid-custom { 
-        height: auto; 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; /* 2 cols */
-        gap: 1rem; 
-        margin-bottom: 1rem; 
-      }
+      .asset-grid-custom { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
       .asset-box { height: auto; min-height: 240px; }
+      .asset-grid-custom .asset-box:nth-child(3) { grid-column: span 1; }
+      .asset-grid-custom .asset-box:nth-child(4) { grid-column: span 2; }
       
-      .asset-grid-custom .asset-box:nth-child(3) { grid-column: span 1; } /* Bonds */
-      .asset-grid-custom .asset-box:nth-child(4) { grid-column: span 2; } /* Crypto spans full width */
-      
-      /* Row 2 wraps */
-      .market-split { 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; /* 2 cols */
-        height: auto; 
-        gap: 1rem; 
-        margin-bottom: 1rem; 
-      }
-      /* Global Stocks spans full width on tablet row */
+      .market-split { display: grid; grid-template-columns: 1fr 1fr; height: auto; gap: 1rem; margin-bottom: 1rem; }
       .market-split .asset-box:nth-child(4) { grid-column: span 2; } 
       
-      .stocks-section { height: auto; min-height: 600px; }
-      .stocks-grid { grid-template-columns: 1fr 1fr 1fr; } /* 3 cols for stocks */
-      .stocks-grid .stock-col { margin-bottom: 1rem; }
+      /* Row 3 Tablet */
+      .row-3-split { display: grid; grid-template-columns: 1fr 1fr; height: auto; gap: 1rem; }
+      .row-3-split .asset-box:nth-child(4) { grid-column: span 2; }
+      .stocks-grid-3col { grid-template-columns: 1fr 1fr 1fr; }
     }
 
-    /* Mobile Devices (Phones) */
     @media (max-width: 768px) {
-      body {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+      body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+      .container { padding: 0.5rem; gap: 1rem; }
+      .dashboard-header { 
+        margin-bottom: 1rem; 
+        flex-wrap: wrap; 
+        height: auto; 
+        gap: 0.5rem;
       }
-      .container {
-        padding: 0.5rem;
-        gap: 1rem;
-      }
+      .reload-timer { display: none; }
+      .system-status { font-size: 0.7rem; }
 
-      .dashboard-header {
-        margin-bottom: 1rem;
-      }
-      .reload-timer {
-        display: none; /* Hide timer on small screens to save space */
-      }
-
-      /* Stack everything in 1 column */
-      .asset-grid-custom {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      /* Crypto on mobile: stack columns internally or keep grid? 
-         Keep grid but maybe 1 col if very narrow, but 3 cols fit ok on modern phones. 
-         Let's keep crypto internal split but ensure wrapper is 1 col.
-      */
+      /* Mobile Column Stacking */
+      .asset-grid-custom { grid-template-columns: 1fr; gap: 1rem; }
       .asset-grid-custom .asset-box:nth-child(4) { grid-column: span 1; }
 
-      .market-split {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
+      /* Fix Crypto and Global Stocks internal grids on mobile */
+      .crypto-split-container { grid-template-columns: 1fr; gap: 1rem; height: auto; }
+      .global-stocks-grid { grid-template-columns: 1fr; gap: 1rem; height: auto; }
+
+      .market-split { grid-template-columns: 1fr; gap: 1rem; }
       .market-split .asset-box:nth-child(4) { grid-column: span 1; }
 
-      /* Stocks: 2 columns is better than 1 for density */
-      .stocks-section {
-        height: auto;
-        padding-bottom: 1rem;
-      }
-      .stocks-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* 2 Columns on mobile */
-        gap: 0.5rem;
-        height: auto;
-      }
+      .row-3-split { grid-template-columns: 1fr; gap: 1rem; }
+      .row-3-split .asset-box:nth-child(4) { grid-column: span 1; }
       
-      .stock-col {
-        height: auto;
-      }
+      .stocks-grid-3col { grid-template-columns: 1fr 1fr; gap: 0.5rem; height: auto; }
       
-      /* Adjust internal rows for mobile scrolling */
-      .asset-box {
-        min-height: unset; /* Let content define height */
-      }
+      .asset-box { min-height: unset; height: auto; padding: 0.75rem; }
+      .stock-col { height: auto; margin-bottom: 0.5rem; }
       
-      /* Ensure text is readable */
-      .u-symbol { font-size: 0.8rem !important; }
-      .u-price { font-size: 0.85rem !important; }
+      .u-symbol { font-size: 0.85rem !important; }
+      .u-price { font-size: 0.9rem !important; }
     }
   </style>
 </head>
@@ -350,7 +304,7 @@
         <div class="asset-row"><span class="u-symbol">🇯🇵 JPY/INR</span><div style="text-align:right"><span class="u-price" id="p-jpyinr">--</span><span class="u-change" id="c-jpyinr">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇦🇺 AUD/USD</span><div style="text-align:right"><span class="u-price" id="p-audusd">--</span><span class="u-change" id="c-audusd">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">💵 DXY Index</span><div style="text-align:right"><span class="u-price" id="p-dxy">--</span><span class="u-change" id="c-dxy">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇨🇳 USD/CNY</span><div style="text-align:right"><span class="u-price">7.24</span><span class="u-change text-green">+0.01%</span></div></div> <!-- Added for 7th Row -->
+        <div class="asset-row"><span class="u-symbol">🇨🇳 USD/CNY</span><div style="text-align:right"><span class="u-price">7.24</span><span class="u-change text-green">+0.01%</span></div></div>
       </div>
 
       <!-- Commodities (7 Rows) -->
@@ -362,7 +316,7 @@
         <div class="asset-row"><span class="u-symbol">🛢️ Brent Oil</span><div style="text-align:right"><span class="u-price" id="p-brent">--</span><span class="u-change" id="c-brent">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🥉 Copper</span><div style="text-align:right"><span class="u-price" id="p-copper">--</span><span class="u-change" id="c-copper">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🔥 Nat Gas</span><div style="text-align:right"><span class="u-price" id="p-ng">--</span><span class="u-change" id="c-ng">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">⚙️ Aluminum</span><div style="text-align:right"><span class="u-price">$2,630</span><span class="u-change text-green">+0.45%</span></div></div> <!-- Added for 7th Row -->
+        <div class="asset-row"><span class="u-symbol">⚙️ Aluminum</span><div style="text-align:right"><span class="u-price">$2,630</span><span class="u-change text-green">+0.45%</span></div></div>
       </div>
 
       <!-- Bonds (7 Rows) -->
@@ -374,7 +328,7 @@
         <div class="asset-row"><span class="u-symbol">🇺🇸 US 2Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us2">--</span><span class="u-change" id="c-us2">--</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇮🇳 India 10Y</span><div style="text-align:right"><span class="u-price">7.15%</span><span class="u-change text-green">+0.01%</span></div></div>
         <div class="asset-row"><span class="u-symbol">🇯🇵 Japan 10Y</span><div style="text-align:right"><span class="u-price">0.98%</span><span class="u-change text-green">+0.02%</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇬🇧 UK 10Y</span><div style="text-align:right"><span class="u-price">4.21%</span><span class="u-change text-red">-0.05%</span></div></div> <!-- Added for 7th Row -->
+        <div class="asset-row"><span class="u-symbol">🇬🇧 UK 10Y</span><div style="text-align:right"><span class="u-price">4.21%</span><span class="u-change text-red">-0.05%</span></div></div>
       </div>
 
       <!-- Crypto (21 Items / 3 Cols) -->
@@ -422,13 +376,34 @@
       </div>
     </div>
 
-    <!-- ROW 3 (Remaining Space) -->
-    <div class="stocks-section">
-      <div class="asset-header" style="margin-bottom:0.25rem">
-        <span class="asset-title">Stocks Watch (42)</span>
+    <!-- ROW 3 (Remaining Space - New Structure) -->
+    <div class="row-3-split">
+      <!-- New Table 1: Capital Markets -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Capital Markets</span></div>
+        <div id="sector-1-body" style="display:flex; flex-direction:column; height:100%;"></div>
       </div>
-      <div class="stocks-grid" id="stocks-grid-container">
-        <!-- JS Generated 6 Cols -->
+
+      <!-- New Table 2: Auto Sector -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">Auto Sector</span></div>
+        <div id="sector-2-body" style="display:flex; flex-direction:column; height:100%;"></div>
+      </div>
+
+      <!-- New Table 3: IT Sector -->
+      <div class="asset-box">
+        <div class="asset-header"><span class="asset-title">IT Sector</span></div>
+        <div id="sector-3-body" style="display:flex; flex-direction:column; height:100%;"></div>
+      </div>
+
+      <!-- Stocks Watch (3 Cols - Custom List) -->
+      <div class="asset-box">
+        <div class="asset-header" style="margin-bottom:0.25rem">
+          <span class="asset-title">Stocks Watch</span>
+        </div>
+        <div class="stocks-grid-3col" id="stocks-grid-container">
+          <!-- JS Generated 3 Cols -->
+        </div>
       </div>
     </div>
 
@@ -446,37 +421,55 @@
       document.getElementById('icon-sun').style.display = isLight ? 'block' : 'none';
     }
 
-    // --- CONFIG: Stocks Watch List (42 Stocks) ---
-    const STOCK_LIST = [
-      // Col 1
-      { sym: "RELIANCE.NS", name: "Reliance" }, { sym: "TCS.NS", name: "TCS" },
-      { sym: "HDFCBANK.NS", name: "HDFC Bank" }, { sym: "INFY.NS", name: "Infosys" },
-      { sym: "ICICIBANK.NS", name: "ICICI Bank" }, { sym: "BHARTIARTL.NS", name: "Airtel" }, { sym: "HAL.NS", name: "HAL" },
-      // Col 2
-      { sym: "SBIN.NS", name: "SBI" }, { sym: "LICI.NS", name: "LIC India" },
-      { sym: "ITC.NS", name: "ITC" }, { sym: "HINDUNILVR.NS", name: "HUL" },
-      { sym: "LT.NS", name: "L&T" }, { sym: "BAJFINANCE.NS", name: "Bajaj Fin" }, { sym: "DLF.NS", name: "DLF" },
-      // Col 3
-      { sym: "MARUTI.NS", name: "Maruti" }, { sym: "ADANIENT.NS", name: "Adani Ent" },
-      { sym: "SUNPHARMA.NS", name: "Sun Pharma" }, { sym: "TATAMOTORS.NS", name: "Tata Motors" },
-      { sym: "KOTAKBANK.NS", name: "Kotak Bank" }, { sym: "AXISBANK.NS", name: "Axis Bank" }, { sym: "SIEMENS.NS", name: "Siemens" },
-      // Col 4
-      { sym: "ONGC.NS", name: "ONGC" }, { sym: "HCLTECH.NS", name: "HCL Tech" },
-      { sym: "TITAN.NS", name: "Titan" }, { sym: "ASIANPAINT.NS", name: "Asian Paint" },
-      { sym: "ZOMATO.NS", name: "Zomato" }, { sym: "POWERGRID.NS", name: "Power Grid" }, { sym: "AVEU.NS", name: "DMart" },
-      // Col 5
-      { sym: "COALINDIA.NS", name: "Coal India" }, { sym: "NTPC.NS", name: "NTPC" },
-      { sym: "M&M.NS", name: "M&M" }, { sym: "ULTRACEMCO.NS", name: "UltraCem" },
-      { sym: "NESTLEIND.NS", name: "Nestle" }, { sym: "GRASIM.NS", name: "Grasim" }, { sym: "BEL.NS", name: "BEL" },
-      // Col 6
-      { sym: "IOC.NS", name: "IOC" }, { sym: "GAIL.NS", name: "GAIL" },
-      { sym: "TRENT.NS", name: "Trent" }, { sym: "JIOFIN.NS", name: "Jio Fin" },
-      { sym: "BPCL.NS", name: "BPCL" }, { sym: "AMBUJACEM.NS", name: "Ambuja Cem" }, { sym: "VEDL.NS", name: "Vedanta" }
+    // --- CONFIG: Stock Lists (Redistributed) ---
+    
+    // Custom Watch List (21 Stocks - 3 Cols x 7 Rows)
+    // Mixed: Favorites + Multibagger Growth (Mid/Small/Growth)
+    const STOCK_LIST_MAIN = [
+      // Col 1 (7) - Essentials & Banking
+      { sym: "SBIN.NS", name: "🇮🇳 SBI" }, { sym: "BHARTIARTL.NS", name: "🇮🇳 Airtel" },
+      { sym: "AXISBANK.NS", name: "🇮🇳 Axis Bank" }, { sym: "SUNPHARMA.NS", name: "🇮🇳 Sun Pharma" },
+      { sym: "LICI.NS", name: "🇮🇳 LIC India" }, { sym: "CANBK.NS", name: "🇮🇳 Canara Bank" }, { sym: "GICRE.NS", name: "🇮🇳 GIC Re" },
+      // Col 2 (7) - Midcap Growth & Consumption
+      { sym: "AUBANK.NS", name: "🇮🇳 AU Bank" }, { sym: "VBL.NS", name: "🇮🇳 Varun Bev" },
+      { sym: "TITAGARH.NS", name: "🇮🇳 Titagarh" }, { sym: "WONDERLA.NS", name: "🇮🇳 Wonderla" },
+      { sym: "HERITGFOOD.NS", name: "🇮🇳 Heritage" }, { sym: "RVNL.NS", name: "🇮🇳 RVNL" }, { sym: "IREDA.NS", name: "🇮🇳 IREDA" },
+      // Col 3 (7) - High Growth & New Age
+      { sym: "KAYNES.NS", name: "🇮🇳 Kaynes Tech" }, { sym: "JIOFIN.NS", name: "🇮🇳 Jio Fin" },
+      { sym: "TRENT.NS", name: "🇮🇳 Trent" }, { sym: "SUZLON.NS", name: "🇮🇳 Suzlon" },
+      { sym: "DIXON.NS", name: "🇮🇳 Dixon Tech" }, { sym: "MAZDOCK.NS", name: "🇮🇳 Mazagon" }, { sym: "TATAPOWER.NS", name: "🇮🇳 Tata Power" }
+    ];
+
+    // Sector 1: Capital Markets (Custom Order)
+    const STOCK_LIST_CAPITAL = [
+      { sym: "GROWW.NS", name: "🇮🇳 Groww" }, // User requested (Billionbrains)
+      { sym: "ANGELONE.NS", name: "🇮🇳 Angel One" },
+      { sym: "CDSL.NS", name: "🇮🇳 CDSL" }, { sym: "BSE.NS", name: "🇮🇳 BSE" },
+      { sym: "HDFCAMC.NS", name: "🇮🇳 HDFC AMC" }, { sym: "NAM-INDIA.NS", name: "🇮🇳 Nippon Life" }, { sym: "CAMS.NS", name: "🇮🇳 CAMS" }
+    ];
+
+    // Sector 2: Auto Sector (7 Stocks)
+    const STOCK_LIST_AUTO = [
+      { sym: "MARUTI.NS", name: "🇮🇳 Maruti" }, { sym: "TATAMOTORS.NS", name: "🇮🇳 Tata Motors" },
+      { sym: "M&M.NS", name: "🇮🇳 M&M" }, { sym: "BAJAJ-AUTO.NS", name: "🇮🇳 Bajaj Auto" },
+      { sym: "EICHERMOT.NS", name: "🇮🇳 Eicher" }, { sym: "HEROMOTOCO.NS", name: "🇮🇳 Hero Moto" }, { sym: "TVSMOTOR.NS", name: "🇮🇳 TVS Motor" }
+    ];
+
+    // Sector 3: IT Sector (7 Stocks)
+    const STOCK_LIST_IT = [
+      { sym: "TCS.NS", name: "🇮🇳 TCS" }, { sym: "INFY.NS", name: "🇮🇳 Infosys" },
+      { sym: "HCLTECH.NS", name: "🇮🇳 HCL Tech" }, { sym: "WIPRO.NS", name: "🇮🇳 Wipro" },
+      { sym: "TECHM.NS", name: "🇮🇳 Tech M" }, { sym: "LTIM.NS", name: "🇮🇳 LTIM" }, { sym: "PERSISTENT.NS", name: "🇮🇳 Persistent" }
     ];
 
     async function updateMarketData() {
       timeLeft = REFRESH_INTERVAL;
-      document.getElementById('update-time').innerText = new Date().toLocaleTimeString();
+      
+      // Update Date & Time with India Symbol
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      const timeStr = now.toLocaleTimeString();
+      document.getElementById('update-time').innerText = `🇮🇳 ${dateStr} • ${timeStr}`;
       
       fetchForex();
       fetchBonds();
@@ -488,14 +481,22 @@
 
     // --- STOCKS FETCHER ---
     async function fetchStocks() {
-      const symbols = STOCK_LIST.map(s => s.sym);
+      // Collect all symbols to fetch in one go
+      const allLists = [...STOCK_LIST_MAIN, ...STOCK_LIST_CAPITAL, ...STOCK_LIST_AUTO, ...STOCK_LIST_IT];
+      const symbols = allLists.map(s => s.sym);
       const data = await fetchYahooData(symbols);
       if (data && Object.keys(data).length > 0) Object.assign(marketCache, data);
 
+      // Render 3 New Single Tables
+      renderIndicesList('sector-1-body', STOCK_LIST_CAPITAL, '₹');
+      renderIndicesList('sector-2-body', STOCK_LIST_AUTO, '₹');
+      renderIndicesList('sector-3-body', STOCK_LIST_IT, '₹');
+
+      // Render Main Stocks Watch (3 Cols)
       const container = document.getElementById('stocks-grid-container');
       let html = '';
-      const cols = [[], [], [], [], [], []]; // 6 Columns
-      STOCK_LIST.forEach((stock, i) => { cols[i % 6].push(stock); });
+      const cols = [[], [], []]; // 3 Columns
+      STOCK_LIST_MAIN.forEach((stock, i) => { cols[i % 3].push(stock); });
 
       cols.forEach(colData => {
         let colHtml = '<div class="stock-col">';
@@ -540,7 +541,7 @@
       // Global Indices (7)
       const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI"];
       
-      // Global Stocks (21) - 12 US, 9 Intl
+      // Global Stocks (21)
       const gsSyms1 = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA"];
       const gsNames1 = ["🇺🇸 Apple", "🇺🇸 Microsoft", "🇺🇸 Nvidia", "🇺🇸 Google", "🇺🇸 Amazon", "🇺🇸 Meta", "🇺🇸 Tesla"];
       
@@ -606,7 +607,6 @@
 
     // --- CRYPTO (21 Coins) ---
     async function fetchCrypto() {
-        // 21 Coins
         const ids = "bitcoin,ethereum,binancecoin,solana,ripple,dogecoin,cardano,avalanche-2,shiba-inu,polkadot,chainlink,litecoin,tron,the-open-network,deeper-network,bitcoin-cash,uniswap,near,aptos,arbitrum,mysterium";
         const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=21&page=1&sparkline=false`);
         const data = await res.json();
