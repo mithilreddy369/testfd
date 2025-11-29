@@ -73,9 +73,9 @@
       gap: 0.5vh; 
     }
 
-    /* --- Top Bar (Luxury Header) --- */
+    /* --- Top Bar (Final Polished Header) --- */
     .dashboard-header {
-      background-color: var(--header-bg); /* Now Navy Blue */
+      background-color: var(--header-bg); /* Navy Blue */
       padding: 0.5rem 1rem;
       display: flex;
       justify-content: space-between;
@@ -83,28 +83,17 @@
       flex-shrink: 0; 
       height: 6vh; 
       min-height: 48px;
-      border: 1px solid var(--border); /* Subtle matching border for polish */
-      border-radius: 4px; 
-      /* Maintained deep shadow for polish */
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 0, 0, 0.3);
+      /* Removed all shadows, borders, and rounding for a clean look */
+      border: none; 
+      border-radius: 0;
+      box-shadow: none;
       transition: all 0.4s ease;
       position: relative;
+      /* Add a single, thin bottom separator for a clean break */
+      border-bottom: 1px solid var(--border);
     }
     
-    /* Subtle inner line at the bottom for separation */
-    .dashboard-header::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        /* Using tertiary color for separator line */
-        background: linear-gradient(to right, transparent 5%, var(--tertiary), transparent 95%);
-    }
-    .light-mode .dashboard-header {
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
+    /* Removed the ::after block for the subtle line */
 
     .brand-area { display: flex; align-items: center; gap: 12px; }
     
