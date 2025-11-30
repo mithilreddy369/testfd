@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ProResume Analyzer | System Live</title>
+    <title>ProResume Analyzer | Mobile Optima</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Elite resume analysis command center. Full-screen diagnostic tool.">
+    <meta name="description" content="Elite resume analysis command center. Optimized for all devices.">
     <meta name="theme-color" content="#030008">
 
     <!-- Fonts: Outfit (UI) & JetBrains Mono (Data/Code) -->
@@ -65,6 +65,7 @@
     </script>
 
     <style>
+        /* Base Setup */
         body { background-color: #05050a; color: #e2e8f0; overflow: hidden; }
         
         /* Clean Glass Panel */
@@ -93,14 +94,6 @@
                               linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 1024px) {
-            body { overflow-y: auto; overflow-x: hidden; }
-            .mobile-stack { flex-direction: column; height: auto !important; }
-            .mobile-h-auto { height: auto !important; min-height: 300px; }
-            .mobile-mt { margin-top: 1rem; }
-        }
-
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         
         /* Standard Loader */
@@ -116,6 +109,41 @@
             width: 100%; height: 100%; object-fit: contain;
             opacity: 0.9;
         }
+
+        /* --- MOBILE & TABLET OPTIMIZATIONS --- */
+        @media (max-width: 1024px) {
+            body { 
+                overflow-y: auto !important; /* Enable scrolling on mobile */
+                overflow-x: hidden;
+                height: auto !important;
+            }
+            main {
+                overflow: visible !important;
+                height: auto !important;
+                padding-bottom: 80px !important; /* Space for footer */
+            }
+            .mobile-stack { 
+                flex-direction: column; 
+                height: auto !important; 
+            }
+            .mobile-h-auto { 
+                height: auto !important; 
+                min-height: 250px; 
+            }
+            .mobile-mt { margin-top: 1rem; }
+            
+            /* Better Header on Mobile */
+            h2 { font-size: 1.75rem !important; }
+            
+            /* Footer Fix */
+            footer {
+                position: fixed;
+                bottom: 0;
+                z-index: 100;
+                backdrop-filter: blur(10px);
+                background: rgba(5, 5, 10, 0.95);
+            }
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col selection:bg-metric_ats selection:text-black">
@@ -126,19 +154,19 @@
     </div>
 
     <!-- Top Bar -->
-    <nav class="w-full z-50 h-14 border-b border-white/5 bg-void/90 backdrop-blur-md flex-none">
-        <div class="w-full h-full px-6 flex items-center justify-between">
+    <nav class="w-full z-50 h-14 border-b border-white/5 bg-void/90 backdrop-blur-md flex-none sticky top-0">
+        <div class="w-full h-full px-4 md:px-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded bg-gradient-to-br from-metric_ats to-metric_imp flex items-center justify-center">
                     <i class="fa-solid fa-layer-group text-white text-xs"></i>
                 </div>
                 <div>
-                    <h1 class="text-base font-bold tracking-tight text-white leading-none">PRORESUME <span class="text-metric_ats">ANALYZER</span></h1>
+                    <h1 class="text-sm md:text-base font-bold tracking-tight text-white leading-none">PRORESUME <span class="text-metric_ats">ANALYZER</span></h1>
                 </div>
             </div>
-            <div class="flex items-center gap-6">
-                <button onclick="showModal('about')" class="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors tracking-wider hidden md:block">ABOUT</button>
-                <button onclick="showModal('tips')" class="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors tracking-wider hidden md:block">TIPS</button>
+            <div class="flex items-center gap-4 md:gap-6">
+                <button onclick="showModal('about')" class="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors tracking-wider">ABOUT</button>
+                <button onclick="showModal('tips')" class="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors tracking-wider">TIPS</button>
                 <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded bg-white/5 border border-white/10">
                     <div class="w-1.5 h-1.5 rounded-full bg-metric_skl animate-pulse"></div>
                     <span class="text-[10px] font-mono text-gray-300 font-bold tracking-wider">SYSTEM LIVE</span>
@@ -151,14 +179,13 @@
     <main class="flex-1 w-full p-4 overflow-hidden relative z-10 flex flex-col items-center">
         
         <!-- Header (Motivational) -->
-        <div class="text-center mb-5 flex-none z-20 px-4">
-            <h2 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-3">
+        <div class="text-center mb-6 flex-none z-20 px-4 mt-2 md:mt-0">
+            <h2 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-2">
                 Don't Just Apply. <br class="hidden md:block" />
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-metric_ats via-metric_imp to-metric_vrb">Dominate the Market.</span>
             </h2>
-            <p class="text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
-                Unlock your true career potential. Our advanced diagnostic engine reveals the hidden gaps in your resume 
-                and provides the strategy you need to <span class="text-white font-medium">stand out instantly.</span>
+            <p class="text-xs md:text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
+                Unlock your true career potential. Our advanced diagnostic engine reveals hidden gaps and provides the strategy to <span class="text-white font-medium">stand out instantly.</span>
             </p>
         </div>
 
@@ -168,16 +195,16 @@
             <!-- Column 1: Upload / Preview (Left - 30%) -->
             <div class="w-full lg:w-[30%] flex flex-col gap-3 h-full mobile-h-auto flex-none">
                 <!-- Drop/Preview Zone -->
-                <div id="dropZone" class="flex-1 glass-panel rounded-xl relative overflow-hidden group cursor-pointer transition-all hover:border-white/20 flex flex-col">
+                <div id="dropZone" class="flex-1 glass-panel rounded-xl relative overflow-hidden group cursor-pointer transition-all hover:border-white/20 flex flex-col min-h-[250px]">
                     
                     <!-- 1. Idle State -->
-                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-10 transition-opacity duration-300">
-                        <div class="w-16 h-16 rounded-2xl bg-void-light border border-white/10 flex items-center justify-center mb-5 group-hover:scale-105 transition-all duration-300 group-hover:bg-white/5">
-                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 group-hover:text-white transition-colors"></i>
+                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 transition-opacity duration-300">
+                        <div class="w-14 h-14 rounded-xl bg-void-light border border-white/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-all duration-300 group-hover:bg-white/5">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-1">Upload Resume</h3>
-                        <p class="text-xs text-gray-500 font-mono mb-5 tracking-wide">PDF or DOCX</p>
-                        <button class="px-6 py-2.5 bg-white text-void font-bold text-xs rounded hover:bg-gray-200 transition-colors">SELECT FILE</button>
+                        <h3 class="text-lg font-bold text-white mb-1">Upload Resume</h3>
+                        <p class="text-[10px] text-gray-500 font-mono mb-4 tracking-wide">PDF or DOCX</p>
+                        <button class="px-5 py-2 bg-white text-void font-bold text-xs rounded hover:bg-gray-200 transition-colors">SELECT FILE</button>
                     </div>
 
                     <!-- 2. Preview State -->
@@ -191,8 +218,8 @@
                             <!-- Scanner Line -->
                             <div class="absolute inset-0 border-b-2 border-metric_ats/80 z-20 animate-scan-vertical pointer-events-none"></div>
                         </div>
-                        <div class="h-10 bg-black/80 backdrop-blur-md flex items-center justify-between px-4 border-t border-white/10 shrink-0">
-                            <span class="text-[10px] text-gray-400 font-mono truncate max-w-[150px]" id="previewFilename">file.pdf</span>
+                        <div class="h-9 bg-black/80 backdrop-blur-md flex items-center justify-between px-4 border-t border-white/10 shrink-0">
+                            <span class="text-[10px] text-gray-400 font-mono truncate max-w-[120px]" id="previewFilename">file.pdf</span>
                             <button id="reuploadBtn" class="text-[10px] text-metric_vrb hover:text-white uppercase font-bold tracking-wider">CHANGE</button>
                         </div>
                     </div>
@@ -207,7 +234,7 @@
                 </div>
 
                 <!-- Terminal Log -->
-                <div class="glass-panel rounded-xl p-3 h-32 flex-none flex flex-col font-mono text-[10px] relative overflow-hidden">
+                <div class="glass-panel rounded-xl p-3 h-28 md:h-32 flex-none flex flex-col font-mono text-[10px] relative overflow-hidden">
                     <div class="flex justify-between items-center border-b border-white/10 pb-1 mb-1">
                         <span class="text-gray-500 font-bold">SYSTEM_LOG</span>
                         <div class="flex gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-red-500"></div><div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div></div>
@@ -222,75 +249,75 @@
             <div id="dashboard" class="w-full lg:flex-1 h-full glass-panel rounded-xl p-1 relative flex flex-col transition-all duration-700 mobile-h-auto mobile-mt">
                 
                 <!-- Content -->
-                <div class="flex-1 bg-void-light/30 rounded-lg p-5 flex flex-col overflow-y-auto">
+                <div class="flex-1 bg-void-light/30 rounded-lg p-4 md:p-5 flex flex-col overflow-y-auto">
                     <!-- Header -->
-                    <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-4">
-                        <div class="flex items-center gap-4">
-                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-chart-pie text-metric_ats"></i> Diagnostic Report
                             </h2>
                         </div>
-                        <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-4 md:gap-6">
                             <!-- New Scan Button -->
-                            <button id="analyzeNewBtnHeader" class="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-2 border border-white/10 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 transition-all group">
-                                <i class="fa-solid fa-rotate"></i> NEW SCAN
+                            <button id="analyzeNewBtnHeader" class="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1.5 border border-white/10 px-2 py-1 md:px-3 md:py-1.5 rounded bg-white/5 hover:bg-white/10 transition-all group">
+                                <i class="fa-solid fa-rotate"></i> <span class="hidden md:inline">NEW SCAN</span>
                             </button>
                             <div class="text-right flex flex-col items-end">
-                                <div class="text-[10px] text-gray-500 font-mono uppercase tracking-widest leading-none mb-1">Total Score</div>
+                                <div class="text-[8px] md:text-[10px] text-gray-500 font-mono uppercase tracking-widest leading-none mb-1">Total Score</div>
                                 <div class="relative leading-none">
-                                    <div class="text-5xl font-bold text-white tracking-tighter" id="totalScore">00</div>
+                                    <div class="text-4xl md:text-5xl font-bold text-white tracking-tighter" id="totalScore">00</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Metrics Grid (Clean Colors) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
+                    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 mb-4">
                         <!-- Cards -->
-                        <div class="glass-card-hover p-3 rounded-lg">
-                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-robot text-metric_ats mr-2"></i>ATS Check</span><span id="atsScore" class="text-xs font-bold text-metric_ats">0%</span></div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="atsBar" class="bg-metric_ats h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
-                            <p class="text-[10px] text-gray-500 truncate">Keyword parsing accuracy</p>
+                        <div class="glass-card-hover p-2.5 rounded-lg">
+                            <div class="flex justify-between items-center mb-1.5"><span class="text-[10px] md:text-xs font-bold text-gray-300"><i class="fa-solid fa-robot text-metric_ats mr-1.5"></i>ATS Check</span><span id="atsScore" class="text-[10px] md:text-xs font-bold text-metric_ats">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1 rounded-full mb-1"><div id="atsBar" class="bg-metric_ats h-1 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[9px] text-gray-500 truncate">Keyword parsing accuracy</p>
                         </div>
-                        <div class="glass-card-hover p-3 rounded-lg">
-                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-chart-line text-metric_imp mr-2"></i>Impact</span><span id="quantScore" class="text-xs font-bold text-metric_imp">0%</span></div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="quantBar" class="bg-metric_imp h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
-                            <p class="text-[10px] text-gray-500 truncate">Metric-driven data points</p>
+                        <div class="glass-card-hover p-2.5 rounded-lg">
+                            <div class="flex justify-between items-center mb-1.5"><span class="text-[10px] md:text-xs font-bold text-gray-300"><i class="fa-solid fa-chart-line text-metric_imp mr-1.5"></i>Impact</span><span id="quantScore" class="text-[10px] md:text-xs font-bold text-metric_imp">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1 rounded-full mb-1"><div id="quantBar" class="bg-metric_imp h-1 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[9px] text-gray-500 truncate">Metric-driven data</p>
                         </div>
-                        <div class="glass-card-hover p-3 rounded-lg">
-                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-bolt text-metric_vrb mr-2"></i>Verbs</span><span id="verbScore" class="text-xs font-bold text-metric_vrb">0%</span></div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="verbBar" class="bg-metric_vrb h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
-                            <p class="text-[10px] text-gray-500 truncate">Strong action vocabulary</p>
+                        <div class="glass-card-hover p-2.5 rounded-lg">
+                            <div class="flex justify-between items-center mb-1.5"><span class="text-[10px] md:text-xs font-bold text-gray-300"><i class="fa-solid fa-bolt text-metric_vrb mr-1.5"></i>Verbs</span><span id="verbScore" class="text-[10px] md:text-xs font-bold text-metric_vrb">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1 rounded-full mb-1"><div id="verbBar" class="bg-metric_vrb h-1 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[9px] text-gray-500 truncate">Action vocabulary</p>
                         </div>
-                        <div class="glass-card-hover p-3 rounded-lg">
-                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-microchip text-metric_skl mr-2"></i>Skills</span><span id="skillScore" class="text-xs font-bold text-metric_skl">0%</span></div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="skillBar" class="bg-metric_skl h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
-                            <p class="text-[10px] text-gray-500 truncate">Hard skill matching</p>
+                        <div class="glass-card-hover p-2.5 rounded-lg">
+                            <div class="flex justify-between items-center mb-1.5"><span class="text-[10px] md:text-xs font-bold text-gray-300"><i class="fa-solid fa-microchip text-metric_skl mr-1.5"></i>Skills</span><span id="skillScore" class="text-[10px] md:text-xs font-bold text-metric_skl">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1 rounded-full mb-1"><div id="skillBar" class="bg-metric_skl h-1 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[9px] text-gray-500 truncate">Skill matching</p>
                         </div>
-                        <div class="glass-card-hover p-3 rounded-lg">
-                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-align-left text-metric_fmt mr-2"></i>Format</span><span id="formatScore" class="text-xs font-bold text-metric_fmt">0%</span></div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="formatBar" class="bg-metric_fmt h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
-                            <p class="text-[10px] text-gray-500 truncate">Layout & structure</p>
+                        <div class="glass-card-hover p-2.5 rounded-lg">
+                            <div class="flex justify-between items-center mb-1.5"><span class="text-[10px] md:text-xs font-bold text-gray-300"><i class="fa-solid fa-align-left text-metric_fmt mr-1.5"></i>Format</span><span id="formatScore" class="text-[10px] md:text-xs font-bold text-metric_fmt">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1 rounded-full mb-1"><div id="formatBar" class="bg-metric_fmt h-1 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[9px] text-gray-500 truncate">Layout & structure</p>
                         </div>
-                        <div class="glass-card-hover p-3 rounded-lg">
-                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-layer-group text-metric_dep mr-2"></i>Depth</span><span id="depthScore" class="text-xs font-bold text-metric_dep">0%</span></div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="depthBar" class="bg-metric_dep h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
-                            <p class="text-[10px] text-gray-500 truncate">Content density</p>
+                        <div class="glass-card-hover p-2.5 rounded-lg">
+                            <div class="flex justify-between items-center mb-1.5"><span class="text-[10px] md:text-xs font-bold text-gray-300"><i class="fa-solid fa-layer-group text-metric_dep mr-1.5"></i>Depth</span><span id="depthScore" class="text-[10px] md:text-xs font-bold text-metric_dep">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1 rounded-full mb-1"><div id="depthBar" class="bg-metric_dep h-1 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[9px] text-gray-500 truncate">Content density</p>
                         </div>
                     </div>
 
-                    <!-- Full Width Critical Analysis (Boxed & Compact) -->
-                    <div class="flex-1 min-h-0 flex flex-col gap-4 border-t border-white/5 pt-4 mt-auto">
+                    <!-- Full Width Critical Analysis (Optimized List - No Boxes) -->
+                    <div class="flex-1 min-h-0 flex flex-col gap-3 border-t border-white/5 pt-3 mt-auto">
                         
-                        <!-- Strategic Recommendations (Full Width) -->
+                        <!-- Strategic Recommendations -->
                         <div class="w-full bg-white/5 rounded-lg p-4 border border-white/5 flex flex-col h-full">
-                            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                            <h3 class="text-xs md:text-sm font-bold text-white mb-2 flex items-center gap-2">
                                 <i class="fa-solid fa-triangle-exclamation text-metric_fmt"></i> Deep Critical Analysis
                             </h3>
-                            <!-- Boxed List: Compact Vertical Stacking -->
-                            <div id="recommendationList" class="flex-1 flex flex-col gap-1.5 overflow-y-auto max-h-[160px] scrollbar-hide text-xs font-mono text-gray-400">
-                                <div class="p-2 rounded bg-white/5 border border-white/5 flex items-start gap-2.5 opacity-70">
-                                    <span class="text-metric_ats mt-0.5 shrink-0"><i class="fa-solid fa-spinner fa-spin"></i></span> 
+                            <!-- High Density List: Plain Text, No Boxes -->
+                            <div id="recommendationList" class="flex-1 flex flex-col gap-2 overflow-y-auto max-h-[200px] scrollbar-hide text-xs font-mono text-gray-400">
+                                <div class="flex items-start gap-2 opacity-50">
+                                    <span class="text-metric_ats shrink-0">></span> 
                                     <span>Upload resume to initialize deep diagnostic scan...</span>
                                 </div>
                             </div>
@@ -302,21 +329,13 @@
             </div>
         </div>
 
-        <!-- Footer with Status Ticker -->
-        <footer class="absolute bottom-0 w-full h-8 bg-void/90 border-t border-white/5 flex items-center justify-between px-6 text-[10px] text-gray-500 font-mono z-50 backdrop-blur-sm">
-            <div class="flex items-center gap-6">
-                <span>© 2025 PRORESUME ANALYZER.</span>
+        <!-- Footer -->
+        <footer class="absolute bottom-0 w-full h-8 bg-void/95 border-t border-white/5 flex items-center justify-between px-4 md:px-6 text-[10px] text-gray-500 font-mono z-50 backdrop-blur-sm">
+            <div class="flex items-center gap-4 md:gap-6">
+                <span>© 2025 PRORESUME.</span>
                 <span id="timeDisplay" class="hidden md:inline text-gray-600"></span>
             </div>
             
-            <!-- Live Ticker -->
-            <div class="hidden md:flex items-center gap-4">
-                <span class="flex items-center gap-2">
-                    <span class="w-1 h-1 rounded-full bg-metric_skl"></span>
-                    <span id="statusTicker" class="uppercase tracking-wider text-gray-400">ENCRYPTION: SECURE</span>
-                </span>
-            </div>
-
             <div class="flex gap-4">
                 <button onclick="showModal('privacy')" class="hover:text-white transition-colors">PRIVACY</button>
                 <button onclick="showModal('contact')" class="hover:text-metric_ats transition-colors">CONTACT</button>
@@ -324,11 +343,11 @@
         </footer>
 
         <!-- Information Modal -->
-        <div id="infoModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
-            <div class="glass-panel w-full max-w-2xl p-8 rounded-xl relative m-4 border border-white/10">
+        <div id="infoModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+            <div class="glass-panel w-full max-w-lg md:max-w-2xl p-6 rounded-xl relative border border-white/10">
                 <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
-                <h3 id="modalTitle" class="text-2xl font-bold text-white mb-6 flex items-center gap-3"></h3>
-                <div id="modalContent" class="text-sm text-gray-300 font-mono leading-relaxed space-y-6"></div>
+                <h3 id="modalTitle" class="text-xl md:text-2xl font-bold text-white mb-4 flex items-center gap-3"></h3>
+                <div id="modalContent" class="text-xs md:text-sm text-gray-300 font-mono leading-relaxed space-y-4"></div>
             </div>
         </div>
 
@@ -352,21 +371,12 @@
         const recommendationList = document.getElementById('recommendationList');
         const analyzeNewBtnHeader = document.getElementById('analyzeNewBtnHeader');
         const timeDisplay = document.getElementById('timeDisplay');
-        const statusTicker = document.getElementById('statusTicker');
 
         // Real-time Clock
         setInterval(() => {
             const now = new Date();
             timeDisplay.innerText = now.toISOString().split('T')[0] + ' ' + now.toLocaleTimeString('en-GB');
         }, 1000);
-
-        // Status Ticker Animation
-        const statuses = ["ENCRYPTION: SECURE", "MEMORY: OPTIMIZED", "LATENCY: 12MS", "SERVER: OFFLINE MODE", "READY"];
-        let statusIdx = 0;
-        setInterval(() => {
-            statusIdx = (statusIdx + 1) % statuses.length;
-            statusTicker.innerText = statuses[statusIdx];
-        }, 3000);
 
         // Modal Elements
         const infoModal = document.getElementById('infoModal');
@@ -378,29 +388,27 @@
             privacy: {
                 title: '<i class="fa-solid fa-shield-halved text-metric_skl"></i> Protocol: Zero-Retention',
                 body: `<p><strong class="text-metric_skl">Absolute Privacy Guarantee:</strong> This system operates entirely within your browser's local memory (Client-Side). Unlike standard analyzers, your resume file is <strong>never</strong> uploaded to any server, cloud storage, or third-party database.</p>
-                       <p>We utilize advanced WebAssembly libraries to process PDF and DOCX files directly on your device. This ensures that your personal data, contact information, and career history remain physically in your possession at all times.</p>
-                       <p class="p-4 bg-white/5 rounded border border-white/10 text-xs"><strong>Security Note:</strong> Once you refresh this page or close this tab, all analysis data is instantly and permanently obliterated from your browser's RAM.</p>`
+                       <p>We utilize advanced WebAssembly libraries to process PDF and DOCX files directly on your device.</p>`
             },
             contact: {
                 title: '<i class="fa-solid fa-envelope text-metric_ats"></i> Engineering Contact',
                 body: `<p><strong class="text-metric_ats">Developer Channel:</strong></p>
-                       <p>We are dedicated to maintaining the highest standard of algorithmic accuracy. For detailed bug reports, feature requests, or enterprise licensing inquiries, please contact the lead engineering team directly.</p>
+                       <p>For bug reports or inquiries, please contact the engineering team.</p>
                        <p class="mt-4"><a href="#" class="text-metric_ats hover:text-white transition-colors border-b border-metric_ats hover:border-white pb-0.5">engineering@proresume.analyzer</a></p>`
             },
             about: {
                 title: '<i class="fa-solid fa-circle-info text-metric_imp"></i> Mission Directive',
                 body: `<p><strong class="text-metric_imp">Democratizing Career Intelligence:</strong> The modern hiring landscape is guarded by unfeeling algorithms. We built ProResume Analyzer to level the playing field.</p>
-                       <p>Our mission is to arm every candidate with the same high-grade diagnostic tools used by Fortune 500 recruitment systems. By reverse-engineering ATS logic, we provide you with the actionable intelligence needed to bypass the bots and put your story directly in human hands.</p>
                        <p>We believe in <strong class="text-white">Career Sovereignty</strong>: Your data, your strategy, your future. Unlocked.</p>`
             },
             tips: {
                 title: '<i class="fa-solid fa-trophy text-metric_fmt"></i> Hall of Fame Rules',
-                body: `<div class="space-y-6">
-                        <div class="flex gap-4"><span class="text-metric_ats font-bold text-xl">01.</span> <div><strong class="text-metric_ats text-lg block mb-1">Reverse Chronology is King</strong> <p>Always list experience new to old. Recruiters spend 74% of their 6-second scan on your current role. Don't bury the lead.</p></div></div>
-                        <div class="flex gap-4"><span class="text-metric_imp font-bold text-xl">02.</span> <div><strong class="text-metric_imp text-lg block mb-1">The Bullet Point Protocol</strong> <p>Banish dense text blocks immediately. Use 3-5 punchy, single-line bullet points per role to hook scanners instantly.</p></div></div>
-                        <div class="flex gap-4"><span class="text-metric_vrb font-bold text-xl">03.</span> <div><strong class="text-metric_vrb text-lg block mb-1">Aggressive Quantification</strong> <p>"Managed budget" is weak. "Managed $50k annual budget" is undeniable. Numbers are the universal language of competence.</p></div></div>
-                        <div class="flex gap-4"><span class="text-metric_skl font-bold text-xl">04.</span> <div><strong class="text-metric_skl text-lg block mb-1">Keyword Mirroring</strong> <p>If the job description says "Project Management", do not write "Team Leading". Use the exact keywords to score high relevance.</p></div></div>
-                        <div class="flex gap-4"><span class="text-metric_fmt font-bold text-xl">05.</span> <div><strong class="text-metric_fmt text-lg block mb-1">PDF Integrity</strong> <p>Always submit as PDF to lock your formatting across all devices. Ensure text is selectable (not an image scan) for bots to read it.</p></div></div>
+                body: `<div class="space-y-4">
+                        <div class="flex gap-3"><span class="text-metric_ats font-bold text-lg">01.</span> <div><strong class="text-metric_ats block mb-1">Reverse Chronology is King</strong> <p>Always list experience new to old. Recruiters scan top-left first.</p></div></div>
+                        <div class="flex gap-3"><span class="text-metric_imp font-bold text-lg">02.</span> <div><strong class="text-metric_imp block mb-1">The Bullet Point Protocol</strong> <p>Banish dense text blocks. Use 3-5 punchy bullets per role.</p></div></div>
+                        <div class="flex gap-3"><span class="text-metric_vrb font-bold text-lg">03.</span> <div><strong class="text-metric_vrb block mb-1">Aggressive Quantification</strong> <p>Numbers are the universal language of competence.</p></div></div>
+                        <div class="flex gap-3"><span class="text-metric_skl font-bold text-lg">04.</span> <div><strong class="text-metric_skl block mb-1">Keyword Mirroring</strong> <p>Use exact skill keywords found in the job description.</p></div></div>
+                        <div class="flex gap-3"><span class="text-metric_fmt font-bold text-lg">05.</span> <div><strong class="text-metric_fmt block mb-1">PDF Integrity</strong> <p>Submit as PDF to lock formatting. Ensure text is selectable.</p></div></div>
                        </div>`
             }
         };
@@ -595,13 +603,11 @@
             // Cap at 8 items
             recs = recs.slice(0, 8);
 
-            // Boxed Item Rendering (Compact)
+            // Compact List Rendering (No Boxes, Just Text)
             recommendationList.innerHTML = recs.map(r => `
-                <div class="flex items-start gap-2.5 p-1.5 rounded bg-white/5 border border-white/5 hover:border-metric_ats/30 hover:bg-white/10 transition-all duration-200 cursor-default">
-                    <span class="text-metric_ats mt-0.5 shrink-0 text-[10px]">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </span> 
-                    <span class="leading-snug text-gray-300 text-[10px]">${r}</span>
+                <div class="flex items-start gap-2">
+                    <span class="text-metric_ats shrink-0">></span> 
+                    <span class="leading-tight">${r}</span>
                 </div>
             `).join('');
         }
@@ -653,9 +659,9 @@
             totalScoreEl.classList.remove('animate-pop-finish');
             
             recommendationList.innerHTML = `
-                <div class="flex items-start gap-2.5 p-1.5 rounded bg-white/5 border border-white/5 opacity-50">
-                    <span class="text-metric_ats mt-0.5 shrink-0 text-[10px]"><i class="fa-solid fa-spinner fa-spin"></i></span> 
-                    <span class="text-gray-400 text-[10px]">Upload resume to initialize deep diagnostic scan...</span>
+                <div class="flex items-start gap-2 opacity-50">
+                    <span class="text-metric_ats shrink-0">></span> 
+                    <span>Upload resume to initialize deep diagnostic scan...</span>
                 </div>
             `;
             log('System reset.', 'process');
