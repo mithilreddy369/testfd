@@ -1,813 +1,803 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Global Market Pulse</title>
-  <meta name="description" content="Real-time dashboard for Global Indices, NSE Sectors, Commodities, Forex, and Stocks." />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      /* Dark Theme (Default) - Ultra Dark Luxury Polish Palette */
-      --bg-body: #070A10; /* Ultra Deep Black/Charcoal for Max Focus */
-      --bg-card: #10172A; /* Deep Navy Blue for Tables */
-      --primary: #FFFFFF; /* Pure White for max contrast */
-      --secondary: #CCCCCC; /* Bright Muted Secondary Text */
-      --tertiary: #555E70; /* Tertiary Text/Subtle Borders (Better visibility against navy) */
-      --accent: #FFC72C; /* Polished Gold Accent */
-      --accent-shadow: rgba(255, 199, 44, 0.4); 
-      --alpha-green: #00E676; /* Vivid, High-Contrast Green */
-      --alpha-red: #FF5252; /* Vivid, High-Contrast Red */
-      --border: #2C3647; /* Darker navy border for distinct separation */
-      --header-bg: #10172A; /* Match Navy Blue Card Background */
-      
-      --font-serif: 'Playfair Display', serif;
-      --font-sans: 'Plus Jakarta Sans', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-    }
-
-    /* Light Theme Override - Professional Look (Kept the last professional light theme) */
-    .light-mode {
-      --bg-body: #F6F8FA; 
-      --bg-card: #ffffff;
-      --primary: #1B2430;
-      --secondary: #475569;
-      --tertiary: #94a3b8;
-      --accent: #0A60B3; /* Rich Professional Blue */
-      --accent-shadow: rgba(10, 96, 179, 0.1);
-      --alpha-green: #10b981;
-      --alpha-red: #ef4444;
-      --border: #DBE1E8; 
-      --header-bg: #ffffff;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mithilesh Reddy | Digital Architect</title>
+    <meta name="description" content="Portfolio of Mithilesh Reddy - Full-Stack Developer & AI Innovator">
     
-    body {
-      font-family: var(--font-sans);
-      background-color: var(--bg-body);
-      color: var(--primary);
-      line-height: 1.3;
-      -webkit-font-smoothing: antialiased;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden; 
-      display: flex;
-      flex-direction: column;
-      transition: background-color 0.4s, color 0.4s;
-    }
-
-    /* --- Container - Resetting Spacing --- */
-    .container {
-      width: 100%;
-      height: 100%;
-      padding: 0.5vh 1vw; 
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5vh; 
-    }
-
-    /* --- Top Bar (Final Polished Header) --- */
-    .dashboard-header {
-      background-color: var(--header-bg); /* Navy Blue */
-      padding: 0.5rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0; 
-      height: 6vh; 
-      min-height: 48px;
-      /* Removed all shadows, borders, and rounding for a clean look */
-      border: none; 
-      border-radius: 0;
-      box-shadow: none;
-      transition: all 0.4s ease;
-      position: relative;
-      /* Add a single, thin bottom separator for a clean break */
-      border-bottom: 1px solid var(--border);
-    }
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    /* Removed the ::after block for the subtle line */
-
-    .brand-area { display: flex; align-items: center; gap: 12px; }
+    <!-- Fonts: Montserrat (Luxury Headings) & Inter (Clean Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@200;400;500;700;800;900&display=swap" rel="stylesheet">
     
-    .page-title {
-      font-family: var(--font-serif);
-      font-size: 1.8rem; 
-      color: var(--accent);
-      margin: 0;
-      line-height: 1;
-      font-weight: 700;
-    }
-
-    .user-name {
-        font-family: var(--font-sans);
-        font-size: 1.0rem; 
-        color: var(--secondary);
-        font-weight: 500;
-        margin-left: 20px;
-        padding-left: 20px;
-        border-left: 1px solid var(--tertiary);
-        line-height: 1.5;
-        opacity: 0.85;
-    }
-
-    .system-status { text-align: right; display: flex; align-items: center; gap: 0.75rem; }
-
-    .theme-btn {
-      background: var(--bg-body); /* Slightly darker background for button */
-      border: 1px solid var(--tertiary); 
-      color: var(--secondary);
-      cursor: pointer; padding: 6px; border-radius: 4px;
-      display: flex; align-items: center; justify-content: center; 
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    }
-    .theme-btn:hover { 
-        background: var(--tertiary); 
-        color: var(--primary); 
-        transform: translateY(-1px); 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.8);
-    }
-
-    .reload-timer {
-      font-family: var(--font-mono); font-size: 0.75rem; color: var(--alpha-green);
-      background: rgba(0, 230, 118, 0.1); /* Vivid Green background subtle */
-      padding: 4px 10px; border-radius: 4px;
-      border: 1px solid rgba(0, 230, 118, 0.3); min-width: 100px; text-align: center;
-      display: block; font-weight: 500;
-    }
-
-    .last-updated {
-      font-family: var(--font-mono); font-size: 0.75rem; color: var(--secondary);
-      display: flex; align-items: center; gap: 5px;
-    }
-
-    .live-dot {
-      width: 6px; height: 6px; background: var(--alpha-green); border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
-
-    /* --- Text Utilities (No size changes) --- */
-    .u-symbol {
-      font-family: var(--font-sans); font-weight: 600; color: var(--primary);
-      font-size: 0.7rem !important; display: flex; align-items: center; gap: 6px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .u-symbol img { display: block; flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; }
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    .u-price {
-      font-family: var(--font-mono); color: var(--primary); font-weight: 500;
-      font-size: 0.75rem !important; display: block; line-height: 1.1;
-    }
+    <!-- GSAP for High-End Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    .u-change {
-      font-family: var(--font-mono); font-size: 0.6rem !important;
-      display: block; line-height: 1.1; margin-top: 1px;
-    }
-    .u-sub { font-size: 0.6rem !important; color: var(--tertiary); margin-left: 4px; }
-    .text-green { color: var(--alpha-green); }
-    .text-red { color: var(--alpha-red); }
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lux: {
+                            black: '#030303',
+                            charcoal: '#0a0a0a',
+                            glass: 'rgba(255, 255, 255, 0.03)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            teal: '#00F0FF',
+                            pink: '#FF0055',
+                            text: '#EAEAEA',
+                            muted: '#888888'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-glow': 'linear-gradient(135deg, rgba(0,240,255,0.1) 0%, rgba(255,0,85,0.1) 100%)',
+                        'card-shine': 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.05) 25%, transparent 30%)' 
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-    /* --- LAYOUT GRID --- */
-    
-    .asset-box {
-      background: var(--bg-card); /* Deep Navy Blue */
-      border: 1px solid var(--border); 
-      border-radius: 4px; 
-      padding: 0.75rem; 
-      display: flex; 
-      flex-direction: column;
-      height: 100%; 
-      overflow: hidden; 
-      transition: background 0.3s, box-shadow 0.3s;
-      /* Deep shadow for rich 3D lift effect - No Glow */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.05);
-    }
-    .light-mode .asset-box {
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+    <style>
+        /* LUXURY RESET & UTILITIES */
+        body {
+            background-color: #030303;
+            color: #EAEAEA;
+            overflow-x: hidden;
+            cursor: default; /* We will use custom cursor logic or keeping it clean */
+        }
 
-    .asset-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.4rem; 
-      border-bottom: 1px solid var(--tertiary);
-      padding-bottom: 0.4rem; 
-      height: 1.5rem; flex-shrink: 0;
-    }
-    .asset-title { 
-        font-size: 0.75rem; 
-        font-weight: 700; 
-        color: var(--accent); 
-        text-transform: uppercase; 
-        letter-spacing: 0.15em; 
-    }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030303;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 
-    /* Standard Row (Flexible 7-row system) */
-    .asset-row {
-      display: flex; justify-content: space-between; align-items: center;
-      height: 14.28%; 
-      border-bottom: 1px solid rgba(128,128,128,0.1); width: 100%;
-      transition: background-color 0.15s;
-    }
-    .asset-row:hover { 
-        background-color: rgba(255, 255, 255, 0.04); 
-    }
-    .light-mode .asset-row:hover { 
-        background-color: rgba(0, 0, 0, 0.03); 
-    }
-    .asset-row:last-child { border-bottom: none; }
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
 
-    /* ROW 1: ~28vh */
-    .asset-grid-custom {
-      display: grid;
-      /* Forex(1) | Cmdty(1) | Bonds(1) | Crypto(3) */
-      grid-template-columns: 1fr 1fr 1fr 3fr; 
-      gap: 0.5rem; 
-      flex-shrink: 0; 
-      height: 28vh; 
-      min-height: 220px;
-    }
+        .glass-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-    .crypto-split-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; height: 100%; }
-    .crypto-col { display: flex; flex-direction: column; height: 100%; }
-    
-    /* ROW 2: ~32vh */
-    .market-split {
-      display: grid; 
-      grid-template-columns: 1fr 1fr 1fr 3fr; 
-      gap: 0.5rem; 
-      flex-shrink: 0;
-      height: 32vh;
-      min-height: 230px;
-    }
+        .glass-card:hover {
+            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 240, 255, 0.1);
+        }
 
-    .global-stocks-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; height: 100%; overflow: hidden; }
+        /* Text Gradients */
+        .text-gradient-gold {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .text-gradient-cyber {
+            background: linear-gradient(to right, #00F0FF, #FF0055);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    /* ROW 3: Remaining Height - New Structure */
-    .row-3-split {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 3fr; /* 1+1+1+3 layout */
-        gap: 0.5rem; 
-        flex: 1; 
-        min-height: 230px;
-        overflow: hidden;
-    }
-    
-    .stocks-grid-3col {
-      display: grid; 
-      grid-template-columns: repeat(3, 1fr); /* 3 Columns for 21 stocks */
-      gap: 0.5rem; 
-      height: 100%;
-      overflow: hidden; 
-    }
+        /* Animated Grid Background */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
 
-    .stock-col { display: flex; flex-direction: column; height: 100%; }
-    .stock-col .asset-row { height: 14.28%; border-bottom: 1px solid rgba(128,128,128,0.1); }
+        /* Spotlight Effect */
+        .spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 240, 255, 0.08) 0%, transparent 40%);
+        }
 
+        /* Typography adjustments */
+        h1, h2, h3, h4, h5, h6 {
+            letter-spacing: -0.02em;
+        }
+        
+        .section-header {
+            position: relative;
+            display: inline-block;
+        }
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #00F0FF, #FF0055);
+        }
 
-    /* --- RESPONSIVE DESIGN --- */
-
-    @media (max-width: 1440px) {
-        .asset-grid-custom, .market-split, .row-3-split { grid-template-columns: 1fr 1fr 1fr 3fr; }
-    }
-
-    @media (max-width: 1024px) {
-      body { height: auto; overflow-y: auto; }
-      .container { height: auto; display: block; padding: 1rem; padding-bottom: 2rem; }
-      
-      .asset-grid-custom { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-      .asset-box { height: auto; min-height: 240px; }
-      .asset-grid-custom .asset-box:nth-child(3) { grid-column: span 1; }
-      .asset-grid-custom .asset-box:nth-child(4) { grid-column: span 2; }
-      
-      .market-split { display: grid; grid-template-columns: 1fr 1fr; height: auto; gap: 1rem; margin-bottom: 1rem; }
-      .market-split .asset-box:nth-child(4) { grid-column: span 2; } 
-      
-      /* Row 3 Tablet */
-      .row-3-split { display: grid; grid-template-columns: 1fr 1fr; height: auto; gap: 1rem; }
-      .row-3-split .asset-box:nth-child(4) { grid-column: span 2; }
-      .stocks-grid-3col { grid-template-columns: 1fr 1fr 1fr; }
-
-      .dashboard-header { height: auto; padding: 0.75rem 1rem; }
-      .brand-area { flex-wrap: wrap; }
-      .user-name { margin-left: 0; padding-left: 0; border-left: none; width: 100%; }
-    }
-
-    @media (max-width: 768px) {
-      body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-      .container { padding: 0.5rem; gap: 1rem; }
-      .dashboard-header { 
-        margin-bottom: 1rem; 
-        flex-wrap: wrap; 
-        height: auto; 
-        gap: 0.5rem;
-        padding: 0.75rem 0.5rem;
-      }
-      .brand-area { flex-direction: column; align-items: flex-start; gap: 5px; }
-      .user-name { margin-top: 5px; }
-      .page-title { font-size: 1.4rem; }
-      
-      .reload-timer { display: none; }
-      .system-status { font-size: 0.7rem; }
-
-      /* Mobile Column Stacking */
-      .asset-grid-custom { grid-template-columns: 1fr; gap: 1rem; }
-      .asset-grid-custom .asset-box:nth-child(4) { grid-column: span 1; }
-
-      /* Fix Crypto and Global Stocks internal grids on mobile */
-      .crypto-split-container { grid-template-columns: 1fr; gap: 1rem; height: auto; }
-      .global-stocks-grid { grid-template-columns: 1fr; gap: 1rem; height: auto; }
-
-      .market-split { grid-template-columns: 1fr; gap: 1rem; }
-      .market-split .asset-box:nth-child(4) { grid-column: span 1; }
-
-      .row-3-split { grid-template-columns: 1fr; gap: 1rem; }
-      .row-3-split .asset-box:nth-child(4) { grid-column: span 1; }
-      
-      .stocks-grid-3col { grid-template-columns: 1fr 1fr; gap: 0.5rem; height: auto; }
-      
-      .asset-box { min-height: unset; height: auto; padding: 0.75rem; }
-      .stock-col { height: auto; margin-bottom: 0.5rem; }
-      
-      .u-symbol { font-size: 0.85rem !important; }
-      .u-price { font-size: 0.9rem !important; }
-    }
-  </style>
+        /* Hover Glow for Socials */
+        .social-glow:hover {
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+        }
+    </style>
 </head>
-<body>
 
-  <div class="container">
-    
-    <!-- HEADER -->
-    <div class="dashboard-header">
-      <div class="brand-area">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--alpha-green)">
-          <path d="M22 7 L13.5 15.5 L8.5 10.5 L2 17" />
-          <path d="M16 7 L22 7 L22 13" />
-        </svg>
-        <h1 class="page-title">Global Market Pulse</h1>
-        <span class="user-name">Mithilesh Reddy's Dashboard</span>     
-      </div>
-      <div class="system-status">
-        <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
-          <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          <svg id="icon-sun" style="display:none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-        </button>
-        <div class="reload-timer" id="countdown">Auto-refresh: 60s</div>
-        <div class="last-updated"><span class="live-dot"></span><span id="update-time">Syncing...</span></div>
-      </div>
-    </div>
+<body class="relative selection:bg-lux-teal selection:text-lux-black">
 
-    <!-- ROW 1 (28vh) -->
-    <div class="asset-grid-custom">
-      <!-- Forex (7 Rows) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Forex</span></div>
-        <div class="asset-row"><span class="u-symbol">🇺🇸 USD/INR</span><div style="text-align:right"><span class="u-price" id="p-usdinr">--</span><span class="u-change" id="c-usdinr">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇪🇺 EUR/USD</span><div style="text-align:right"><span class="u-price" id="p-eurusd">--</span><span class="u-change" id="c-eurusd">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇬🇧 GBP/INR</span><div style="text-align:right"><span class="u-price" id="p-gbpinr">--</span><span class="u-change" id="c-gbpinr">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇯🇵 JPY/INR</span><div style="text-align:right"><span class="u-price" id="p-jpyinr">--</span><span class="u-change" id="c-jpyinr">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇦🇺 AUD/USD</span><div style="text-align:right"><span class="u-price" id="p-audusd">--</span><span class="u-change" id="c-audusd">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">💵 DXY Index</span><div style="text-align:right"><span class="u-price" id="p-dxy">--</span><span class="u-change" id="c-dxy">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇨🇳 USD/CNY</span><div style="text-align:right"><span class="u-price">7.24</span><span class="u-change text-green">+0.01%</span></div></div>
-      </div>
+    <!-- Dynamic Spotlight Background -->
+    <div class="spotlight" id="spotlight"></div>
+    <div class="fixed inset-0 bg-grid z-[-1] pointer-events-none"></div>
 
-      <!-- Commodities (7 Rows) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Commodities</span></div>
-        <div class="asset-row"><span class="u-symbol">🌕 Gold <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-gold">--</span><span class="u-change" id="c-gold">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">⚪ Silver <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-silver">--</span><span class="u-change" id="c-silver">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🛢️ WTI Crude</span><div style="text-align:right"><span class="u-price" id="p-wti">--</span><span class="u-change" id="c-wti">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🛢️ Brent Oil</span><div style="text-align:right"><span class="u-price" id="p-brent">--</span><span class="u-change" id="c-brent">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🥉 Copper</span><div style="text-align:right"><span class="u-price" id="p-copper">--</span><span class="u-change" id="c-copper">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🔥 Nat Gas</span><div style="text-align:right"><span class="u-price" id="p-ng">--</span><span class="u-change" id="c-ng">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">⚙️ Aluminum</span><div style="text-align:right"><span class="u-price">$2,630</span><span class="u-change text-green">+0.45%</span></div></div>
-      </div>
+    <!-- Navigation (Floating Glass) -->
+    <nav class="fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6">
+            <div class="glass-panel rounded-full px-6 py-3 flex justify-between items-center max-w-7xl mx-auto">
+                <a href="#" class="text-2xl font-display font-black tracking-tighter text-white group">
+                    M<span class="text-lux-teal group-hover:text-lux-pink transition-colors duration-300">.</span>R
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#about" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">About</a>
+                    <a href="#skills" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Skills</a>
+                    <a href="#projects" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Projects</a>
+                    <a href="#experience" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Experience</a>
+                    <a href="#education" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Education</a>
+                    <a href="#contact" class="px-6 py-2 rounded-full border border-lux-teal/30 text-lux-teal hover:bg-lux-teal hover:text-lux-black transition-all duration-300 text-sm uppercase font-bold tracking-wider shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                        Contact
+                    </a>
+                </div>
 
-      <!-- Bonds (7 Rows) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Global Bonds</span></div>
-        <div class="asset-row"><span class="u-symbol">🇺🇸 US 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us10">--</span><span class="u-change" id="c-us10">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇺🇸 US 30Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us30">--</span><span class="u-change" id="c-us30">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇺🇸 US 5Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us5">--</span><span class="u-change" id="c-us5">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇺🇸 US 2Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us2">--</span><span class="u-change" id="c-us2">--</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇮🇳 India 10Y</span><div style="text-align:right"><span class="u-price">7.15%</span><span class="u-change text-green">+0.01%</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇯🇵 Japan 10Y</span><div style="text-align:right"><span class="u-price">0.98%</span><span class="u-change text-green">+0.02%</span></div></div>
-        <div class="asset-row"><span class="u-symbol">🇬🇧 UK 10Y</span><div style="text-align:right"><span class="u-price">4.21%</span><span class="u-change text-red">-0.05%</span></div></div>
-      </div>
-
-      <!-- Crypto (21 Items / 3 Cols) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Digital Assets</span></div>
-        <div class="crypto-split-container">
-          <div class="crypto-col" id="crypto-col-1"></div>
-          <div class="crypto-col" id="crypto-col-2"></div>
-          <div class="crypto-col" id="crypto-col-3"></div>
+                <!-- Mobile Toggle -->
+                <button class="lg:hidden text-white focus:outline-none" id="mobile-toggle">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ROW 2 (32vh) -->
-    <div class="market-split">
-      <!-- Global Markets (1 Col - Renamed) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Global Markets</span></div>
-        <div id="global-indices-body" style="display:flex; flex-direction:column; height:100%;"></div>
-      </div>
-      
-      <!-- Indian Markets (Split 1 - Renamed) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Indian Markets</span></div>
-        <div id="nse-indices-body-1" style="display:flex; flex-direction:column; height:100%;"></div>
-      </div>
-
-      <!-- NSE Sector Market (Split 2 - Unchanged) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">NSE Sector Market</span></div>
-        <div id="nse-indices-body-2" style="display:flex; flex-direction:column; height:100%;"></div>
-      </div>
-
-      <!-- Global Stocks Box (3 Cols) -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Global Stocks (Mega Cap)</span></div>
-        <div class="global-stocks-grid">
-           <!-- Col 1 -->
-           <div id="global-stocks-body-1" style="display:flex; flex-direction:column; height:100%;"></div>
-           <!-- Col 2 -->
-           <div id="global-stocks-body-2" style="display:flex; flex-direction:column; height:100%;"></div>
-           <!-- Col 3 -->
-           <div id="global-stocks-body-3" style="display:flex; flex-direction:column; height:100%;"></div>
+        <!-- Mobile Menu -->
+        <div class="lg:hidden absolute top-20 left-0 w-full px-4 transform scale-y-0 opacity-0 origin-top transition-all duration-300" id="mobile-menu">
+            <div class="glass-panel rounded-2xl p-6 flex flex-col space-y-4 text-center">
+                <a href="#about" class="text-lg font-display font-bold text-white py-2 mobile-link">About</a>
+                <a href="#skills" class="text-lg font-display font-bold text-white py-2 mobile-link">Skills</a>
+                <a href="#projects" class="text-lg font-display font-bold text-white py-2 mobile-link">Projects</a>
+                <a href="#experience" class="text-lg font-display font-bold text-white py-2 mobile-link">Experience</a>
+                <a href="#education" class="text-lg font-display font-bold text-white py-2 mobile-link">Education</a>
+                <a href="#contact" class="text-lg font-display font-bold text-lux-teal py-2 mobile-link">Contact</a>
+            </div>
         </div>
-      </div>
-    </div>
+    </nav>
 
-    <!-- ROW 3 (Remaining Space - New Structure) -->
-    <div class="row-3-split">
-      <!-- New Table 1: Capital Markets -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Capital Markets</span></div>
-        <div id="sector-1-body" style="display:flex; flex-direction:column; height:100%;"></div>
-      </div>
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <!-- Ambient Blobs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-lux-teal/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lux-pink/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
 
-      <!-- New Table 2: Auto Sector -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">Auto Sector</span></div>
-        <div id="sector-2-body" style="display:flex; flex-direction:column; height:100%;"></div>
-      </div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <div class="overflow-hidden">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-display font-black text-white leading-tight gs-reveal-y">
+                    MITHILESH <br> 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lux-teal to-lux-pink">REDDY</span>
+                </h1>
+            </div>
+            
+            <p class="mt-8 text-xl md:text-2xl text-lux-muted font-light tracking-wide max-w-3xl mx-auto gs-reveal-opacity">
+                Full-Stack Developer <span class="text-lux-teal mx-2">•</span> Machine Learning Enthusiast <span class="text-lux-pink mx-2">•</span> AI Innovator
+            </p>
 
-      <!-- New Table 3: IT Sector -->
-      <div class="asset-box">
-        <div class="asset-header"><span class="asset-title">IT Sector</span></div>
-        <div id="sector-3-body" style="display:flex; flex-direction:column; height:100%;"></div>
-      </div>
-
-      <!-- Stocks Watch (3 Cols - Custom List) -->
-      <div class="asset-box">
-        <div class="asset-header" style="margin-bottom:0.25rem">
-          <span class="asset-title">Stocks Watch</span>
+            <div class="flex justify-center gap-6 mt-12 gs-reveal-opacity">
+                <a href="https://www.linkedin.com/in/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-lux-teal hover:bg-lux-teal hover:text-lux-black transition-all duration-300 social-glow">
+                    <i class="fab fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="https://github.com/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-lux-pink hover:bg-lux-pink hover:text-lux-black transition-all duration-300 social-glow">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+                <a href="https://www.hackerrank.com/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-green-400 hover:bg-green-400 hover:text-lux-black transition-all duration-300 social-glow">
+                    <i class="fab fa-hackerrank text-xl"></i>
+                </a>
+                <a href="https://www.kaggle.com/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-blue-400 hover:bg-blue-400 hover:text-lux-black transition-all duration-300 social-glow">
+                    <i class="fab fa-kaggle text-xl"></i>
+                </a>
+                <a href="mailto:s.mithilesh.reddi@gmail.com" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-yellow-400 hover:bg-yellow-400 hover:text-lux-black transition-all duration-300 social-glow">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+            </div>
+            
+            <div class="mt-20 animate-bounce">
+                <i class="fas fa-chevron-down text-lux-muted text-2xl"></i>
+            </div>
         </div>
-        <div class="stocks-grid-3col" id="stocks-grid-container">
-          <!-- JS Generated 3 Cols -->
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <div class="glass-panel p-10 md:p-16 rounded-3xl max-w-5xl mx-auto relative overflow-hidden">
+                <!-- Decorative Shine -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-lux-teal/10 to-transparent rounded-bl-full pointer-events-none"></div>
+                
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-10 text-white section-header">About Me</h2>
+                
+                <p class="text-lg md:text-xl text-lux-muted leading-relaxed font-light">
+                    I am a <strong class="text-white">Master of Technology student</strong> specializing in Computer Science with a relentless drive for programming, technology, and innovation. 
+                    <br><br>
+                    My expertise spans <span class="text-lux-teal">Web Development</span>, <span class="text-lux-pink">Cloud Technologies</span>, and <span class="text-lux-teal">Machine Learning</span>. 
+                    I thrive on architecting innovative solutions that address real-world complexities. I am committed to continuous evolution in the ever-changing tech landscape, 
+                    driving both professional excellence and technical mastery.
+                </p>
+            </div>
         </div>
-      </div>
-    </div>
+    </section>
 
-  </div>
+    <!-- Skills Section -->
+    <section id="skills" class="py-32 bg-lux-charcoal/30">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white inline-block section-header">Technical Arsenal</h2>
+            </div>
 
-  <script>
-    const REFRESH_INTERVAL = 60;
-    let timeLeft = REFRESH_INTERVAL;
-    const marketCache = {};
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Skill Card 1 -->
+                <div class="glass-card p-8 rounded-2xl group hover:border-lux-teal/50">
+                    <div class="w-14 h-14 bg-lux-teal/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-code text-2xl text-lux-teal"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">Languages</h3>
+                    <p class="text-lux-muted leading-relaxed">Python, C, JavaScript, Java</p>
+                </div>
 
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      document.getElementById('icon-moon').style.display = isLight ? 'none' : 'block';
-      document.getElementById('icon-sun').style.display = isLight ? 'block' : 'none';
-    }
+                <!-- Skill Card 2 -->
+                <div class="glass-card p-8 rounded-2xl group hover:border-lux-pink/50">
+                    <div class="w-14 h-14 bg-lux-pink/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-globe text-2xl text-lux-pink"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">Web Development</h3>
+                    <p class="text-lux-muted leading-relaxed">HTML, CSS, React, RESTful APIs, Bootstrap, Node.js, Express.js, Tailwind CSS</p>
+                </div>
 
-    // --- CONFIG: Stock Lists (Redistributed) ---
-    
-    // Custom Watch List (21 Stocks - 3 Cols x 7 Rows)
-    // Mixed: Favorites + Multibagger Growth (Mid/Small/Growth)
-    const STOCK_LIST_MAIN = [
-      // Col 1 (7) - Essentials & Banking
-      { sym: "SBIN.NS", name: "🇮🇳 SBI" }, { sym: "BHARTIARTL.NS", name: "🇮🇳 Airtel" },
-      { sym: "AXISBANK.NS", name: "🇮🇳 Axis Bank" }, { sym: "SUNPHARMA.NS", name: "🇮🇳 Sun Pharma" },
-      { sym: "LICI.NS", name: "🇮🇳 LIC India" }, { sym: "CANBK.NS", name: "🇮🇳 Canara Bank" }, { sym: "GICRE.NS", name: "🇮🇳 GIC Re" },
-      // Col 2 (7) - Midcap Growth & Consumption
-      { sym: "AUBANK.NS", name: "🇮🇳 AU Bank" }, { sym: "VBL.NS", name: "🇮🇳 Varun Bev" },
-      { sym: "TITAGARH.NS", name: "🇮🇳 Titagarh" }, { sym: "WONDERLA.NS", name: "🇮🇳 Wonderla" },
-      { sym: "HERITGFOOD.NS", name: "🇮🇳 Heritage" }, { sym: "RVNL.NS", name: "🇮🇳 RVNL" }, { sym: "IREDA.NS", name: "🇮🇳 IREDA" },
-      // Col 3 (7) - High Growth & New Age
-      { sym: "KAYNES.NS", name: "🇮🇳 Kaynes Tech" }, { sym: "JIOFIN.NS", name: "🇮🇳 Jio Fin" },
-      { sym: "TRENT.NS", name: "🇮🇳 Trent" }, { sym: "SUZLON.NS", name: "🇮🇳 Suzlon" },
-      { sym: "DIXON.NS", name: "🇮🇳 Dixon Tech" }, { sym: "MAZDOCK.NS", name: "🇮🇳 Mazagon" }, { sym: "TATAPOWER.NS", name: "🇮🇳 Tata Power" }
-    ];
+                <!-- Skill Card 3 -->
+                <div class="glass-card p-8 rounded-2xl group hover:border-purple-500/50">
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-database text-2xl text-purple-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">Databases</h3>
+                    <p class="text-lux-muted leading-relaxed">MySQL, MongoDB</p>
+                </div>
 
-    // Sector 1: Capital Markets (Custom Order)
-    const STOCK_LIST_CAPITAL = [
-      { sym: "GROWW.NS", name: "🇮🇳 Groww" }, // User requested (Billionbrains)
-      { sym: "ANGELONE.NS", name: "🇮🇳 Angel One" },
-      { sym: "CDSL.NS", name: "🇮🇳 CDSL" }, { sym: "BSE.NS", name: "🇮🇳 BSE" },
-      { sym: "HDFCAMC.NS", name: "🇮🇳 HDFC AMC" }, { sym: "NAM-INDIA.NS", name: "🇮🇳 Nippon Life" }, { sym: "CAMS.NS", name: "🇮🇳 CAMS" }
-    ];
+                <!-- Skill Card 4 -->
+                <div class="glass-card p-8 rounded-2xl group hover:border-orange-500/50">
+                    <div class="w-14 h-14 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-cloud text-2xl text-orange-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">Cloud</h3>
+                    <p class="text-lux-muted leading-relaxed">AWS, Firebase, EC2, Amplify, S3, Route 53</p>
+                </div>
 
-    // Sector 2: Auto Sector (7 Stocks)
-    const STOCK_LIST_AUTO = [
-      { sym: "MARUTI.NS", name: "🇮🇳 Maruti" }, { sym: "TATAMOTORS.NS", name: "🇮🇳 Tata Motors" },
-      { sym: "M&M.NS", name: "🇮🇳 M&M" }, { sym: "BAJAJ-AUTO.NS", name: "🇮🇳 Bajaj Auto" },
-      { sym: "EICHERMOT.NS", name: "🇮🇳 Eicher" }, { sym: "HEROMOTOCO.NS", name: "🇮🇳 Hero Moto" }, { sym: "TVSMOTOR.NS", name: "🇮🇳 TVS Motor" }
-    ];
+                <!-- Skill Card 5 -->
+                <div class="glass-card p-8 rounded-2xl group hover:border-green-500/50">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-line text-2xl text-green-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">Data Science & ML</h3>
+                    <p class="text-lux-muted leading-relaxed">Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn</p>
+                </div>
 
-    // Sector 3: IT Sector (7 Stocks)
-    const STOCK_LIST_IT = [
-      { sym: "TCS.NS", name: "🇮🇳 TCS" }, { sym: "INFY.NS", name: "🇮🇳 Infosys" },
-      { sym: "HCLTECH.NS", name: "🇮🇳 HCL Tech" }, { sym: "WIPRO.NS", name: "🇮🇳 Wipro" },
-      { sym: "TECHM.NS", name: "🇮🇳 Tech M" }, { sym: "LTIM.NS", name: "🇮🇳 LTIM" }, { sym: "PERSISTENT.NS", name: "🇮🇳 Persistent" }
-    ];
+                <!-- Skill Card 6 -->
+                <div class="glass-card p-8 rounded-2xl group hover:border-blue-500/50">
+                    <div class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-tools text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-4">Tools</h3>
+                    <p class="text-lux-muted leading-relaxed">Linux, Windows, Jenkins, Git, GitLab, Figma, Unity</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    async function updateMarketData() {
-      timeLeft = REFRESH_INTERVAL;
-      
-      // Update Date & Time with India Symbol
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-      const timeStr = now.toLocaleTimeString();
-      document.getElementById('update-time').innerText = `🇮🇳 ${dateStr} • ${timeStr}`;
-      
-      fetchForex();
-      fetchBonds();
-      fetchCrypto();
-      fetchRealCommodities();
-      fetchRealIndices();
-      fetchStocks();
-    }
+    <!-- Projects Section -->
+    <section id="projects" class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4">Featured Projects</h2>
+                    <p class="text-lux-muted">Innovation through code.</p>
+                </div>
+            </div>
 
-    // --- STOCKS FETCHER ---
-    async function fetchStocks() {
-      // Collect all symbols to fetch in one go
-      const allLists = [...STOCK_LIST_MAIN, ...STOCK_LIST_CAPITAL, ...STOCK_LIST_AUTO, ...STOCK_LIST_IT];
-      const symbols = allLists.map(s => s.sym);
-      const data = await fetchYahooData(symbols);
-      if (data && Object.keys(data).length > 0) Object.assign(marketCache, data);
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
+                    <div class="h-48 bg-gradient-to-br from-lux-teal/20 to-lux-black relative overflow-hidden">
+                        <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
+                        <i class="fas fa-heartbeat absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-lux-teal opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-lux-teal transition-colors">Heart Disease Prediction</h3>
+                        <p class="text-lux-muted text-sm mb-6 flex-grow">A Stacked Ensemble Model with SMOTE technology achieving 98.5% accuracy and 98.52% F1-Score in predicting cardiac events.</p>
+                        <a href="https://github.com/mithilreddy369/Heart-Disease-Prediction" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                            View Source
+                        </a>
+                    </div>
+                </div>
 
-      // Render 3 New Single Tables
-      renderIndicesList('sector-1-body', STOCK_LIST_CAPITAL, '₹');
-      renderIndicesList('sector-2-body', STOCK_LIST_AUTO, '₹');
-      renderIndicesList('sector-3-body', STOCK_LIST_IT, '₹');
+                <!-- Project 2 -->
+                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
+                    <div class="h-48 bg-gradient-to-br from-lux-pink/20 to-lux-black relative overflow-hidden">
+                        <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
+                        <i class="fas fa-gamepad absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-lux-pink opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-lux-pink transition-colors">Tic-Tac-Toe Web Game</h3>
+                        <p class="text-lux-muted text-sm mb-6 flex-grow">A dynamic, responsive gaming interface built with vanilla JS and deployed on Firebase, featuring a modern engaging UI.</p>
+                        <a href="https://github.com/mithilreddy369/Tic-Tac-Toe-Web-Game" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                            View Source
+                        </a>
+                    </div>
+                </div>
 
-      // Render Main Stocks Watch (3 Cols)
-      const container = document.getElementById('stocks-grid-container');
-      let html = '';
-      const cols = [[], [], []]; // 3 Columns
-      STOCK_LIST_MAIN.forEach((stock, i) => { cols[i % 3].push(stock); });
+                <!-- Project 3 -->
+                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
+                    <div class="h-48 bg-gradient-to-br from-green-500/20 to-lux-black relative overflow-hidden">
+                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
+                        <i class="fas fa-dragon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-green-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">Snake Game</h3>
+                        <p class="text-lux-muted text-sm mb-6 flex-grow">Classic arcade nostalgia reinvented with persistent local storage scoring, high-performance rendering, and fluid controls.</p>
+                        <a href="https://github.com/mithilreddy369/snake-game" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                            View Source
+                        </a>
+                    </div>
+                </div>
 
-      cols.forEach(colData => {
-        let colHtml = '<div class="stock-col">';
-        colData.forEach(stock => {
-          const d = marketCache[stock.sym];
-          const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
-          const chg = d ? d.chg : 0;
-          const color = chg >= 0 ? "text-green" : "text-red";
-          const sign = chg > 0 ? "+" : "";
-          const curr = "₹"; 
+                <!-- Project 4 -->
+                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
+                    <div class="h-48 bg-gradient-to-br from-purple-500/20 to-lux-black relative overflow-hidden">
+                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
+                        <i class="fas fa-vr-cardboard absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-purple-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">Immersive Classroom</h3>
+                        <p class="text-lux-muted text-sm mb-6 flex-grow">Interactive VR navigation system using Unity & Google Cardboard SDK. Features gaze-controlled navigation for educational PPTs.</p>
+                        <a href="https://github.com/mithilreddy369/Immersive-Google-Classroom" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                            View Source
+                        </a>
+                    </div>
+                </div>
 
-          colHtml += `
-            <div class="asset-row">
-              <span class="u-symbol">${stock.name}</span>
-              <div style="text-align:right">
-                <span class="u-price">${curr}${price}</span>
-                <span class="u-change ${color}">${sign}${chg.toFixed(2)}%</span>
-              </div>
-            </div>`;
+                <!-- Project 5 -->
+                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
+                    <div class="h-48 bg-gradient-to-br from-yellow-500/20 to-lux-black relative overflow-hidden">
+                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
+                        <i class="fas fa-university absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-yellow-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors">Bank App Python</h3>
+                        <p class="text-lux-muted text-sm mb-6 flex-grow">Robust financial system architecture demonstrating advanced OOP principles: Encapsulation, Inheritance, and Polymorphism.</p>
+                        <a href="https://github.com/mithilreddy369/Bank-App-Python" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                            View Source
+                        </a>
+                    </div>
+                </div>
+
+                 <!-- Project 6 -->
+                 <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
+                    <div class="h-48 bg-gradient-to-br from-red-500/20 to-lux-black relative overflow-hidden">
+                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
+                        <i class="fas fa-user-secret absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-red-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">Image Steganography</h3>
+                        <p class="text-lux-muted text-sm mb-6 flex-grow">Advanced security tool for hiding encrypted messages within digital imagery, utilizing password-protected retrieval logic.</p>
+                        <a href="https://github.com/mithilreddy369/Image-Steganography" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                            View Source
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-32 bg-lux-charcoal/30">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-20 text-center section-header">Experience</h2>
+            
+            <div class="max-w-4xl mx-auto space-y-12">
+                <!-- Experience Item 1 -->
+                <div class="relative pl-10 md:pl-0">
+                    <!-- Timeline Line -->
+                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-lux-teal to-transparent transform -translate-x-1/2"></div>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-between group">
+                        <div class="md:w-5/12 text-left md:text-right mb-6 md:mb-0">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-lux-teal transition-colors">Cyber Security Internship</h3>
+                            <p class="text-lux-muted mt-1">Edunet Foundation (AICTE)</p>
+                            <p class="text-sm text-lux-teal font-mono mt-2">Jan 2025 - Feb 2025</p>
+                        </div>
+                        
+                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-lux-teal rounded-full shadow-[0_0_10px_#00F0FF] transform md:-translate-x-1/2 mt-1.5 md:mt-0"></div>
+                        
+                        <div class="md:w-5/12 glass-panel p-6 rounded-xl border-l-4 border-lux-teal">
+                            <ul class="space-y-3 text-lux-muted text-sm">
+                                <li class="flex items-start"><i class="fas fa-check text-lux-teal mt-1 mr-3"></i> <span>Gained expertise in network security & ethical hacking via SkillsBuild.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-lux-teal mt-1 mr-3"></i> <span>Developed secure image steganography tools.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-lux-teal mt-1 mr-3"></i> <span>Implemented data protection and threat mitigation strategies.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="relative pl-10 md:pl-0">
+                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-lux-pink to-transparent transform -translate-x-1/2"></div>
+                    
+                    <div class="flex flex-col md:flex-row-reverse items-center justify-between group">
+                        <div class="md:w-5/12 text-left mb-6 md:mb-0">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-lux-pink transition-colors">Foundations of AI Internship</h3>
+                            <p class="text-lux-muted mt-1">Microsoft Initiative (Edunet)</p>
+                            <p class="text-sm text-lux-pink font-mono mt-2">April 2025 - May 2025</p>
+                        </div>
+                        
+                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-lux-pink rounded-full shadow-[0_0_10px_#FF0055] transform md:-translate-x-1/2 mt-1.5 md:mt-0"></div>
+                        
+                        <div class="md:w-5/12 glass-panel p-6 rounded-xl border-r-4 border-lux-pink text-right">
+                             <ul class="space-y-3 text-lux-muted text-sm inline-block text-left">
+                                <li class="flex items-start"><i class="fas fa-check text-lux-pink mt-1 mr-3"></i> <span>Mastered Azure AI and Cloud concepts via MS Learn.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-lux-pink mt-1 mr-3"></i> <span>Engaged in expert-led masterclasses.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-lux-pink mt-1 mr-3"></i> <span>Solved real-world problem statements under mentorship.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-20 text-center section-header">Education</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                <!-- Education Card 1 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-lux-teal">
+                    <span class="text-6xl text-lux-teal/10 font-black absolute top-4 right-6 pointer-events-none">01</span>
+                    <h3 class="text-2xl font-bold text-white mb-1">M.Tech (Computer Science)</h3>
+                    <p class="text-lux-teal font-medium mb-4">JNTUA College of Engineering, Anantapur</p>
+                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
+                        <span>Sept 2023 - Present</span>
+                        <span class="font-bold text-white">8.06 CGPA</span>
+                    </div>
+                </div>
+
+                <!-- Education Card 2 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-lux-pink">
+                    <span class="text-6xl text-lux-pink/10 font-black absolute top-4 right-6 pointer-events-none">02</span>
+                    <h3 class="text-2xl font-bold text-white mb-1">B.Tech (Computer Engineering)</h3>
+                    <p class="text-lux-pink font-medium mb-4">Presidency University, Bengaluru</p>
+                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
+                        <span>Aug 2018 - Jun 2022</span>
+                        <span class="font-bold text-white">6.34 CGPA</span>
+                    </div>
+                </div>
+
+                <!-- Education Card 3 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-white/30">
+                    <h3 class="text-xl font-bold text-white mb-1">Class XII</h3>
+                    <p class="text-lux-muted mb-4">Narayana Junior College</p>
+                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
+                        <span>2016 - 2018</span>
+                        <span class="font-bold text-white">86.66%</span>
+                    </div>
+                </div>
+
+                <!-- Education Card 4 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-white/30">
+                    <h3 class="text-xl font-bold text-white mb-1">Class X</h3>
+                    <p class="text-lux-muted mb-4">Montessori Indus School</p>
+                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
+                        <span>2015 - 2016</span>
+                        <span class="font-bold text-white">8.5 CGPA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="py-32 bg-lux-charcoal/30">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-16 text-center section-header">Credentials</h2>
+            
+            <div class="flex overflow-x-auto pb-8 gap-6 snap-x hide-scroll" style="scrollbar-width: none;">
+                <!-- Certificate Card Template -->
+                <a href="https://www.hackerrank.com/certificates/bde31d35c2a0" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-teal group">
+                    <div class="text-lux-teal mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-certificate text-3xl"></i></div>
+                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Software Engineer</h4>
+                    <p class="text-lux-muted text-sm">HackerRank</p>
+                </a>
+
+                <a href="https://www.hackerrank.com/certificates/df0fb0eb975b" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-teal group">
+                    <div class="text-lux-teal mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-database text-3xl"></i></div>
+                    <h4 class="text-white font-bold text-lg leading-tight mb-2">SQL (Advanced)</h4>
+                    <p class="text-lux-muted text-sm">HackerRank</p>
+                </a>
+
+                <a href="https://www.credly.com/badges/f39792ee-5bd5-48b3-b787-a49bfc842f87/linked_in_profile" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-pink group">
+                    <div class="text-lux-pink mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fab fa-python text-3xl"></i></div>
+                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Applied Data Science</h4>
+                    <p class="text-lux-muted text-sm">IBM</p>
+                </a>
+                
+                <a href="https://www.credly.com/badges/69196b29-ac8d-4ddd-aa0a-be3eafc2f8e2" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-pink group">
+                    <div class="text-lux-pink mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-brain text-3xl"></i></div>
+                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Machine Learning L1</h4>
+                    <p class="text-lux-muted text-sm">IBM</p>
+                </a>
+
+                <a href="https://learn.deeplearning.ai/accomplishments/13d6f919-0a69-4cc3-8eb8-3fce99ffc503?usp=sharing" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-yellow-500 group">
+                    <div class="text-yellow-500 mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-robot text-3xl"></i></div>
+                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Prompt Engineering</h4>
+                    <p class="text-lux-muted text-sm">DeepLearning.AI</p>
+                </a>
+
+                 <a href="https://freecodecamp.org/certification/mithilreddy369/responsive-web-design" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-blue-500 group">
+                    <div class="text-blue-500 mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fab fa-html5 text-3xl"></i></div>
+                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Responsive Web Design</h4>
+                    <p class="text-lux-muted text-sm">freeCodeCamp</p>
+                </a>
+            </div>
+            <p class="text-center text-lux-muted text-sm mt-4"><i class="fas fa-arrow-right mr-2"></i> Swipe to explore more</p>
+        </div>
+    </section>
+
+    <!-- Achievements & Interests (Compact High-End Grid) -->
+    <section class="py-32 relative">
+         <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <!-- Achievements -->
+                <div>
+                    <h3 class="text-3xl font-display font-bold text-white mb-8 border-l-4 border-lux-teal pl-4">Achievements</h3>
+                    <div class="space-y-6">
+                        <div class="glass-panel p-6 rounded-xl flex items-start space-x-4">
+                            <i class="fas fa-trophy text-yellow-500 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-lg">98.5% ML Accuracy</h4>
+                                <p class="text-lux-muted text-sm mt-1">Achieved superior prediction reliability in Heart Disease Prediction model.</p>
+                            </div>
+                        </div>
+                         <div class="glass-panel p-6 rounded-xl flex items-start space-x-4">
+                            <i class="fas fa-users text-lux-pink text-xl mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-lg">Project Leadership</h4>
+                                <p class="text-lux-muted text-sm mt-1">Led university team to successful delivery, fostering strong collaboration.</p>
+                            </div>
+                        </div>
+                         <div class="glass-panel p-6 rounded-xl flex items-start space-x-4">
+                            <i class="fas fa-hand-holding-heart text-green-500 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-lg">Community Impact</h4>
+                                <p class="text-lux-muted text-sm mt-1">Coordinated donation drives aiding underprivileged groups.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interests -->
+                <div>
+                    <h3 class="text-3xl font-display font-bold text-white mb-8 border-l-4 border-lux-pink pl-4">Interests</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-lux-teal hover:text-black transition-colors cursor-default">Exploring Tech</span>
+                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-lux-pink hover:text-black transition-colors cursor-default">Cybersecurity</span>
+                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-purple-500 hover:text-white transition-colors cursor-default">Automation</span>
+                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-blue-500 hover:text-white transition-colors cursor-default">Blockchain</span>
+                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-yellow-500 hover:text-black transition-colors cursor-default">Cryptocurrency</span>
+                    </div>
+                    
+                    <!-- Decor -->
+                    <div class="mt-12 p-8 glass-card rounded-2xl text-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-lux-teal/10 to-lux-pink/10 opacity-50"></div>
+                        <p class="text-xl font-display font-bold text-white relative z-10">"Code is the poetry of a better future."</p>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 bg-gradient-to-t from-black to-transparent">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-5xl md:text-7xl font-display font-black text-white mb-8 tracking-tight">LET'S TALK</h2>
+            <p class="text-xl text-lux-muted max-w-2xl mx-auto mb-12">
+                Open to opportunities, collaborations, and technical discussions.
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                <a href="mailto:s.mithilesh.reddi@gmail.com" class="group relative px-8 py-4 bg-lux-teal text-black font-bold text-lg rounded-full overflow-hidden transition-transform hover:scale-105">
+                    <span class="relative z-10 flex items-center"><i class="fas fa-envelope mr-3"></i> Send Email</span>
+                    <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/mithilreddy369" target="_blank" class="group relative px-8 py-4 border border-white text-white font-bold text-lg rounded-full overflow-hidden transition-transform hover:scale-105">
+                    <span class="relative z-10 flex items-center group-hover:text-black transition-colors"><i class="fab fa-linkedin-in mr-3"></i> LinkedIn</span>
+                    <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/5">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-lux-muted text-sm">&copy; 2025 Mithilesh Reddy.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="text-lux-muted hover:text-white transition-colors"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-lux-muted hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-lux-muted hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center opacity-0 translate-y-10 transition-all duration-300 hover:bg-lux-teal z-40">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Spotlight Effect
+        const spotlight = document.getElementById('spotlight');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth * 100;
+            const y = e.clientY / window.innerHeight * 100;
+            spotlight.style.setProperty('--x', `${x}%`);
+            spotlight.style.setProperty('--y', `${y}%`);
         });
-        colHtml += '</div>';
-        html += colHtml;
-      });
-      container.innerHTML = html;
-    }
 
-    // --- BONDS ---
-    async function fetchBonds() {
-        const bondSyms = ["^TNX", "^TYX", "^FVX", "^IRX"];
-        const data = await fetchYahooData(bondSyms);
-        if(data) Object.assign(marketCache, data);
-        
-        const map = { "^TNX": "us10", "^TYX": "us30", "^FVX": "us5", "^IRX": "us2" };
-        for (const [sym, id] of Object.entries(map)) {
-            const d = marketCache[sym];
-            /* Fix: Add "%" suffix to price for bond yields */
-            if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '', '%', true); 
-        }
-    }
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-toggle');
+        const menu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-    // --- INDICES & GLOBAL STOCKS ---
-    async function fetchRealIndices() {
-      // Global Indices (7)
-      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI"];
-      
-      // Global Stocks (21)
-      const gsSyms1 = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA"];
-      const gsNames1 = ["🇺🇸 Apple", "🇺🇸 Microsoft", "🇺🇸 Nvidia", "🇺🇸 Google", "🇺🇸 Amazon", "🇺🇸 Meta", "🇺🇸 Tesla"];
-      
-      const gsSyms2 = ["AVGO", "NFLX", "ADBE", "COST", "PEP", "TSM", "ASML"];
-      const gsNames2 = ["🇺🇸 Broadcom", "🇺🇸 Netflix", "🇺🇸 Adobe", "🇺🇸 Costco", "🇺🇸 Pepsi", "🇹🇼 TSMC", "🇳🇱 ASML"];
-      
-      const gsSyms3 = ["TM", "SONY", "LVMUY", "SAP", "AZN", "NVO", "SHEL"];
-      const gsNames3 = ["🇯🇵 Toyota", "🇯🇵 Sony", "🇫🇷 LVMH", "🇩🇪 SAP", "🇬🇧 AstraZeneca", "🇩🇰 Novo", "🇬🇧 Shell"];
+        btn.addEventListener('click', () => {
+            if (menu.classList.contains('scale-y-0')) {
+                menu.classList.remove('scale-y-0', 'opacity-0');
+            } else {
+                menu.classList.add('scale-y-0', 'opacity-0');
+            }
+        });
 
-      const nseSyms1 = ["^NSEI", "^CNX100", "NIFTYMIDCAP150.NS", "NIFTYSMLCAP250.NS", "^CRSLDX", "NIFTY_MICROCAP250.NS", "NIFTY_TOTAL_MKT.NS"];
-      const nseSyms2 = ["^NSEBANK", "^CNXIT", "^CNXPHARMA", "^CNXREALTY", "^CNXFIN", "^CNXAUTO", "^CNXFMCG"];
-      
-      const allSyms = [...globalSyms, ...gsSyms1, ...gsSyms2, ...gsSyms3, ...nseSyms1, ...nseSyms2];
-      const data = await fetchYahooData(allSyms);
-      if(data) Object.assign(marketCache, data);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('scale-y-0', 'opacity-0');
+            });
+        });
 
-      renderIndicesList('global-indices-body', [
-        { name: "🇺🇸 S&P 500", sym: "^GSPC" }, { name: "🇺🇸 Nasdaq 100", sym: "^IXIC" },
-        { name: "🇺🇸 Dow Jones", sym: "^DJI" }, { name: "🇯🇵 Nikkei 225", sym: "^N225" },
-        { name: "🇩🇪 DAX", sym: "^GDAXI" }, { name: "🇬🇧 FTSE 100", sym: "^FTSE" },
-        { name: "🇭🇰 Hang Seng", sym: "^HSI" }
-      ]);
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2');
+            }
+        });
 
-      renderIndicesList('global-stocks-body-1', gsSyms1.map((s, i) => ({name: gsNames1[i], sym: s})), '$');
-      renderIndicesList('global-stocks-body-2', gsSyms2.map((s, i) => ({name: gsNames2[i], sym: s})), '$');
-      renderIndicesList('global-stocks-body-3', gsSyms3.map((s, i) => ({name: gsNames3[i], sym: s})), '$');
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.remove('opacity-0', 'translate-y-10');
+            } else {
+                backToTop.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-      renderIndicesList('nse-indices-body-1', [
-        { name: "🇮🇳 Nifty 50", sym: "^NSEI" }, { name: "🇮🇳 Nifty 100", sym: "^CNX100" },
-        { name: "🇮🇳 Midcap 150", sym: "NIFTYMIDCAP150.NS" }, { name: "🇮🇳 Smallcap 250", sym: "NIFTYSMLCAP250.NS" },
-        { name: "🇮🇳 Nifty 500", sym: "^CRSLDX" }, { name: "🇮🇳 Microcap 250", sym: "NIFTY_MICROCAP250.NS" },
-        { name: "🇮🇳 Total Mkt", sym: "NIFTY_TOTAL_MKT.NS" }
-      ]);
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
 
-      renderIndicesList('nse-indices-body-2', [
-        { name: "🏦 Nifty Bank", sym: "^NSEBANK" }, { name: "💻 Nifty IT", sym: "^CNXIT" },
-        { name: "💊 Nifty Pharma", sym: "^CNXPHARMA" }, { name: "🏗️ Nifty Realty", sym: "^CNXREALTY" },
-        { name: "💰 Fin Service", sym: "^CNXFIN" }, { name: "🚗 Nifty Auto", sym: "^CNXAUTO" },
-        { name: "🛒 Nifty FMCG", sym: "^CNXFMCG" }
-      ]);
-    }
+        // Hero Reveal
+        gsap.from('.gs-reveal-y', {
+            y: 100,
+            opacity: 0,
+            duration: 1.2,
+            ease: 'power4.out',
+            stagger: 0.2
+        });
+        gsap.from('.gs-reveal-opacity', {
+            opacity: 0,
+            duration: 1.5,
+            delay: 0.5,
+            ease: 'power2.out'
+        });
 
-    function renderIndicesList(elementId, items, curr='') {
-      let html = '';
-      items.forEach(item => {
-        const d = marketCache[item.sym];
-        const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
-        const chg = d ? d.chg : 0;
-        const color = chg >= 0 ? "text-green" : "text-red";
-        const sign = chg > 0 ? "+" : "";
+        // Section Headers
+        gsap.utils.toArray('.section-header').forEach(header => {
+            gsap.from(header, {
+                scrollTrigger: {
+                    trigger: header,
+                    start: 'top 80%',
+                },
+                x: -50,
+                opacity: 0,
+                duration: 1,
+                ease: 'power3.out'
+            });
+        });
 
-        html += `
-          <div class="asset-row">
-            <span class="u-symbol">${item.name}</span>
-            <div style="text-align:right">
-              <span class="u-price">${curr}${price}</span>
-              <span class="u-change ${color}">${d ? sign + chg.toFixed(2) + "%" : "--"}</span>
-            </div>
-          </div>`;
-      });
-      document.getElementById(elementId).innerHTML = html;
-    }
+        // Cards Stagger
+        gsap.utils.toArray('.glass-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 85%',
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'back.out(1.7)'
+            });
+        });
 
-    // --- CRYPTO (21 Coins) ---
-    async function fetchCrypto() {
-        const ids = "bitcoin,ethereum,binancecoin,solana,ripple,dogecoin,cardano,avalanche-2,shiba-inu,polkadot,chainlink,litecoin,tron,the-open-network,deeper-network,bitcoin-cash,uniswap,near,aptos,arbitrum,mysterium";
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=21&page=1&sparkline=false`);
-        const data = await res.json();
-        
-        if (!data || data.length === 0) return;
-        marketCache['crypto'] = data; 
-        renderCrypto(data);
-    }
-
-    function renderCrypto(data) {
-      const col1 = document.getElementById('crypto-col-1');
-      const col2 = document.getElementById('crypto-col-2');
-      const col3 = document.getElementById('crypto-col-3');
-      let h1="", h2="", h3="";
-      
-      data.forEach((item, index) => {
-        const price = item.current_price;
-        const chg = item.price_change_percentage_24h;
-        const color = chg >= 0 ? "text-green" : "text-red";
-        const sign = chg > 0 ? "+" : "";
-        
-        let pStr = "---";
-        if (price) {
-            if(price < 1) pStr = price.toFixed(4);
-            else if(price > 1000) pStr = price.toLocaleString(undefined, {maximumFractionDigits: 0});
-            else pStr = price.toLocaleString(undefined, {maximumFractionDigits: 2});
-        }
-
-        const row = `
-        <div class="asset-row">
-            <span class="u-symbol">
-              <img src="${item.image}" alt=""> 
-              ${item.name} <span class="u-sub">${item.symbol.toUpperCase()}</span>
-            </span>
-            <div style="text-align:right">
-            <span class="u-price">$${pStr}</span>
-            <span class="u-change ${color}">${sign}${chg ? chg.toFixed(2) + "%" : "--"}</span>
-            </div>
-        </div>`;
-        
-        if(index < 7) h1+=row; 
-        else if(index < 14) h2+=row; 
-        else h3+=row;
-      });
-      col1.innerHTML = h1; col2.innerHTML = h2; col3.innerHTML = h3;
-    }
-
-    // --- Forex/Cmdty ---
-    async function fetchForex() {
-      try {
-        const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR,EUR,GBP,JPY,AUD');
-        const fxData = await fxRes.json();
-        if(fxData) {
-            // Using dummy changes for a richer look since real-time change data is not available from this simple API
-            updateUI('p-usdinr', 'c-usdinr', fxData.rates.INR, 0.05, '₹');
-            updateUI('p-eurusd', 'c-eurusd', 1/fxData.rates.EUR, -0.09, '$');
-            updateUI('p-gbpinr', 'c-gbpinr', (1/fxData.rates.GBP) * fxData.rates.INR, 0.15, '₹');
-            updateUI('p-jpyinr', 'c-jpyinr', (1/fxData.rates.JPY) * fxData.rates.INR, -0.02, '₹');
-            updateUI('p-audusd', 'c-audusd', 1/fxData.rates.AUD, 0.10, '$');
-        }
-        const dxyData = await fetchYahooData(["DX-Y.NYB"]);
-        if(dxyData["DX-Y.NYB"]) {
-             Object.assign(marketCache, dxyData);
-             updateUI('p-dxy', 'c-dxy', dxyData["DX-Y.NYB"].price, dxyData["DX-Y.NYB"].chg, '');
-        }
-      } catch (e) {}
-    }
-
-    async function fetchRealCommodities() {
-      const symbols = ["GC=F", "SI=F", "CL=F", "BZ=F", "HG=F", "NG=F"];
-      const data = await fetchYahooData(symbols);
-      if(data) Object.assign(marketCache, data);
-      
-      const map = { "GC=F": "gold", "SI=F": "silver", "CL=F": "wti", "BZ=F": "brent", "HG=F": "copper", "NG=F": "ng" };
-      for (const [sym, id] of Object.entries(map)) {
-        const d = marketCache[sym];
-        if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '$');
-      }
-    }
-
-    // --- Yahoo ---
-    async function fetchYahooData(symbols) {
-      const results = {};
-      const fetchOne = async (sym) => {
-        try {
-          const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
-          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&timestamp=${new Date().getTime()}`;
-          const res = await fetch(proxyUrl);
-          const wrapper = await res.json();
-          const data = JSON.parse(wrapper.contents);
-          if(!data.chart || !data.chart.result) return null;
-          const meta = data.chart.result[0].meta;
-          return { price: meta.regularMarketPrice, chg: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100 };
-        } catch(e) { return null; }
-      };
-      
-      const promises = symbols.map(s => fetchOne(s).then(res => ({symbol: s, data: res})));
-      const outcomes = await Promise.all(promises);
-      outcomes.forEach(o => { if(o.data) results[o.symbol] = o.data; });
-      return results;
-    }
-
-    function updateUI(pId, cId, val, chg, pre, suffix='%', priceSuffix = false) {
-      const elPrice = document.getElementById(pId);
-      const elChg = document.getElementById(cId);
-      if(elPrice && elChg) {
-        // Price formatting: Add suffix if priceSuffix is true
-        const formattedPrice = val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        elPrice.innerText = pre + formattedPrice + (priceSuffix ? '%' : '');
-        
-        // Change formatting
-        elChg.innerText = (chg>=0?"+":"") + chg.toFixed(2) + suffix;
-        elChg.className = "u-change " + (chg>=0 ? "text-green" : "text-red");
-      }
-    }
-
-    function timerLoop() {
-      if (timeLeft <= 0) { updateMarketData(); } 
-      else { 
-         const el = document.getElementById('countdown');
-         if(el) el.innerText = "Auto-refresh: " + timeLeft + "s"; 
-         timeLeft--; 
-      }
-    }
-
-    updateMarketData();
-    setInterval(timerLoop, 1000); 
-  </script>
+    </script>
 </body>
 </html>
