@@ -1,65 +1,62 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mithilesh Reddy | Digital Architect</title>
-    <meta name="description" content="Portfolio of Mithilesh Reddy - Full-Stack Developer & AI Innovator">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ProResume Analyzer | System Live</title>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonts: Montserrat (Luxury Headings) & Inter (Clean Body) -->
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Elite resume analysis command center. Full-screen diagnostic tool.">
+    <meta name="theme-color" content="#030008">
+
+    <!-- Fonts: Outfit (UI) & JetBrains Mono (Data/Code) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@200;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- GSAP for High-End Animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
                     colors: {
-                        lux: {
-                            black: '#030303',
-                            charcoal: '#0a0a0a',
-                            glass: 'rgba(255, 255, 255, 0.03)',
-                            border: 'rgba(255, 255, 255, 0.08)',
-                            teal: '#00F0FF',
-                            pink: '#FF0055',
-                            text: '#EAEAEA',
-                            muted: '#888888'
-                        }
+                        void: '#05050a',
+                        'void-light': '#12121a',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        border: 'rgba(255, 255, 255, 0.1)',
+                        // Distinct Colors for Metrics
+                        metric_ats: '#22d3ee', // Cyan
+                        metric_imp: '#a855f7', // Purple
+                        metric_vrb: '#f43f5e', // Rose
+                        metric_skl: '#10b981', // Emerald
+                        metric_fmt: '#f59e0b', // Amber
+                        metric_dep: '#3b82f6', // Blue
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif'],
-                    },
-                    backgroundImage: {
-                        'gradient-glow': 'linear-gradient(135deg, rgba(0,240,255,0.1) 0%, rgba(255,0,85,0.1) 100%)',
-                        'card-shine': 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.05) 25%, transparent 30%)' 
-                    },
-                    animation: {
-                        'blob': 'blob 10s infinite',
-                        'float': 'float 6s ease-in-out infinite',
+                    animation: { 
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scan-vertical': 'scanVertical 2s linear infinite',
+                        'pop-finish': 'popFinish 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'
                     },
                     keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        scanVertical: {
+                            '0%': { top: '0%', opacity: 0 },
+                            '10%': { opacity: 1 },
+                            '90%': { opacity: 1 },
+                            '100%': { top: '100%', opacity: 0 }
                         },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                        popFinish: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                            '100%': { transform: 'scale(1)' }
                         }
                     }
                 }
@@ -68,736 +65,601 @@
     </script>
 
     <style>
-        /* LUXURY RESET & UTILITIES */
-        body {
-            background-color: #030303;
-            color: #EAEAEA;
-            overflow-x: hidden;
-            cursor: default; /* We will use custom cursor logic or keeping it clean */
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #030303;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Glassmorphism Classes */
+        body { background-color: #05050a; color: #e2e8f0; overflow: hidden; }
+        
+        /* Clean Glass Panel */
         .glass-panel {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .glass-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(10px);
+        .glass-card-hover {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s ease-out;
         }
-
-        .glass-card:hover {
-            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+        
+        .glass-card-hover:hover {
+            background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 240, 255, 0.1);
+            transform: translateY(-2px);
         }
 
-        /* Text Gradients */
-        .text-gradient-gold {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        /* Subtle Grid */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
         }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+            body { overflow-y: auto; overflow-x: hidden; }
+            .mobile-stack { flex-direction: column; height: auto !important; }
+            .mobile-h-auto { height: auto !important; min-height: 300px; }
+            .mobile-mt { margin-top: 1rem; }
+        }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
         
-        .text-gradient-cyber {
-            background: linear-gradient(to right, #00F0FF, #FF0055);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        /* Standard Loader */
+        .cyber-loader {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%; border-top-color: #22d3ee;
+            animation: rotation 0.8s linear infinite;
         }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Animated Grid Background */
-        .bg-grid {
-            background-size: 50px 50px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-        }
-
-        /* Spotlight Effect */
-        .spotlight {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 240, 255, 0.08) 0%, transparent 40%);
-        }
-
-        /* Typography adjustments */
-        h1, h2, h3, h4, h5, h6 {
-            letter-spacing: -0.02em;
-        }
-        
-        .section-header {
-            position: relative;
-            display: inline-block;
-        }
-        .section-header::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(to right, #00F0FF, #FF0055);
-        }
-
-        /* Hover Glow for Socials */
-        .social-glow:hover {
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+        #pdfPreviewCanvas {
+            width: 100%; height: 100%; object-fit: contain;
+            opacity: 0.9;
         }
     </style>
 </head>
+<body class="h-screen flex flex-col selection:bg-metric_ats selection:text-black">
 
-<body class="relative selection:bg-lux-teal selection:text-lux-black">
+    <!-- Background -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute inset-0 grid-bg"></div>
+    </div>
 
-    <!-- Dynamic Spotlight Background -->
-    <div class="spotlight" id="spotlight"></div>
-    <div class="fixed inset-0 bg-grid z-[-1] pointer-events-none"></div>
-
-    <!-- Navigation (Floating Glass) -->
-    <nav class="fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300" id="navbar">
-        <div class="container mx-auto px-6">
-            <div class="glass-panel rounded-full px-6 py-3 flex justify-between items-center max-w-7xl mx-auto">
-                <a href="#" class="text-2xl font-display font-black tracking-tighter text-white group">
-                    M<span class="text-lux-teal group-hover:text-lux-pink transition-colors duration-300">.</span>R
-                </a>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-8">
-                    <a href="#about" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">About</a>
-                    <a href="#skills" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Skills</a>
-                    <a href="#projects" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Projects</a>
-                    <a href="#experience" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Experience</a>
-                    <a href="#education" class="text-sm uppercase tracking-widest text-lux-text hover:text-lux-teal transition-all duration-300 font-medium">Education</a>
-                    <a href="#contact" class="px-6 py-2 rounded-full border border-lux-teal/30 text-lux-teal hover:bg-lux-teal hover:text-lux-black transition-all duration-300 text-sm uppercase font-bold tracking-wider shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-                        Contact
-                    </a>
+    <!-- Top Bar -->
+    <nav class="w-full z-50 h-14 border-b border-white/5 bg-void/90 backdrop-blur-md flex-none">
+        <div class="w-full h-full px-6 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-metric_ats to-metric_imp flex items-center justify-center">
+                    <i class="fa-solid fa-layer-group text-white text-xs"></i>
                 </div>
-
-                <!-- Mobile Toggle -->
-                <button class="lg:hidden text-white focus:outline-none" id="mobile-toggle">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight text-white leading-none">PRORESUME <span class="text-metric_ats">ANALYZER</span></h1>
+                </div>
             </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div class="lg:hidden absolute top-20 left-0 w-full px-4 transform scale-y-0 opacity-0 origin-top transition-all duration-300" id="mobile-menu">
-            <div class="glass-panel rounded-2xl p-6 flex flex-col space-y-4 text-center">
-                <a href="#about" class="text-lg font-display font-bold text-white py-2 mobile-link">About</a>
-                <a href="#skills" class="text-lg font-display font-bold text-white py-2 mobile-link">Skills</a>
-                <a href="#projects" class="text-lg font-display font-bold text-white py-2 mobile-link">Projects</a>
-                <a href="#experience" class="text-lg font-display font-bold text-white py-2 mobile-link">Experience</a>
-                <a href="#education" class="text-lg font-display font-bold text-white py-2 mobile-link">Education</a>
-                <a href="#contact" class="text-lg font-display font-bold text-lux-teal py-2 mobile-link">Contact</a>
+            <div class="flex items-center gap-6">
+                <button onclick="showModal('about')" class="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors tracking-wider hidden md:block">ABOUT</button>
+                <button onclick="showModal('tips')" class="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors tracking-wider hidden md:block">TIPS</button>
+                <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded bg-white/5 border border-white/10">
+                    <div class="w-1.5 h-1.5 rounded-full bg-metric_skl animate-pulse"></div>
+                    <span class="text-[10px] font-mono text-gray-300 font-bold tracking-wider">SYSTEM LIVE</span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
-        <!-- Ambient Blobs -->
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-lux-teal/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lux-pink/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
-
-        <div class="container mx-auto px-6 relative z-10 text-center">
-            <div class="overflow-hidden">
-                <h1 class="text-6xl md:text-8xl lg:text-9xl font-display font-black text-white leading-tight gs-reveal-y">
-                    MITHILESH <br> 
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lux-teal to-lux-pink">REDDY</span>
-                </h1>
-            </div>
-            
-            <p class="mt-8 text-xl md:text-2xl text-lux-muted font-light tracking-wide max-w-3xl mx-auto gs-reveal-opacity">
-                Full-Stack Developer <span class="text-lux-teal mx-2">•</span> Machine Learning Enthusiast <span class="text-lux-pink mx-2">•</span> AI Innovator
+    <!-- Main Content Area -->
+    <main class="flex-1 w-full p-4 overflow-hidden relative z-10 flex flex-col items-center">
+        
+        <!-- Header (Motivational) -->
+        <div class="text-center mb-5 flex-none z-20 px-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-3">
+                Don't Just Apply. <br class="hidden md:block" />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-metric_ats via-metric_imp to-metric_vrb">Dominate the Market.</span>
+            </h2>
+            <p class="text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
+                Unlock your true career potential. Our advanced diagnostic engine reveals the hidden gaps in your resume 
+                and provides the strategy you need to <span class="text-white font-medium">stand out instantly.</span>
             </p>
+        </div>
 
-            <div class="flex justify-center gap-6 mt-12 gs-reveal-opacity">
-                <a href="https://www.linkedin.com/in/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-lux-teal hover:bg-lux-teal hover:text-lux-black transition-all duration-300 social-glow">
-                    <i class="fab fa-linkedin-in text-xl"></i>
-                </a>
-                <a href="https://github.com/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-lux-pink hover:bg-lux-pink hover:text-lux-black transition-all duration-300 social-glow">
-                    <i class="fab fa-github text-xl"></i>
-                </a>
-                <a href="https://www.hackerrank.com/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-green-400 hover:bg-green-400 hover:text-lux-black transition-all duration-300 social-glow">
-                    <i class="fab fa-hackerrank text-xl"></i>
-                </a>
-                <a href="https://www.kaggle.com/mithilreddy369" target="_blank" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-blue-400 hover:bg-blue-400 hover:text-lux-black transition-all duration-300 social-glow">
-                    <i class="fab fa-kaggle text-xl"></i>
-                </a>
-                <a href="mailto:s.mithilesh.reddi@gmail.com" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-yellow-400 hover:bg-yellow-400 hover:text-lux-black transition-all duration-300 social-glow">
-                    <i class="fas fa-envelope text-xl"></i>
-                </a>
-            </div>
+        <!-- Main Layout -->
+        <div class="w-full h-full max-w-[1500px] mx-auto flex mobile-stack gap-4 flex-1 min-h-0 pb-6">
             
-            <div class="mt-20 animate-bounce">
-                <i class="fas fa-chevron-down text-lux-muted text-2xl"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-32 relative">
-        <div class="container mx-auto px-6">
-            <div class="glass-panel p-10 md:p-16 rounded-3xl max-w-5xl mx-auto relative overflow-hidden">
-                <!-- Decorative Shine -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-lux-teal/10 to-transparent rounded-bl-full pointer-events-none"></div>
-                
-                <h2 class="text-4xl md:text-5xl font-display font-bold mb-10 text-white section-header">About Me</h2>
-                
-                <p class="text-lg md:text-xl text-lux-muted leading-relaxed font-light">
-                    I am a <strong class="text-white">Master of Technology student</strong> specializing in Computer Science with a relentless drive for programming, technology, and innovation. 
-                    <br><br>
-                    My expertise spans <span class="text-lux-teal">Web Development</span>, <span class="text-lux-pink">Cloud Technologies</span>, and <span class="text-lux-teal">Machine Learning</span>. 
-                    I thrive on architecting innovative solutions that address real-world complexities. I am committed to continuous evolution in the ever-changing tech landscape, 
-                    driving both professional excellence and technical mastery.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-32 bg-lux-charcoal/30">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl md:text-5xl font-display font-bold text-white inline-block section-header">Technical Arsenal</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Skill Card 1 -->
-                <div class="glass-card p-8 rounded-2xl group hover:border-lux-teal/50">
-                    <div class="w-14 h-14 bg-lux-teal/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-code text-2xl text-lux-teal"></i>
-                    </div>
-                    <h3 class="text-2xl font-display font-bold text-white mb-4">Languages</h3>
-                    <p class="text-lux-muted leading-relaxed">Python, C, JavaScript, Java</p>
-                </div>
-
-                <!-- Skill Card 2 -->
-                <div class="glass-card p-8 rounded-2xl group hover:border-lux-pink/50">
-                    <div class="w-14 h-14 bg-lux-pink/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-globe text-2xl text-lux-pink"></i>
-                    </div>
-                    <h3 class="text-2xl font-display font-bold text-white mb-4">Web Development</h3>
-                    <p class="text-lux-muted leading-relaxed">HTML, CSS, React, RESTful APIs, Bootstrap, Node.js, Express.js, Tailwind CSS</p>
-                </div>
-
-                <!-- Skill Card 3 -->
-                <div class="glass-card p-8 rounded-2xl group hover:border-purple-500/50">
-                    <div class="w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-database text-2xl text-purple-500"></i>
-                    </div>
-                    <h3 class="text-2xl font-display font-bold text-white mb-4">Databases</h3>
-                    <p class="text-lux-muted leading-relaxed">MySQL, MongoDB</p>
-                </div>
-
-                <!-- Skill Card 4 -->
-                <div class="glass-card p-8 rounded-2xl group hover:border-orange-500/50">
-                    <div class="w-14 h-14 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-cloud text-2xl text-orange-500"></i>
-                    </div>
-                    <h3 class="text-2xl font-display font-bold text-white mb-4">Cloud</h3>
-                    <p class="text-lux-muted leading-relaxed">AWS, Firebase, EC2, Amplify, S3, Route 53</p>
-                </div>
-
-                <!-- Skill Card 5 -->
-                <div class="glass-card p-8 rounded-2xl group hover:border-green-500/50">
-                    <div class="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-chart-line text-2xl text-green-500"></i>
-                    </div>
-                    <h3 class="text-2xl font-display font-bold text-white mb-4">Data Science & ML</h3>
-                    <p class="text-lux-muted leading-relaxed">Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn</p>
-                </div>
-
-                <!-- Skill Card 6 -->
-                <div class="glass-card p-8 rounded-2xl group hover:border-blue-500/50">
-                    <div class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-tools text-2xl text-blue-500"></i>
-                    </div>
-                    <h3 class="text-2xl font-display font-bold text-white mb-4">Tools</h3>
-                    <p class="text-lux-muted leading-relaxed">Linux, Windows, Jenkins, Git, GitLab, Figma, Unity</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-32 relative">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-20">
-                <div>
-                    <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4">Featured Projects</h2>
-                    <p class="text-lux-muted">Innovation through code.</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
-                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
-                    <div class="h-48 bg-gradient-to-br from-lux-teal/20 to-lux-black relative overflow-hidden">
-                        <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
-                        <i class="fas fa-heartbeat absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-lux-teal opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-lux-teal transition-colors">Heart Disease Prediction</h3>
-                        <p class="text-lux-muted text-sm mb-6 flex-grow">A Stacked Ensemble Model with SMOTE technology achieving 98.5% accuracy and 98.52% F1-Score in predicting cardiac events.</p>
-                        <a href="https://github.com/mithilreddy369/Heart-Disease-Prediction" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                            View Source
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
-                    <div class="h-48 bg-gradient-to-br from-lux-pink/20 to-lux-black relative overflow-hidden">
-                        <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
-                        <i class="fas fa-gamepad absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-lux-pink opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-lux-pink transition-colors">Tic-Tac-Toe Web Game</h3>
-                        <p class="text-lux-muted text-sm mb-6 flex-grow">A dynamic, responsive gaming interface built with vanilla JS and deployed on Firebase, featuring a modern engaging UI.</p>
-                        <a href="https://github.com/mithilreddy369/Tic-Tac-Toe-Web-Game" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                            View Source
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
-                    <div class="h-48 bg-gradient-to-br from-green-500/20 to-lux-black relative overflow-hidden">
-                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
-                        <i class="fas fa-dragon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-green-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">Snake Game</h3>
-                        <p class="text-lux-muted text-sm mb-6 flex-grow">Classic arcade nostalgia reinvented with persistent local storage scoring, high-performance rendering, and fluid controls.</p>
-                        <a href="https://github.com/mithilreddy369/snake-game" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                            View Source
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
-                    <div class="h-48 bg-gradient-to-br from-purple-500/20 to-lux-black relative overflow-hidden">
-                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
-                        <i class="fas fa-vr-cardboard absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-purple-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">Immersive Classroom</h3>
-                        <p class="text-lux-muted text-sm mb-6 flex-grow">Interactive VR navigation system using Unity & Google Cardboard SDK. Features gaze-controlled navigation for educational PPTs.</p>
-                        <a href="https://github.com/mithilreddy369/Immersive-Google-Classroom" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                            View Source
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
-                    <div class="h-48 bg-gradient-to-br from-yellow-500/20 to-lux-black relative overflow-hidden">
-                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
-                        <i class="fas fa-university absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-yellow-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors">Bank App Python</h3>
-                        <p class="text-lux-muted text-sm mb-6 flex-grow">Robust financial system architecture demonstrating advanced OOP principles: Encapsulation, Inheritance, and Polymorphism.</p>
-                        <a href="https://github.com/mithilreddy369/Bank-App-Python" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                            View Source
-                        </a>
-                    </div>
-                </div>
-
-                 <!-- Project 6 -->
-                 <div class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full">
-                    <div class="h-48 bg-gradient-to-br from-red-500/20 to-lux-black relative overflow-hidden">
-                         <div class="absolute inset-0 bg-lux-black/40 backdrop-filter backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-500"></div>
-                        <i class="fas fa-user-secret absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-red-500 opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col">
-                        <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">Image Steganography</h3>
-                        <p class="text-lux-muted text-sm mb-6 flex-grow">Advanced security tool for hiding encrypted messages within digital imagery, utilizing password-protected retrieval logic.</p>
-                        <a href="https://github.com/mithilreddy369/Image-Steganography" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/10 text-center text-white text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-                            View Source
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-32 bg-lux-charcoal/30">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-20 text-center section-header">Experience</h2>
-            
-            <div class="max-w-4xl mx-auto space-y-12">
-                <!-- Experience Item 1 -->
-                <div class="relative pl-10 md:pl-0">
-                    <!-- Timeline Line -->
-                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-lux-teal to-transparent transform -translate-x-1/2"></div>
+            <!-- Column 1: Upload / Preview (Left - 30%) -->
+            <div class="w-full lg:w-[30%] flex flex-col gap-3 h-full mobile-h-auto flex-none">
+                <!-- Drop/Preview Zone -->
+                <div id="dropZone" class="flex-1 glass-panel rounded-xl relative overflow-hidden group cursor-pointer transition-all hover:border-white/20 flex flex-col">
                     
-                    <div class="flex flex-col md:flex-row items-center justify-between group">
-                        <div class="md:w-5/12 text-left md:text-right mb-6 md:mb-0">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-lux-teal transition-colors">Cyber Security Internship</h3>
-                            <p class="text-lux-muted mt-1">Edunet Foundation (AICTE)</p>
-                            <p class="text-sm text-lux-teal font-mono mt-2">Jan 2025 - Feb 2025</p>
+                    <!-- 1. Idle State -->
+                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-10 transition-opacity duration-300">
+                        <div class="w-16 h-16 rounded-2xl bg-void-light border border-white/10 flex items-center justify-center mb-5 group-hover:scale-105 transition-all duration-300 group-hover:bg-white/5">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 group-hover:text-white transition-colors"></i>
                         </div>
-                        
-                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-lux-teal rounded-full shadow-[0_0_10px_#00F0FF] transform md:-translate-x-1/2 mt-1.5 md:mt-0"></div>
-                        
-                        <div class="md:w-5/12 glass-panel p-6 rounded-xl border-l-4 border-lux-teal">
-                            <ul class="space-y-3 text-lux-muted text-sm">
-                                <li class="flex items-start"><i class="fas fa-check text-lux-teal mt-1 mr-3"></i> <span>Gained expertise in network security & ethical hacking via SkillsBuild.</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-lux-teal mt-1 mr-3"></i> <span>Developed secure image steganography tools.</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-lux-teal mt-1 mr-3"></i> <span>Implemented data protection and threat mitigation strategies.</span></li>
-                            </ul>
+                        <h3 class="text-xl font-bold text-white mb-1">Upload Resume</h3>
+                        <p class="text-xs text-gray-500 font-mono mb-5 tracking-wide">PDF or DOCX</p>
+                        <button class="px-6 py-2.5 bg-white text-void font-bold text-xs rounded hover:bg-gray-200 transition-colors">SELECT FILE</button>
+                    </div>
+
+                    <!-- 2. Preview State -->
+                    <div id="previewContainer" class="hidden absolute inset-0 bg-void-light/50 flex-col">
+                        <div class="relative w-full h-full overflow-hidden p-4 flex items-center justify-center">
+                            <canvas id="pdfPreviewCanvas" class="shadow-xl rounded border border-white/10"></canvas>
+                            <div id="docxPreview" class="hidden flex-col items-center">
+                                <i class="fa-solid fa-file-word text-6xl text-metric_dep mb-2"></i>
+                                <span class="text-white font-bold" id="docxName">filename.docx</span>
+                            </div>
+                            <!-- Scanner Line -->
+                            <div class="absolute inset-0 border-b-2 border-metric_ats/80 z-20 animate-scan-vertical pointer-events-none"></div>
+                        </div>
+                        <div class="h-10 bg-black/80 backdrop-blur-md flex items-center justify-between px-4 border-t border-white/10 shrink-0">
+                            <span class="text-[10px] text-gray-400 font-mono truncate max-w-[150px]" id="previewFilename">file.pdf</span>
+                            <button id="reuploadBtn" class="text-[10px] text-metric_vrb hover:text-white uppercase font-bold tracking-wider">CHANGE</button>
                         </div>
                     </div>
+
+                    <!-- 3. Loading State -->
+                    <div id="uploadProcessing" class="hidden absolute inset-0 bg-void/95 z-30 flex-col items-center justify-center">
+                        <div class="cyber-loader mb-4"></div>
+                        <p class="text-gray-400 font-mono text-xs animate-pulse tracking-widest">ANALYZING...</p>
+                    </div>
+
+                    <input type="file" id="fileInput" accept=".pdf,.docx" class="hidden">
                 </div>
 
-                <!-- Experience Item 2 -->
-                <div class="relative pl-10 md:pl-0">
-                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-lux-pink to-transparent transform -translate-x-1/2"></div>
-                    
-                    <div class="flex flex-col md:flex-row-reverse items-center justify-between group">
-                        <div class="md:w-5/12 text-left mb-6 md:mb-0">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-lux-pink transition-colors">Foundations of AI Internship</h3>
-                            <p class="text-lux-muted mt-1">Microsoft Initiative (Edunet)</p>
-                            <p class="text-sm text-lux-pink font-mono mt-2">April 2025 - May 2025</p>
-                        </div>
-                        
-                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-lux-pink rounded-full shadow-[0_0_10px_#FF0055] transform md:-translate-x-1/2 mt-1.5 md:mt-0"></div>
-                        
-                        <div class="md:w-5/12 glass-panel p-6 rounded-xl border-r-4 border-lux-pink text-right">
-                             <ul class="space-y-3 text-lux-muted text-sm inline-block text-left">
-                                <li class="flex items-start"><i class="fas fa-check text-lux-pink mt-1 mr-3"></i> <span>Mastered Azure AI and Cloud concepts via MS Learn.</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-lux-pink mt-1 mr-3"></i> <span>Engaged in expert-led masterclasses.</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-lux-pink mt-1 mr-3"></i> <span>Solved real-world problem statements under mentorship.</span></li>
-                            </ul>
-                        </div>
+                <!-- Terminal Log -->
+                <div class="glass-panel rounded-xl p-3 h-32 flex-none flex flex-col font-mono text-[10px] relative overflow-hidden">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-1 mb-1">
+                        <span class="text-gray-500 font-bold">SYSTEM_LOG</span>
+                        <div class="flex gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-red-500"></div><div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div></div>
+                    </div>
+                    <div id="consoleOutput" class="flex-1 overflow-y-auto space-y-1 text-gray-400 scrollbar-hide">
+                        <p>> Core_Logic_Ready...</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Education Section -->
-    <section id="education" class="py-32 relative">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-20 text-center section-header">Education</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                <!-- Education Card 1 -->
-                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-lux-teal">
-                    <span class="text-6xl text-lux-teal/10 font-black absolute top-4 right-6 pointer-events-none">01</span>
-                    <h3 class="text-2xl font-bold text-white mb-1">M.Tech (Computer Science)</h3>
-                    <p class="text-lux-teal font-medium mb-4">JNTUA College of Engineering, Anantapur</p>
-                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
-                        <span>Sept 2023 - Present</span>
-                        <span class="font-bold text-white">8.06 CGPA</span>
-                    </div>
-                </div>
-
-                <!-- Education Card 2 -->
-                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-lux-pink">
-                    <span class="text-6xl text-lux-pink/10 font-black absolute top-4 right-6 pointer-events-none">02</span>
-                    <h3 class="text-2xl font-bold text-white mb-1">B.Tech (Computer Engineering)</h3>
-                    <p class="text-lux-pink font-medium mb-4">Presidency University, Bengaluru</p>
-                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
-                        <span>Aug 2018 - Jun 2022</span>
-                        <span class="font-bold text-white">6.34 CGPA</span>
-                    </div>
-                </div>
-
-                <!-- Education Card 3 -->
-                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-white/30">
-                    <h3 class="text-xl font-bold text-white mb-1">Class XII</h3>
-                    <p class="text-lux-muted mb-4">Narayana Junior College</p>
-                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
-                        <span>2016 - 2018</span>
-                        <span class="font-bold text-white">86.66%</span>
-                    </div>
-                </div>
-
-                <!-- Education Card 4 -->
-                <div class="glass-card p-8 rounded-2xl flex flex-col border-t-2 border-t-white/30">
-                    <h3 class="text-xl font-bold text-white mb-1">Class X</h3>
-                    <p class="text-lux-muted mb-4">Montessori Indus School</p>
-                    <div class="mt-auto flex justify-between items-center text-sm text-lux-muted border-t border-white/10 pt-4">
-                        <span>2015 - 2016</span>
-                        <span class="font-bold text-white">8.5 CGPA</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Certifications -->
-    <section class="py-32 bg-lux-charcoal/30">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-16 text-center section-header">Credentials</h2>
-            
-            <div class="flex overflow-x-auto pb-8 gap-6 snap-x hide-scroll" style="scrollbar-width: none;">
-                <!-- Certificate Card Template -->
-                <a href="https://www.hackerrank.com/certificates/bde31d35c2a0" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-teal group">
-                    <div class="text-lux-teal mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-certificate text-3xl"></i></div>
-                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Software Engineer</h4>
-                    <p class="text-lux-muted text-sm">HackerRank</p>
-                </a>
-
-                <a href="https://www.hackerrank.com/certificates/df0fb0eb975b" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-teal group">
-                    <div class="text-lux-teal mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-database text-3xl"></i></div>
-                    <h4 class="text-white font-bold text-lg leading-tight mb-2">SQL (Advanced)</h4>
-                    <p class="text-lux-muted text-sm">HackerRank</p>
-                </a>
-
-                <a href="https://www.credly.com/badges/f39792ee-5bd5-48b3-b787-a49bfc842f87/linked_in_profile" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-pink group">
-                    <div class="text-lux-pink mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fab fa-python text-3xl"></i></div>
-                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Applied Data Science</h4>
-                    <p class="text-lux-muted text-sm">IBM</p>
-                </a>
+            <!-- Column 2: Dashboard (Right - 70%) -->
+            <div id="dashboard" class="w-full lg:flex-1 h-full glass-panel rounded-xl p-1 relative flex flex-col transition-all duration-700 mobile-h-auto mobile-mt">
                 
-                <a href="https://www.credly.com/badges/69196b29-ac8d-4ddd-aa0a-be3eafc2f8e2" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-lux-pink group">
-                    <div class="text-lux-pink mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-brain text-3xl"></i></div>
-                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Machine Learning L1</h4>
-                    <p class="text-lux-muted text-sm">IBM</p>
-                </a>
-
-                <a href="https://learn.deeplearning.ai/accomplishments/13d6f919-0a69-4cc3-8eb8-3fce99ffc503?usp=sharing" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-yellow-500 group">
-                    <div class="text-yellow-500 mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-robot text-3xl"></i></div>
-                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Prompt Engineering</h4>
-                    <p class="text-lux-muted text-sm">DeepLearning.AI</p>
-                </a>
-
-                 <a href="https://freecodecamp.org/certification/mithilreddy369/responsive-web-design" target="_blank" class="min-w-[280px] glass-card p-6 rounded-xl hover:bg-white/5 transition-colors snap-center border-l-4 border-l-blue-500 group">
-                    <div class="text-blue-500 mb-4 group-hover:scale-110 transition-transform origin-left"><i class="fab fa-html5 text-3xl"></i></div>
-                    <h4 class="text-white font-bold text-lg leading-tight mb-2">Responsive Web Design</h4>
-                    <p class="text-lux-muted text-sm">freeCodeCamp</p>
-                </a>
-            </div>
-            <p class="text-center text-lux-muted text-sm mt-4"><i class="fas fa-arrow-right mr-2"></i> Swipe to explore more</p>
-        </div>
-    </section>
-
-    <!-- Achievements & Interests (Compact High-End Grid) -->
-    <section class="py-32 relative">
-         <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <!-- Achievements -->
-                <div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-8 border-l-4 border-lux-teal pl-4">Achievements</h3>
-                    <div class="space-y-6">
-                        <div class="glass-panel p-6 rounded-xl flex items-start space-x-4">
-                            <i class="fas fa-trophy text-yellow-500 text-xl mt-1"></i>
-                            <div>
-                                <h4 class="text-white font-bold text-lg">98.5% ML Accuracy</h4>
-                                <p class="text-lux-muted text-sm mt-1">Achieved superior prediction reliability in Heart Disease Prediction model.</p>
-                            </div>
+                <!-- Content -->
+                <div class="flex-1 bg-void-light/30 rounded-lg p-5 flex flex-col overflow-y-auto">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-4">
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-chart-pie text-metric_ats"></i> Diagnostic Report
+                            </h2>
                         </div>
-                         <div class="glass-panel p-6 rounded-xl flex items-start space-x-4">
-                            <i class="fas fa-users text-lux-pink text-xl mt-1"></i>
-                            <div>
-                                <h4 class="text-white font-bold text-lg">Project Leadership</h4>
-                                <p class="text-lux-muted text-sm mt-1">Led university team to successful delivery, fostering strong collaboration.</p>
-                            </div>
-                        </div>
-                         <div class="glass-panel p-6 rounded-xl flex items-start space-x-4">
-                            <i class="fas fa-hand-holding-heart text-green-500 text-xl mt-1"></i>
-                            <div>
-                                <h4 class="text-white font-bold text-lg">Community Impact</h4>
-                                <p class="text-lux-muted text-sm mt-1">Coordinated donation drives aiding underprivileged groups.</p>
+                        <div class="flex items-center gap-6">
+                            <!-- New Scan Button -->
+                            <button id="analyzeNewBtnHeader" class="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-2 border border-white/10 px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 transition-all group">
+                                <i class="fa-solid fa-rotate"></i> NEW SCAN
+                            </button>
+                            <div class="text-right flex flex-col items-end">
+                                <div class="text-[10px] text-gray-500 font-mono uppercase tracking-widest leading-none mb-1">Total Score</div>
+                                <div class="relative leading-none">
+                                    <div class="text-5xl font-bold text-white tracking-tighter" id="totalScore">00</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Interests -->
-                <div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-8 border-l-4 border-lux-pink pl-4">Interests</h3>
-                    <div class="flex flex-wrap gap-4">
-                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-lux-teal hover:text-black transition-colors cursor-default">Exploring Tech</span>
-                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-lux-pink hover:text-black transition-colors cursor-default">Cybersecurity</span>
-                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-purple-500 hover:text-white transition-colors cursor-default">Automation</span>
-                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-blue-500 hover:text-white transition-colors cursor-default">Blockchain</span>
-                        <span class="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-yellow-500 hover:text-black transition-colors cursor-default">Cryptocurrency</span>
+                    <!-- Metrics Grid (Clean Colors) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-5">
+                        <!-- Cards -->
+                        <div class="glass-card-hover p-3 rounded-lg">
+                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-robot text-metric_ats mr-2"></i>ATS Check</span><span id="atsScore" class="text-xs font-bold text-metric_ats">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="atsBar" class="bg-metric_ats h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[10px] text-gray-500 truncate">Keyword parsing accuracy</p>
+                        </div>
+                        <div class="glass-card-hover p-3 rounded-lg">
+                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-chart-line text-metric_imp mr-2"></i>Impact</span><span id="quantScore" class="text-xs font-bold text-metric_imp">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="quantBar" class="bg-metric_imp h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[10px] text-gray-500 truncate">Metric-driven data points</p>
+                        </div>
+                        <div class="glass-card-hover p-3 rounded-lg">
+                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-bolt text-metric_vrb mr-2"></i>Verbs</span><span id="verbScore" class="text-xs font-bold text-metric_vrb">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="verbBar" class="bg-metric_vrb h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[10px] text-gray-500 truncate">Strong action vocabulary</p>
+                        </div>
+                        <div class="glass-card-hover p-3 rounded-lg">
+                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-microchip text-metric_skl mr-2"></i>Skills</span><span id="skillScore" class="text-xs font-bold text-metric_skl">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="skillBar" class="bg-metric_skl h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[10px] text-gray-500 truncate">Hard skill matching</p>
+                        </div>
+                        <div class="glass-card-hover p-3 rounded-lg">
+                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-align-left text-metric_fmt mr-2"></i>Format</span><span id="formatScore" class="text-xs font-bold text-metric_fmt">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="formatBar" class="bg-metric_fmt h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[10px] text-gray-500 truncate">Layout & structure</p>
+                        </div>
+                        <div class="glass-card-hover p-3 rounded-lg">
+                            <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-300"><i class="fa-solid fa-layer-group text-metric_dep mr-2"></i>Depth</span><span id="depthScore" class="text-xs font-bold text-metric_dep">0%</span></div>
+                            <div class="w-full bg-gray-800 h-1.5 rounded-full mb-1.5"><div id="depthBar" class="bg-metric_dep h-1.5 rounded-full transition-all duration-1000 w-0"></div></div>
+                            <p class="text-[10px] text-gray-500 truncate">Content density</p>
+                        </div>
                     </div>
-                    
-                    <!-- Decor -->
-                    <div class="mt-12 p-8 glass-card rounded-2xl text-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-r from-lux-teal/10 to-lux-pink/10 opacity-50"></div>
-                        <p class="text-xl font-display font-bold text-white relative z-10">"Code is the poetry of a better future."</p>
+
+                    <!-- Full Width Critical Analysis (Boxed & Compact) -->
+                    <div class="flex-1 min-h-0 flex flex-col gap-4 border-t border-white/5 pt-4 mt-auto">
+                        
+                        <!-- Strategic Recommendations (Full Width) -->
+                        <div class="w-full bg-white/5 rounded-lg p-4 border border-white/5 flex flex-col h-full">
+                            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation text-metric_fmt"></i> Deep Critical Analysis
+                            </h3>
+                            <!-- Boxed List: Compact Vertical Stacking -->
+                            <div id="recommendationList" class="flex-1 flex flex-col gap-1.5 overflow-y-auto max-h-[160px] scrollbar-hide text-xs font-mono text-gray-400">
+                                <div class="p-2 rounded bg-white/5 border border-white/5 flex items-start gap-2.5 opacity-70">
+                                    <span class="text-metric_ats mt-0.5 shrink-0"><i class="fa-solid fa-spinner fa-spin"></i></span> 
+                                    <span>Upload resume to initialize deep diagnostic scan...</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
             </div>
-         </div>
-    </section>
+        </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-32 bg-gradient-to-t from-black to-transparent">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-7xl font-display font-black text-white mb-8 tracking-tight">LET'S TALK</h2>
-            <p class="text-xl text-lux-muted max-w-2xl mx-auto mb-12">
-                Open to opportunities, collaborations, and technical discussions.
-            </p>
+        <!-- Footer with Status Ticker -->
+        <footer class="absolute bottom-0 w-full h-8 bg-void/90 border-t border-white/5 flex items-center justify-between px-6 text-[10px] text-gray-500 font-mono z-50 backdrop-blur-sm">
+            <div class="flex items-center gap-6">
+                <span>© 2025 PRORESUME ANALYZER.</span>
+                <span id="timeDisplay" class="hidden md:inline text-gray-600"></span>
+            </div>
             
-            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
-                <a href="mailto:s.mithilesh.reddi@gmail.com" class="group relative px-8 py-4 bg-lux-teal text-black font-bold text-lg rounded-full overflow-hidden transition-transform hover:scale-105">
-                    <span class="relative z-10 flex items-center"><i class="fas fa-envelope mr-3"></i> Send Email</span>
-                    <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                </a>
-                
-                <a href="https://www.linkedin.com/in/mithilreddy369" target="_blank" class="group relative px-8 py-4 border border-white text-white font-bold text-lg rounded-full overflow-hidden transition-transform hover:scale-105">
-                    <span class="relative z-10 flex items-center group-hover:text-black transition-colors"><i class="fab fa-linkedin-in mr-3"></i> LinkedIn</span>
-                    <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                </a>
+            <!-- Live Ticker -->
+            <div class="hidden md:flex items-center gap-4">
+                <span class="flex items-center gap-2">
+                    <span class="w-1 h-1 rounded-full bg-metric_skl"></span>
+                    <span id="statusTicker" class="uppercase tracking-wider text-gray-400">ENCRYPTION: SECURE</span>
+                </span>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="showModal('privacy')" class="hover:text-white transition-colors">PRIVACY</button>
+                <button onclick="showModal('contact')" class="hover:text-metric_ats transition-colors">CONTACT</button>
+            </div>
+        </footer>
+
+        <!-- Information Modal -->
+        <div id="infoModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+            <div class="glass-panel w-full max-w-2xl p-8 rounded-xl relative m-4 border border-white/10">
+                <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 id="modalTitle" class="text-2xl font-bold text-white mb-6 flex items-center gap-3"></h3>
+                <div id="modalContent" class="text-sm text-gray-300 font-mono leading-relaxed space-y-6"></div>
             </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="py-8 border-t border-white/5">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-            <p class="text-lux-muted text-sm">&copy; 2025 Mithilesh Reddy.</p>
-            <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" class="text-lux-muted hover:text-white transition-colors"><i class="fab fa-github"></i></a>
-                <a href="#" class="text-lux-muted hover:text-white transition-colors"><i class="fab fa-linkedin"></i></a>
-                <a href="#" class="text-lux-muted hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
-            </div>
-        </div>
-    </footer>
+    </main>
 
-    <!-- Back to Top -->
-    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-white text-black flex items-center justify-center opacity-0 translate-y-10 transition-all duration-300 hover:bg-lux-teal z-40">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
+    <!-- JS Logic -->
     <script>
-        // Spotlight Effect
-        const spotlight = document.getElementById('spotlight');
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth * 100;
-            const y = e.clientY / window.innerHeight * 100;
-            spotlight.style.setProperty('--x', `${x}%`);
-            spotlight.style.setProperty('--y', `${y}%`);
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadIdle = document.getElementById('uploadIdle');
+        const previewContainer = document.getElementById('previewContainer');
+        const pdfPreviewCanvas = document.getElementById('pdfPreviewCanvas');
+        const docxPreview = document.getElementById('docxPreview');
+        const docxName = document.getElementById('docxName');
+        const uploadProcessing = document.getElementById('uploadProcessing');
+        const consoleOutput = document.getElementById('consoleOutput');
+        const dashboard = document.getElementById('dashboard');
+        const totalScoreEl = document.getElementById('totalScore');
+        const reuploadBtn = document.getElementById('reuploadBtn');
+        const previewFilename = document.getElementById('previewFilename');
+        const recommendationList = document.getElementById('recommendationList');
+        const analyzeNewBtnHeader = document.getElementById('analyzeNewBtnHeader');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const statusTicker = document.getElementById('statusTicker');
+
+        // Real-time Clock
+        setInterval(() => {
+            const now = new Date();
+            timeDisplay.innerText = now.toISOString().split('T')[0] + ' ' + now.toLocaleTimeString('en-GB');
+        }, 1000);
+
+        // Status Ticker Animation
+        const statuses = ["ENCRYPTION: SECURE", "MEMORY: OPTIMIZED", "LATENCY: 12MS", "SERVER: OFFLINE MODE", "READY"];
+        let statusIdx = 0;
+        setInterval(() => {
+            statusIdx = (statusIdx + 1) % statuses.length;
+            statusTicker.innerText = statuses[statusIdx];
+        }, 3000);
+
+        // Modal Elements
+        const infoModal = document.getElementById('infoModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        const modalData = {
+            privacy: {
+                title: '<i class="fa-solid fa-shield-halved text-metric_skl"></i> Protocol: Zero-Retention',
+                body: `<p><strong class="text-metric_skl">Absolute Privacy Guarantee:</strong> This system operates entirely within your browser's local memory (Client-Side). Unlike standard analyzers, your resume file is <strong>never</strong> uploaded to any server, cloud storage, or third-party database.</p>
+                       <p>We utilize advanced WebAssembly libraries to process PDF and DOCX files directly on your device. This ensures that your personal data, contact information, and career history remain physically in your possession at all times.</p>
+                       <p class="p-4 bg-white/5 rounded border border-white/10 text-xs"><strong>Security Note:</strong> Once you refresh this page or close this tab, all analysis data is instantly and permanently obliterated from your browser's RAM.</p>`
+            },
+            contact: {
+                title: '<i class="fa-solid fa-envelope text-metric_ats"></i> Engineering Contact',
+                body: `<p><strong class="text-metric_ats">Developer Channel:</strong></p>
+                       <p>We are dedicated to maintaining the highest standard of algorithmic accuracy. For detailed bug reports, feature requests, or enterprise licensing inquiries, please contact the lead engineering team directly.</p>
+                       <p class="mt-4"><a href="#" class="text-metric_ats hover:text-white transition-colors border-b border-metric_ats hover:border-white pb-0.5">engineering@proresume.analyzer</a></p>`
+            },
+            about: {
+                title: '<i class="fa-solid fa-circle-info text-metric_imp"></i> Mission Directive',
+                body: `<p><strong class="text-metric_imp">Democratizing Career Intelligence:</strong> The modern hiring landscape is guarded by unfeeling algorithms. We built ProResume Analyzer to level the playing field.</p>
+                       <p>Our mission is to arm every candidate with the same high-grade diagnostic tools used by Fortune 500 recruitment systems. By reverse-engineering ATS logic, we provide you with the actionable intelligence needed to bypass the bots and put your story directly in human hands.</p>
+                       <p>We believe in <strong class="text-white">Career Sovereignty</strong>: Your data, your strategy, your future. Unlocked.</p>`
+            },
+            tips: {
+                title: '<i class="fa-solid fa-trophy text-metric_fmt"></i> Hall of Fame Rules',
+                body: `<div class="space-y-6">
+                        <div class="flex gap-4"><span class="text-metric_ats font-bold text-xl">01.</span> <div><strong class="text-metric_ats text-lg block mb-1">Reverse Chronology is King</strong> <p>Always list experience new to old. Recruiters spend 74% of their 6-second scan on your current role. Don't bury the lead.</p></div></div>
+                        <div class="flex gap-4"><span class="text-metric_imp font-bold text-xl">02.</span> <div><strong class="text-metric_imp text-lg block mb-1">The Bullet Point Protocol</strong> <p>Banish dense text blocks immediately. Use 3-5 punchy, single-line bullet points per role to hook scanners instantly.</p></div></div>
+                        <div class="flex gap-4"><span class="text-metric_vrb font-bold text-xl">03.</span> <div><strong class="text-metric_vrb text-lg block mb-1">Aggressive Quantification</strong> <p>"Managed budget" is weak. "Managed $50k annual budget" is undeniable. Numbers are the universal language of competence.</p></div></div>
+                        <div class="flex gap-4"><span class="text-metric_skl font-bold text-xl">04.</span> <div><strong class="text-metric_skl text-lg block mb-1">Keyword Mirroring</strong> <p>If the job description says "Project Management", do not write "Team Leading". Use the exact keywords to score high relevance.</p></div></div>
+                        <div class="flex gap-4"><span class="text-metric_fmt font-bold text-xl">05.</span> <div><strong class="text-metric_fmt text-lg block mb-1">PDF Integrity</strong> <p>Always submit as PDF to lock your formatting across all devices. Ensure text is selectable (not an image scan) for bots to read it.</p></div></div>
+                       </div>`
+            }
+        };
+
+        function showModal(type) {
+            const data = modalData[type];
+            if(data) {
+                modalTitle.innerHTML = data.title;
+                modalContent.innerHTML = data.body;
+                infoModal.classList.remove('hidden');
+                infoModal.classList.add('flex');
+            }
+        }
+
+        closeModalBtn.addEventListener('click', () => {
+            infoModal.classList.add('hidden');
+            infoModal.classList.remove('flex');
         });
 
-        // Mobile Menu Toggle
-        const btn = document.getElementById('mobile-toggle');
-        const menu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-
-        btn.addEventListener('click', () => {
-            if (menu.classList.contains('scale-y-0')) {
-                menu.classList.remove('scale-y-0', 'opacity-0');
-            } else {
-                menu.classList.add('scale-y-0', 'opacity-0');
+        infoModal.addEventListener('click', (e) => {
+            if(e.target === infoModal) {
+                infoModal.classList.add('hidden');
+                infoModal.classList.remove('flex');
             }
         });
 
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menu.classList.add('scale-y-0', 'opacity-0');
-            });
-        });
+        function log(msg, type='info') {
+            const p = document.createElement('p');
+            const time = new Date().toLocaleTimeString('en-US',{hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"});
+            p.innerHTML = `<span class="opacity-50">[${time}]</span> ${msg}`;
+            if(type==='error') p.className = 'text-red-400';
+            if(type==='success') p.className = 'text-emerald-400';
+            if(type==='process') p.className = 'text-metric_ats';
+            consoleOutput.appendChild(p);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
 
-        // Navbar Scroll Effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('py-2');
-                navbar.classList.remove('py-4');
-            } else {
-                navbar.classList.add('py-4');
-                navbar.classList.remove('py-2');
+        dropZone.addEventListener('click', () => { if(uploadIdle.style.display !== 'none') fileInput.click(); });
+        reuploadBtn.addEventListener('click', (e) => { e.stopPropagation(); resetUI(); fileInput.click(); });
+        analyzeNewBtnHeader.addEventListener('click', resetUI);
+        
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-white/30'); });
+        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-white/30'); });
+        dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('border-white/30'); handleFiles(e.dataTransfer.files); });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        async function handleFiles(files) {
+            if(!files.length) return;
+            const file = files[0];
+            
+            // UI Transition
+            uploadIdle.style.display = 'none';
+            previewContainer.classList.add('hidden');
+            uploadProcessing.classList.remove('hidden');
+            uploadProcessing.classList.add('flex');
+            
+            log(`Initializing upload: ${file.name}`, 'process');
+
+            try {
+                // 1. Render Preview
+                if (file.type === 'application/pdf') {
+                    await renderPDFPreview(file);
+                } else if (file.name.endsWith('.docx')) {
+                    renderDOCXPreview(file);
+                } else {
+                    throw new Error("Invalid file type.");
+                }
+
+                // 2. Extract Text
+                let text = '';
+                if(file.type === 'application/pdf') {
+                    const ab = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({data:ab}).promise;
+                    for(let i=1; i<=pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item=>item.str).join(' ') + ' ';
+                    }
+                } else {
+                    const ab = await file.arrayBuffer();
+                    const res = await mammoth.extractRawText({arrayBuffer:ab});
+                    text = res.value;
+                }
+
+                if(!text || text.length < 50) throw new Error("Document appears empty.");
+                
+                // 3. Analyze
+                await new Promise(r => setTimeout(r, 600)); // Simulate think time
+                log('Preview generated. Analyzing content...', 'success');
+                
+                // Show Preview UI
+                uploadProcessing.classList.remove('flex');
+                uploadProcessing.classList.add('hidden');
+                previewContainer.classList.remove('hidden');
+                previewContainer.classList.add('flex');
+                previewFilename.innerText = file.name;
+
+                analyze(text);
+
+            } catch(e) {
+                log(`Error: ${e.message}`, 'error');
+                resetUI();
             }
-        });
+        }
 
-        // Back to Top
-        const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                backToTop.classList.remove('opacity-0', 'translate-y-10');
-            } else {
-                backToTop.classList.add('opacity-0', 'translate-y-10');
+        async function renderPDFPreview(file) {
+            const fileReader = new FileReader();
+            return new Promise((resolve, reject) => {
+                fileReader.onload = async function() {
+                    const typedarray = new Uint8Array(this.result);
+                    try {
+                        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                        const page = await pdf.getPage(1);
+                        const viewport = page.getViewport({scale: 1.5});
+                        const context = pdfPreviewCanvas.getContext('2d');
+                        pdfPreviewCanvas.height = viewport.height;
+                        pdfPreviewCanvas.width = viewport.width;
+                        
+                        await page.render({canvasContext: context, viewport: viewport}).promise;
+                        
+                        pdfPreviewCanvas.classList.remove('hidden');
+                        docxPreview.classList.add('hidden');
+                        resolve();
+                    } catch (e) { reject(e); }
+                };
+                fileReader.readAsArrayBuffer(file);
+            });
+        }
+
+        function renderDOCXPreview(file) {
+            pdfPreviewCanvas.classList.add('hidden');
+            docxPreview.classList.remove('hidden');
+            docxPreview.classList.add('flex');
+            docxName.innerText = file.name;
+        }
+
+        function analyze(text) {
+            const lower = text.toLowerCase();
+            const words = text.split(/\s+/).length;
+
+            // Metrics Logic
+            const ats = Math.min(Math.round((['experience','education','skills','summary','project'].filter(k=>lower.includes(k)).length/5)*100), 100);
+            const quant = Math.min((text.match(/\d+%|\$\d+/g)||[]).length * 15, 100);
+            const verbs = Math.min((text.match(/\b(led|created|managed|developed)\b/gi)||[]).length * 20, 100);
+            const skills = Math.min((['javascript','python','java','react','sql','aws','management','sales'].filter(s=>lower.includes(s)).length * 15), 100);
+            const format = (lower.includes('@')?25:0) + (lower.includes('linkedin')?25:0) + (text.includes('•')?50:0);
+            const depth = words > 400 ? 100 : (words/400)*100;
+
+            const total = Math.round((ats * 0.2) + (quant * 0.2) + (verbs * 0.15) + (skills * 0.15) + (format * 0.15) + (depth * 0.15));
+
+            
+            // Animate
+            animateValue(totalScoreEl, 0, total, 1500);
+            
+            // Update Bars
+            updateBar('ats', ats); updateBar('quant', quant); updateBar('verb', verbs); 
+            updateBar('skill', skills); updateBar('format', format); updateBar('depth', depth);
+
+            // Generate Expanded Recommendations
+            generateRecommendations({ats, quant, verbs, format, skills, depth}, text);
+        }
+
+        function generateRecommendations(scores, text) {
+            let recs = [];
+            const lowerText = text.toLowerCase();
+            
+            // 1. Critical Errors
+            if(scores.ats < 70) recs.push("Missed standard section headers (Experience, Education). ATS may fail to parse.");
+            if(scores.format < 80) recs.push("Incomplete contact info or bullet points missing. Ensure bullet points are used.");
+            
+            // 2. Improvements
+            if(scores.quant < 60) recs.push("Low quantification. Add numbers (%, $) to prove impact.");
+            if(scores.verbs < 60) recs.push("Passive voice detected. Use strong action verbs (Led, Created).");
+            
+            // 3. Nuance/Depth
+            if(scores.depth < 50) recs.push("Resume is too brief. Expand on role details to hit 400+ words.");
+            if(scores.depth > 95) recs.push("Resume might be too dense. Ensure white space is sufficient.");
+            
+            // 4. Advanced/Specific Checks
+            if(text.includes('references available upon request')) recs.push("Remove 'References available upon request'. It wastes valuable space.");
+            if(!lowerText.includes('linkedin.com/in/')) recs.push("Add a customized LinkedIn URL for professional verification.");
+            if(lowerText.includes('objective')) recs.push("Replace 'Objective' with 'Professional Summary'. Objectives are outdated.");
+            if((text.match(/I /g) || []).length > 5) recs.push("Reduce use of personal pronouns ('I', 'Me'). Keep it objective.");
+
+            // 5. Fillers if needed to reach meaningful count
+            if(recs.length < 4) {
+                if(scores.skills < 100) recs.push("Add more technical keywords relevant to your target role.");
+                recs.push("Consider adding a 'Key Achievements' section to highlight wins.");
+                recs.push("Ensure hyperlinked text (LinkedIn, Portfolio) is active.");
             }
-        });
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
 
-        // GSAP Animations
-        gsap.registerPlugin(ScrollTrigger);
+            // Cap at 8 items
+            recs = recs.slice(0, 8);
 
-        // Hero Reveal
-        gsap.from('.gs-reveal-y', {
-            y: 100,
-            opacity: 0,
-            duration: 1.2,
-            ease: 'power4.out',
-            stagger: 0.2
-        });
-        gsap.from('.gs-reveal-opacity', {
-            opacity: 0,
-            duration: 1.5,
-            delay: 0.5,
-            ease: 'power2.out'
-        });
+            // Boxed Item Rendering (Compact)
+            recommendationList.innerHTML = recs.map(r => `
+                <div class="flex items-start gap-2.5 p-1.5 rounded bg-white/5 border border-white/5 hover:border-metric_ats/30 hover:bg-white/10 transition-all duration-200 cursor-default">
+                    <span class="text-metric_ats mt-0.5 shrink-0 text-[10px]">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </span> 
+                    <span class="leading-snug text-gray-300 text-[10px]">${r}</span>
+                </div>
+            `).join('');
+        }
 
-        // Section Headers
-        gsap.utils.toArray('.section-header').forEach(header => {
-            gsap.from(header, {
-                scrollTrigger: {
-                    trigger: header,
-                    start: 'top 80%',
-                },
-                x: -50,
-                opacity: 0,
-                duration: 1,
-                ease: 'power3.out'
+        function updateBar(id, val) {
+            document.getElementById(id+'Score').innerText = Math.round(val) + '%';
+            setTimeout(() => document.getElementById(id+'Bar').style.width = val + '%', 100);
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 4);
+                
+                const currentValue = Math.floor(ease * (end - start) + start);
+                obj.innerHTML = currentValue;
+                
+                // Color Transition Logic
+                if(currentValue < 40) obj.style.color = '#f43f5e'; // Red
+                else if(currentValue < 70) obj.style.color = '#f59e0b'; // Amber
+                else obj.style.color = '#10b981'; // Emerald
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    // Trigger pop animation on finish
+                    obj.classList.add('animate-pop-finish');
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function resetUI() {
+            uploadProcessing.classList.add('hidden');
+            uploadProcessing.classList.remove('flex');
+            previewContainer.classList.add('hidden');
+            previewContainer.classList.remove('flex');
+            uploadIdle.style.display = 'flex';
+            fileInput.value = '';
+            
+            ['ats','quant','verb','skill','format','depth'].forEach(id=>{ 
+                document.getElementById(id+'Bar').style.width='0%'; 
+                document.getElementById(id+'Score').innerText='0%'; 
             });
-        });
-
-        // Cards Stagger
-        gsap.utils.toArray('.glass-card').forEach((card, i) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: 'top 85%',
-                },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'back.out(1.7)'
-            });
-        });
-
+            totalScoreEl.innerText = '00';
+            totalScoreEl.style.color = 'white';
+            totalScoreEl.classList.remove('animate-pop-finish');
+            
+            recommendationList.innerHTML = `
+                <div class="flex items-start gap-2.5 p-1.5 rounded bg-white/5 border border-white/5 opacity-50">
+                    <span class="text-metric_ats mt-0.5 shrink-0 text-[10px]"><i class="fa-solid fa-spinner fa-spin"></i></span> 
+                    <span class="text-gray-400 text-[10px]">Upload resume to initialize deep diagnostic scan...</span>
+                </div>
+            `;
+            log('System reset.', 'process');
+        }
     </script>
 </body>
 </html>
