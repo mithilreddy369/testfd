@@ -1,1285 +1,1021 @@
 <!DOCTYPE html>
-<html lang="en" class="antialiased scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <!-- ===============================================
-         SEO & MARKET DOMINATION SUITE
-         =============================================== -->
-    <title>ProResume Analyzer | Professional Resume Scoring</title>
-    
-    <!-- Dynamic Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2222%22 y=%2212%22 width=%2256%22 height=%2276%22 rx=%228%22 fill=%22%2300F0FF%22/><rect x=%2234%22 y=%2232%22 width=%2232%22 height=%226%22 rx=%223%22 fill=%22%23000000%22 opacity=%220.5%22/><rect x=%2234%22 y=%2246%22 width=%2232%22 height=%226%22 rx=%223%22 fill=%22%23000000%22 opacity=%220.5%22/><circle cx=%2272%22 cy=%2272%22 r=%2216%22 fill=%22%23050505%22/><circle cx=%2272%22 cy=%2272%22 r=%2213%22 fill=%22%2305FFA1%22/></svg>">
-    
-    <!-- Primary Meta Tags -->
-    <meta name="title" content="ProResume Analyzer | Professional Resume Scoring">
-    <meta name="description" content="Unlock your career potential with our professional resume diagnostic tool. Get instant ATS compatibility scores, keyword gap analysis, and formatting optimization strategies.">
-    <meta name="keywords" content="resume analyzer, ats checker, cv score, resume optimization, career tools, job application helper, pdf resume scanner, algorithmic resume review">
-    <meta name="author" content="ProResume Systems">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="1 days">
-    <meta name="theme-color" content="#050505">
-    
-    <!-- Mobile App Configuration -->
-    <meta name="application-name" content="ProResume Analyzer">
-    <meta name="apple-mobile-web-app-title" content="ProResume">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="mobile-web-app-capable" content="yes">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://proresumeanalyzer.com/">
-    <meta property="og:site_name" content="ProResume Analyzer">
-    <meta property="og:title" content="ProResume Analyzer | Professional Resume Scoring">
-    <meta property="og:description" content="Don't just apply. Dominate. Get a free instant analysis of your resume's ATS compatibility and impact score.">
-    <meta property="og:image" content="https://ui-avatars.com/api/?name=Pro+Resume&background=00F0FF&color=000&size=1200">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://proresumeanalyzer.com/">
-    <meta property="twitter:domain" content="proresumeanalyzer.com">
-    <meta property="twitter:title" content="ProResume Analyzer | Professional Resume Scoring">
-    <meta property="twitter:description" content="Professional grade resume diagnostics. Analyze your resume with our advanced algorithmic ATS checker.">
-    <meta property="twitter:image" content="https://ui-avatars.com/api/?name=Pro+Resume&background=00F0FF&color=000&size=1200">
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://proresumeanalyzer.com/" />
-    
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "ProResume Analyzer",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": "Professional resume analysis tool providing ATS compatibility scoring and optimization tips.",
-      "featureList": "ATS Parsing, Keyword Analysis, Format Checking, Impact Scoring"
-    }
-    </script>
-    
-    <!-- Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wealth Strategy Analyzer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Configuration -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // We force dark mode via HTML class
-            theme: {
-                extend: {
-                    fontFamily: { 
-                        sans: ['Outfit', 'sans-serif'], 
-                        mono: ['JetBrains Mono', 'monospace'] 
-                    },
-                    colors: {
-                        void: '#050505',
-                        'void-deep': '#000000',
-                        'panel-bg': '#0A0A0A',
-                        'border-dim': '#1F1F1F',
-                        'border-bright': '#333333',
-                        // Enhanced Neon Palette
-                        cyan: { DEFAULT: '#00F0FF', dim: '#00B8C4' }, 
-                        purple: { DEFAULT: '#9D00FF', dim: '#5D0096' }, 
-                        rose: { DEFAULT: '#FF0055', dim: '#990033' }, 
-                        acid: { DEFAULT: '#00FF9D', dim: '#008F58' }, 
-                        amber: { DEFAULT: '#FFB800', dim: '#996F00' }, 
-                        // Custom Logo Colors
-                        'logo-body': '#00F0FF', 
-                        'logo-check': '#00FF9D', 
-                    },
-                    animation: { 
-                        'scan-vertical': 'scanVertical 3s cubic-bezier(0.4, 0, 0.2, 1) infinite',
-                        'grid-move': 'gridMove 20s linear infinite',
-                        'pulse-slow': 'pulseSlow 4s ease-in-out infinite'
-                    },
-                    keyframes: {
-                        scanVertical: {
-                            '0%': { top: '-20%', opacity: '0' },
-                            '10%': { opacity: '1' },
-                            '90%': { opacity: '1' },
-                            '100%': { top: '100%', opacity: '0' }
-                        },
-                        gridMove: {
-                            '0%': { backgroundPosition: '0 0' },
-                            '100%': { backgroundPosition: '40px 40px' }
-                        },
-                        pulseSlow: {
-                            '0%, 100%': { opacity: '0.4' },
-                            '50%': { opacity: '0.1' }
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE VISUALS --- */
-        body { 
-            background-color: #050505; 
-            color: #E2E8F0; 
-            /* Mobile: Allow native scroll. Desktop: Fixed app layout. */
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --primary: #4F46E5;       /* Indigo 600 */
+            --primary-light: #818CF8;
+            --primary-dark: #4338CA;
+            --secondary: #64748B;     /* Slate 500 */
+            --bg-app: #F8FAFC;        /* Slate 50 */
+            --bg-panel: #FFFFFF;      /* White */
+            --bg-sidebar: #0F172A;    /* Slate 900 */
+            --text-main: #1E293B;     /* Slate 800 */
+            --text-muted: #94A3B8;    /* Slate 400 */
+            --text-on-dark: #F8FAFC;  /* Slate 50 */
+            --border: #E2E8F0;        /* Slate 200 */
+            --success: #10B981;       /* Emerald 500 */
+            --danger: #EF4444;        /* Red 500 */
+            --accent-purple: #8B5CF6; /* Violet 500 */
+            --accent-orange: #F97316; /* Orange 500 */
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+            /* Table Background Tints */
+            --tint-reg: #F1F5F9;
+            --tint-fix: #F3E8FF;
+            --tint-per: #DCFCE7;
+            --tint-lum: #FFEDD5;
+        }
+
+        body.dark-theme {
+            --primary: #6366F1;
+            --primary-light: #A5B4FC;
+            --primary-dark: #4338CA;
+            --secondary: #94A3B8;
+            --bg-app: #020617;
+            --bg-panel: #1E293B;
+            --bg-sidebar: #020617;
+            --text-main: #F1F5F9;
+            --text-muted: #64748B;
+            --text-on-dark: #E2E8F0;
+            --border: #334155;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+            /* Dark Tints */
+            --tint-reg: #0F172A;
+            --tint-fix: #2E1065;
+            --tint-per: #064E3B;
+            --tint-lum: #431407;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+        }
+
+        /* --- Layout --- */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 260px 1fr; /* Fixed sidebar width */
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            background-color: var(--bg-sidebar);
+            color: var(--text-on-dark);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            height: 100%;
+            overflow-y: hidden; 
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-sidebar);
+            flex-shrink: 0;
         }
         
-        /* Desktop App Layout Fixes */
-        @media (min-width: 1024px) {
-            body { 
-                overflow: hidden; 
-                height: 100vh;
-            }
+        .sidebar-header h1 { font-size: 0.85rem; font-weight: 700; color: white; letter-spacing: 0.02em; }
+
+        .sidebar-content { 
+            padding: 0.75rem 1rem; 
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: #0A0A0A; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 0; }
-        ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
-
-        /* NEON PANEL */
-        .neon-panel {
-            background: #0A0A0A;
-            border: 1px solid #1F1F1F;
-            position: relative;
-            overflow: hidden;
-            border-radius: 0.5rem; 
-            transition: border-color 0.3s ease;
-        }
-        
-        .neon-panel.interactive:hover {
-            border-color: #333;
+        .sidebar-footer {
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
         }
 
-        /* --- REPORT CARD STYLES --- */
-        .report-card {
-            background: #0F1014;
-            border: 1px solid #1F1F1F;
-            border-radius: 0.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: none; 
-        }
-        
-        /* Solid Neon Top Borders */
-        .accent-top-cyan { border-top: 2px solid #00F0FF; }
-        .accent-top-purple { border-top: 2px solid #9D00FF; }
-        .accent-top-rose { border-top: 2px solid #FF0055; }
-        .accent-top-acid { border-top: 2px solid #00FF9D; }
-        .accent-top-white { border-top: 2px solid #FFFFFF; }
-        .accent-top-amber { border-top: 2px solid #FFB800; }
-
-        .bg-cyber-grid {
-            background-image: 
-                linear-gradient(to right, #1a1a1a 1px, transparent 1px),
-                linear-gradient(to bottom, #1a1a1a 1px, transparent 1px);
-            background-size: 40px 40px;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-        }
-
-        /* Scan Line */
-        .scan-line {
-            width: 100%; height: 1px;
-            background: #00F0FF;
-            opacity: 0.5;
-        }
-
-        /* --- MOBILE ADAPTATIONS --- */
-        .mobile-panel-transition {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Logic for minimizing upload on mobile */
-        .upload-minimized {
-            flex-grow: 0 !important;
-            flex-basis: auto !important;
-            min-height: 50px !important;
-            height: 50px !important;
-            padding: 0 !important;
-            overflow: hidden;
-            border-color: #333 !important;
+        /* Compact Inputs */
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
             margin-bottom: 0.5rem;
         }
+
+        .input-group { margin-bottom: 0.5rem; }
+        .input-group label {
+            display: block; font-size: 0.6rem; text-transform: uppercase;
+            letter-spacing: 0.05em; font-weight: 600; color: var(--text-muted);
+            margin-bottom: 0.2rem;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .input-group input, .input-group select {
+            width: 100%; background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); color: white;
+            padding: 0.35rem 0.5rem; border-radius: 6px;
+            font-family: inherit; font-size: 0.75rem; transition: all 0.2s;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none; border-color: var(--primary);
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .section-title {
+            color: var(--primary-light); font-size: 0.65rem; font-weight: 700;
+            margin: 0.5rem 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+        .scenario-chips { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.25rem; margin-bottom: 0.5rem; }
+        .chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);
+            padding: 0.25rem; font-size: 0.6rem; border-radius: 4px;
+            cursor: pointer; text-align: center; transition: all 0.2s;
+        }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .reset-btn {
+            width: 100%; background: transparent; border: 1px dashed rgba(255,255,255,0.3);
+            color: var(--text-muted); padding: 0.4rem; border-radius: 6px;
+            cursor: pointer; font-size: 0.7rem; margin-top: 0.5rem; transition: 0.2s;
+        }
+        .reset-btn:hover { border-color: var(--text-on-dark); color: var(--text-on-dark); }
         
-        .upload-minimized .upload-content { opacity: 0; pointer-events: none; display: none !important; }
-        .upload-minimized .mini-header { opacity: 1; pointer-events: auto; display: flex !important; }
+        /* Strategy DNA Visual Widget (Sidebar Footer) */
+        .dna-panel {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+        }
+        .dna-title {
+            font-size: 0.65rem; font-weight: 700; color: var(--text-muted); 
+            text-transform: uppercase; margin-bottom: 0.75rem; letter-spacing: 0.05em;
+            display: flex; justify-content: space-between;
+        }
+        .dna-row {
+            margin-bottom: 0.6rem;
+        }
+        .dna-row:last-child { margin-bottom: 0; }
+        
+        .dna-label {
+            display: flex; justify-content: space-between; font-size: 0.7rem; 
+            color: var(--text-on-dark); margin-bottom: 0.25rem; font-weight: 600;
+        }
+        .dna-bar-bg {
+            height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;
+        }
+        .dna-bar-fill {
+            height: 100%; border-radius: 3px; width: 0; transition: width 1s ease-out;
+        }
+        
+        .fill-reg { background-color: var(--secondary); }
+        .fill-fix { background-color: var(--accent-purple); }
+        .fill-per { background-color: var(--success); }
+        .fill-lum { background-color: var(--accent-orange); }
 
-        /* --- PRINT STYLES (ENHANCED REPORT FORMAT) --- */
-        @media print {
-            @page { margin: 1cm; size: A4; }
-            
+        /* --- Main Panel --- */
+        .main-panel {
+            display: flex; flex-direction: column;
+            height: 100%; overflow: hidden; padding: 0.75rem; gap: 0.75rem;
+            background: var(--bg-app);
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .card {
+            background: var(--bg-panel); border-radius: var(--radius);
+            padding: 0.75rem; box-shadow: var(--shadow);
+            border: 1px solid var(--border); position: relative;
+            display: flex; flex-direction: column;
+            min-height: 120px;
+        }
+        
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .card.regular::before { background: var(--secondary); }
+        .card.fixed::before { background: var(--accent-purple); }
+        .card.percent::before { background: var(--success); }
+        .card.lumpsum::before { background: var(--accent-orange); }
+
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 0.5rem; padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-header h3 { font-size: 0.8rem; font-weight: 700; color: var(--text-main); white-space: nowrap; }
+        
+        .badge { 
+            font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; 
+            font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
+        }
+        .badge.gold { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
+        .badge.silver { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+        .badge.bronze { background: #FFEDD5; color: #9A3412; border: 1px solid #FDBA74; }
+        .badge.base { background: var(--bg-app); color: var(--text-muted); }
+
+        /* Metrics */
+        .card-metrics {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 0.5rem;
+            font-size: 0.75rem; flex: 1;
+        }
+
+        .metric-item { display: flex; flex-direction: column; overflow: hidden; justify-content: center; }
+        .metric-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0; white-space: nowrap; line-height: 1.2; }
+        .metric-value { font-weight: 600; color: var(--text-main); font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+        
+        .main-val { grid-column: span 2; margin-bottom: 0.25rem; }
+        .main-val-container { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;}
+        .highlight { font-weight: 800; font-size: 1.1rem; color: var(--primary); }
+        .gain-badge { font-size: 0.75rem; font-weight: 700; color: var(--success); }
+        
+        .card.percent .highlight { color: var(--success); }
+        .card.fixed .highlight { color: var(--accent-purple); }
+        .card.regular .highlight { color: var(--secondary); }
+        .card.lumpsum .highlight { color: var(--accent-orange); }
+
+        .met-year { color: var(--success); font-weight: 700; }
+        .missed-year { color: var(--danger); font-size: 0.7rem; }
+
+        /* --- Table Section (Flexbox Auto-fit) --- */
+        .table-wrapper {
+            background: var(--bg-panel); border-radius: var(--radius);
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+            flex: 1; /* Fills remaining vertical space */
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .table-header-title {
+            padding: 0.5rem 0.75rem; font-weight: 700; font-size: 0.75rem;
+            border-bottom: 1px solid var(--border); background: var(--bg-app);
+            color: var(--text-main); flex-shrink: 0;
+        }
+
+        .auto-size-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-panel);
+        }
+
+        .flex-table {
+            display: flex; flex-direction: column;
+            height: 100%; width: 100%; font-size: 0.75rem;
+        }
+
+        .flex-thead {
+            flex-shrink: 0; background: var(--bg-app); border-bottom: 1px solid var(--border);
+        }
+
+        .flex-row { display: flex; width: 100%; align-items: center; }
+
+        .flex-tbody {
+            display: flex; flex-direction: column; flex: 1;
+            overflow: hidden; 
+        }
+
+        .flex-tbody .flex-row { flex: 1; min-height: 0; }
+
+        .flex-cell {
+            flex: 1; padding: 0 0.4rem; text-align: right;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            color: var(--text-main); display: flex; align-items: center; justify-content: flex-end;
+            height: 100%; font-variant-numeric: tabular-nums;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.1); 
+        }
+        
+        .w-yr { 
+            width: 32px; flex: none; justify-content: center; 
+            font-weight: 700; border-right: 1px solid var(--border); 
+            background: var(--bg-app); color: var(--text-muted); 
+        }
+        
+        /* Modified Flex Groups for 4 Columns */
+        .group-reg { flex: 4; background-color: var(--tint-reg); display: flex; height: 100%; }
+        .group-fix { flex: 4; background-color: var(--tint-fix); display: flex; border-left: 1px solid var(--border); height: 100%; }
+        .group-per { flex: 4; background-color: var(--tint-per); display: flex; border-left: 1px solid var(--border); height: 100%; }
+        /* Lumpsum stays 3 columns */
+        .group-lum { flex: 3; background-color: var(--tint-lum); display: flex; border-left: 1px solid var(--border); height: 100%; }
+
+        .flex-thead .flex-row { height: 28px; } 
+        .flex-thead .flex-cell { font-weight: 600; color: var(--text-muted); font-size: 0.7rem; justify-content: center; border-bottom: none; }
+        
+        /* Revised Cell Widths for 4-Col Layout */
+        .c-val { flex: 1.4; font-weight: 600; }
+        .c-tinv { flex: 1.2; color: var(--text-muted); font-size: 0.7rem; } /* New Total Inv */
+        .c-inv { flex: 1; color: var(--text-muted); font-size: 0.7rem; } /* Yearly Inv */
+        .c-pct { flex: 0.9; color: var(--text-muted); font-size: 0.7rem; }
+
+        .col-reg { color: var(--secondary); }
+        .col-fix { color: var(--accent-purple); }
+        .col-per { color: var(--success); }
+        .col-lum { color: var(--accent-orange); }
+
+        .group-lum .flex-cell:last-child { padding-right: 1rem; }
+
+        /* Theme Toggle */
+        .theme-toggle-label { position: relative; display: inline-block; width: 32px; height: 18px; }
+        .theme-toggle-label input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(14px); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        
+        /* Tablet Portrait (Vertical Layout) */
+        @media (max-width: 1024px) {
+            .summary-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Mobile (Full Stack) */
+        @media (max-width: 768px) {
             body { 
-                background: white !important; 
-                color: #111 !important; 
-                overflow: visible !important; 
-                height: auto !important;
-                font-size: 11pt;
+                overflow: auto; /* Enable Scroll for mobile */
+                height: auto;
+                font-size: 14px; /* Larger font for readability */
             }
-
-            /* Elements to Hide */
-            nav, footer, .ambient-bg, #leftPanel, #printBtn, #navActions, .no-print, #dropZone, #consoleOutput, #modalOverlay { 
-                display: none !important; 
+            .dashboard-container { 
+                display: flex; 
+                flex-direction: column; 
+                height: auto; 
+                overflow: visible;
             }
-
-            /* Main Layout */
-            main { 
-                padding: 0 !important; 
-                margin: 0 !important; 
-                max-width: 100% !important; 
-                height: auto !important;
+            .sidebar { 
+                height: auto; 
+                border-right: none; 
+                border-bottom: 1px solid var(--border);
+                overflow: visible;
             }
-
-            /* Report Header (Only visible in Print) */
-            #printHeader {
-                display: block !important;
-                border-bottom: 2px solid #000;
-                margin-bottom: 20px;
-                padding-bottom: 10px;
-            }
-
-            #rightPanel { 
-                width: 100% !important; 
-                height: auto !important; 
-                opacity: 1 !important; 
-                pointer-events: auto !important; 
-                display: block !important; 
-                padding: 0 !important; 
-                overflow: visible !important;
-            }
-
-            /* Dashboard Header in Print */
-            #rightPanel > div:first-child {
-                background: transparent !important;
-                border: none !important;
-                color: black !important;
-                margin-bottom: 20px;
-                padding: 0 !important;
-                justify-content: flex-start !important;
-            }
-            #rightPanel h2 { color: black !important; font-size: 18pt !important; margin-right: 20px; }
+            .sidebar-content { padding: 1rem; }
+            .sidebar-footer { border-top: 1px solid var(--border); }
             
-            /* Total Score Bar Print Fix */
-            #totalScore { color: black !important; font-size: 28pt !important; }
-            #totalScoreBar { 
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
-                height: 10px !important;
-                border: 1px solid #ccc;
+            .main-panel { 
+                height: auto; 
+                padding: 1rem;
+                overflow: visible;
             }
             
-            /* Cards */
-            .grid { 
-                display: grid !important; 
-                grid-template-columns: repeat(3, 1fr) !important; 
-                gap: 10px !important; 
-                margin-bottom: 20px !important;
+            .summary-grid { 
+                grid-template-columns: 1fr; /* Stack cards */
+                gap: 1rem;
             }
             
-            .report-card { 
-                background: white !important; 
-                border: 1px solid #ddd !important; 
-                color: black !important; 
-                box-shadow: none !important; 
-                break-inside: avoid;
-                padding: 10px !important;
-                height: auto !important;
-                min-height: 80px;
+            .table-wrapper { 
+                height: 600px; /* Fixed height for table scrolling */
+                margin-bottom: 2rem;
             }
-
-            /* Print typography adjustments */
-            .text-white { color: #000 !important; }
-            .text-gray-300, .text-gray-400, .text-gray-500 { color: #444 !important; }
-            .font-mono { font-family: monospace !important; }
             
-            /* Force Gradient/Color printing */
-            .bg-cyan, .text-cyan { color: #008F99 !important; background-color: #008F99 !important; -webkit-print-color-adjust: exact; }
-            .bg-purple, .text-purple { color: #4A1A75 !important; background-color: #4A1A75 !important; -webkit-print-color-adjust: exact; }
-            .bg-rose, .text-rose { color: #991941 !important; background-color: #991941 !important; -webkit-print-color-adjust: exact; }
-            .bg-acid, .text-acid { color: #038050 !important; background-color: #038050 !important; -webkit-print-color-adjust: exact; }
-            .bg-amber, .text-amber { color: #995F00 !important; background-color: #995F00 !important; -webkit-print-color-adjust: exact; }
+            /* Table Adjustments for Mobile */
+            .flex-tbody { overflow-y: auto; display: block; } 
+            .flex-tbody .flex-row { height: 40px; flex: none; }
+            .flex-thead { position: sticky; top: 0; z-index: 10; }
             
-            /* Bars in cards */
-            [id$="Bar"] { 
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
-                height: 5px !important;
-            }
-
-            /* Recommendations List */
-            #recommendationList {
-                border-top: 1px solid #eee;
-                margin-top: 10px;
-                padding-top: 10px;
-            }
-            .compact-list-item {
-                border-bottom: 1px solid #eee !important;
-                padding: 8px 0 !important;
-                page-break-inside: avoid;
-            }
+            /* Simplify table on mobile if needed */
+            .c-tinv, .c-inv, .c-pct { display: none; } /* Show only value on tiny screens */
+            .flex-cell { font-size: 0.85rem; }
+            .c-val { flex: 1; text-align: center; }
+            .group-reg, .group-fix, .group-per, .group-lum { flex: 1; justify-content: center; }
         }
 
-        .compact-list-item {
-            padding-top: 3px;
-            padding-bottom: 3px;
-            margin-bottom: 2px;
-            border-bottom: 1px solid #1F1F1F;
+        /* Tiny Phone Adjustment to show minimal data */
+        @media (min-width: 480px) and (max-width: 768px) {
+             .c-tinv { display: flex; } /* Show Total Inv on larger phones */
         }
-        .compact-list-item:last-child { border-bottom: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-cyan selection:text-black">
+<body>
 
-    <!-- Ambient Background -->
-    <div class="fixed inset-0 z-0 pointer-events-none bg-void ambient-bg">
-        <div class="absolute inset-0 bg-cyber-grid opacity-20 animate-grid-move"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-cyan/5 blur-[100px] rounded-full pointer-events-none opacity-50"></div>
-    </div>
-
-    <!-- Navigation (Height increased for mobile fit) -->
-    <nav class="w-full h-16 flex-none z-50 border-b border-border-dim bg-panel-bg/95 backdrop-blur-sm sticky top-0 lg:relative">
-        <div class="h-full max-w-[1600px] mx-auto px-4 md:px-6 flex items-center justify-between">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Wealth Strategy Analyzer</h1>
+                <label class="theme-toggle-label">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
             
-            <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
-                <!-- LOGO -->
-                <div class="relative w-8 h-8 md:w-10 md:h-10 group-hover:scale-105 transition-transform duration-300">
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="22" y="12" width="56" height="76" rx="8" fill="#00F0FF" />
-                        <rect x="34" y="32" width="32" height="6" rx="3" fill="#000000" opacity="0.5"/>
-                        <rect x="34" y="46" width="32" height="6" rx="3" fill="#000000" opacity="0.5"/>
-                        <circle cx="72" cy="72" r="16" fill="#050505" />
-                        <circle cx="72" cy="72" r="13" fill="#05FFA1" />
-                        <path d="M66 72 L69.5 75.5 L78 67" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+            <div class="sidebar-content">
+                <form id="sipForm">
+                    <div class="section-title" style="margin-top:0">Monthly Investment</div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Amount (₹)</label>
+                            <input type="number" id="initialSip" value="7000" min="500" max="100000" step="500">
+                        </div>
+                        <div class="input-group">
+                            <label>Lumpsum (₹)</label>
+                            <input type="number" id="lumpsumAmount" value="500000" min="0" max="100000000" step="5000">
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">Investment Profile</div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Years</label>
+                            <input type="number" id="duration" value="30" max="40" min="1">
+                        </div>
+                        <div class="input-group">
+                            <label>Return %</label>
+                            <input type="number" id="returnRate" value="24" max="30">
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-chips">
+                        <div class="chip" data-rate="12">12%</div>
+                        <div class="chip active" data-rate="24">24%</div>
+                        <div class="chip" data-rate="30">30%</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Goal Target (Cr)</label>
+                        <input type="number" id="goalAmount" value="10" step="0.5">
+                    </div>
+
+                    <div class="section-title">Top-Up Configuration</div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Top-Up (₹)</label>
+                            <input type="number" id="stepUpAmount" value="1000" step="500">
+                        </div>
+                         <div class="input-group">
+                            <label>Freq.</label>
+                            <select id="stepUpFrequency">
+                                <option value="6">Half-Yr</option>
+                                <option value="12" selected>Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>% Step-Up</label>
+                        <input type="number" id="stepUpPercentage" value="15" max="24">
+                    </div>
+                    <button type="button" id="resetBtn" class="reset-btn">Reset Defaults</button>
+                </form>
+            </div>
+
+            <!-- Strategy DNA (Visual Comparison) -->
+            <div class="sidebar-footer">
+                <div class="dna-panel">
+                    <div class="dna-title">
+                        <span>Strategy DNA</span>
+                        <span style="opacity:0.6; font-weight:400">Wealth Potential</span>
+                    </div>
+                    
+                    <div class="dna-row">
+                        <div class="dna-label"><span>Regular SIP</span></div>
+                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-reg" id="bar-reg"></div></div>
+                    </div>
+                    <div class="dna-row">
+                        <div class="dna-label"><span>Fixed Top-Up</span></div>
+                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-fix" id="bar-fix"></div></div>
+                    </div>
+                    <div class="dna-row">
+                        <div class="dna-label"><span>% Step-Up</span></div>
+                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-per" id="bar-per"></div></div>
+                    </div>
+                    <div class="dna-row">
+                        <div class="dna-label"><span>Lumpsum</span></div>
+                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-lum" id="bar-lum"></div></div>
+                    </div>
                 </div>
-                <div class="flex flex-col justify-center">
-                    <h1 class="text-base md:text-xl font-bold text-white tracking-tight leading-none font-sans">
-                        PRORESUME <span class="text-cyan">ANALYZER</span>
-                    </h1>
+            </div>
+        </aside>
+
+        <!-- Main Panel -->
+        <main class="main-panel">
+            
+            <!-- Cards Section -->
+            <div class="summary-grid">
+                <!-- Regular SIP Card -->
+                <div class="card regular">
+                    <div class="card-header">
+                        <h3>Regular SIP</h3>
+                        <span class="badge" id="badge-regular">Regular</span>
+                    </div>
+                    <div class="card-metrics">
+                        <div class="metric-item main-val">
+                            <span class="metric-label">Final Value</span>
+                            <div class="main-val-container">
+                                <span class="metric-value highlight" id="summary-value-regular">₹0</span>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Invested</span>
+                            <span class="metric-value" id="summary-invest-regular">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Returns</span>
+                            <span class="metric-value" id="summary-returns-regular">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">CAGR</span>
+                            <span class="metric-value" id="summary-cagr-regular">0%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Multiplier</span>
+                            <span class="metric-value" id="summary-multiplier-regular">0x</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">ROI</span>
+                            <span class="metric-value" id="summary-roi-regular">0%</span>
+                        </div>
+                         <div class="metric-item">
+                            <span class="metric-label">Goal Met</span>
+                            <span class="metric-value" id="summary-goal-regular">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fixed Top-Up Card -->
+                <div class="card fixed">
+                    <div class="card-header">
+                        <h3>Fixed Top-Up</h3>
+                        <span class="badge" id="badge-fixed">Fixed</span>
+                    </div>
+                    <div class="card-metrics">
+                        <div class="metric-item main-val">
+                            <span class="metric-label">Final Value</span>
+                            <div class="main-val-container">
+                                <span class="metric-value highlight" id="summary-value-fixed">₹0</span>
+                                <span class="gain-badge" id="summary-gain-fixed"></span>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Invested</span>
+                            <span class="metric-value" id="summary-invest-fixed">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Returns</span>
+                            <span class="metric-value" id="summary-returns-fixed">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">CAGR</span>
+                            <span class="metric-value" id="summary-cagr-fixed">0%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Multiplier</span>
+                            <span class="metric-value" id="summary-multiplier-fixed">0x</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">ROI</span>
+                            <span class="metric-value" id="summary-roi-fixed">0%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Goal Met</span>
+                            <span class="metric-value" id="summary-goal-fixed">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Percent Step-Up Card -->
+                <div class="card percent">
+                    <div class="card-header">
+                        <h3>% Step-Up</h3>
+                        <span class="badge" id="badge-percent">Step-Up</span>
+                    </div>
+                    <div class="card-metrics">
+                        <div class="metric-item main-val">
+                            <span class="metric-label">Final Value</span>
+                            <div class="main-val-container">
+                                <span class="metric-value highlight" id="summary-value-percent">₹0</span>
+                                <span class="gain-badge" id="summary-gain-percent"></span>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Invested</span>
+                            <span class="metric-value" id="summary-invest-percent">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Returns</span>
+                            <span class="metric-value" id="summary-returns-percent">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">CAGR</span>
+                            <span class="metric-value" id="summary-cagr-percent">0%</span>
+                        </div>
+                         <div class="metric-item">
+                            <span class="metric-label">Multiplier</span>
+                            <span class="metric-value" id="summary-multiplier-percent">0x</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">ROI</span>
+                            <span class="metric-value" id="summary-roi-percent">0%</span>
+                        </div>
+                         <div class="metric-item">
+                            <span class="metric-label">Goal Met</span>
+                            <span class="metric-value" id="summary-goal-percent">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lumpsum Card -->
+                <div class="card lumpsum">
+                    <div class="card-header">
+                        <h3>Lumpsum</h3>
+                        <span class="badge" id="badge-lumpsum">Lumpsum</span>
+                    </div>
+                    <div class="card-metrics">
+                        <div class="metric-item main-val">
+                            <span class="metric-label">Final Value</span>
+                             <div class="main-val-container">
+                                <span class="metric-value highlight" id="summary-value-lumpsum">₹0</span>
+                             </div>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Invested</span>
+                            <span class="metric-value" id="summary-invest-lumpsum">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Returns</span>
+                            <span class="metric-value" id="summary-returns-lumpsum">₹0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">CAGR</span>
+                            <span class="metric-value" id="summary-cagr-lumpsum">0%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Multiplier</span>
+                            <span class="metric-value" id="summary-multiplier-lumpsum">0x</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">ROI</span>
+                            <span class="metric-value" id="summary-roi-lumpsum">0%</span>
+                        </div>
+                         <div class="metric-item">
+                            <span class="metric-label">Goal Met</span>
+                            <span class="metric-value" id="summary-goal-lumpsum">-</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Header Actions -->
-            <div id="navActions" class="flex items-center gap-2 md:gap-3">
-                <div class="hidden md:flex gap-3">
-                    <button onclick="showModal('faq')" class="flex items-center gap-2 px-3 py-1.5 rounded border border-border-dim bg-void hover:bg-white/5 hover:border-cyan transition-all group">
-                        <i class="fa-solid fa-circle-question text-gray-500 group-hover:text-cyan text-xs"></i>
-                        <span class="text-xs font-mono font-bold text-gray-400">FAQ</span>
-                    </button>
-                     <button onclick="showModal('tips')" class="flex items-center gap-2 px-3 py-1.5 rounded border border-border-dim bg-void hover:bg-white/5 hover:border-acid transition-all group">
-                        <i class="fa-solid fa-lightbulb text-gray-500 group-hover:text-acid text-xs"></i>
-                        <span class="text-xs font-mono font-bold text-gray-400">TIPS</span>
-                    </button>
-                </div>
-                <div class="flex items-center gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded bg-cyan/10 border border-cyan/30">
-                    <div class="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse"></div>
-                    <span class="text-[9px] md:text-xs font-mono font-bold text-cyan">ONLINE</span>
+            <!-- Table Section -->
+            <div class="table-wrapper">
+                <div class="table-header-title">Yearly Projection (Auto-fits Screen)</div>
+                <div class="auto-size-container">
+                    <div class="flex-table super-dense">
+                        <!-- Table Header -->
+                        <div class="flex-thead">
+                            <div class="flex-row">
+                                <div class="flex-cell w-yr">Yr</div>
+                                <div class="group-reg"><div class="flex-cell" style="flex:1; justify-content:center;">Regular SIP</div></div>
+                                <div class="group-fix"><div class="flex-cell" style="flex:1; justify-content:center;">Fixed Top-Up</div></div>
+                                <div class="group-per"><div class="flex-cell" style="flex:1; justify-content:center;">% Step-Up</div></div>
+                                <div class="group-lum"><div class="flex-cell" style="flex:1; justify-content:center;">Lumpsum</div></div>
+                            </div>
+                            <div class="flex-row" style="border-top:1px solid rgba(0,0,0,0.05)">
+                                <div class="flex-cell w-yr"></div>
+                                <!-- Regular -->
+                                <div class="group-reg">
+                                    <div class="flex-cell c-val">Value</div>
+                                    <div class="flex-cell c-tinv">T.Inv</div>
+                                    <div class="flex-cell c-inv">Yr.Inv</div>
+                                    <div class="flex-cell c-pct">%</div>
+                                </div>
+                                <!-- Fixed -->
+                                <div class="group-fix">
+                                    <div class="flex-cell c-val">Value</div>
+                                    <div class="flex-cell c-tinv">T.Inv</div>
+                                    <div class="flex-cell c-inv">Yr.Inv</div>
+                                    <div class="flex-cell c-pct">%</div>
+                                </div>
+                                <!-- Percent -->
+                                <div class="group-per">
+                                    <div class="flex-cell c-val">Value</div>
+                                    <div class="flex-cell c-tinv">T.Inv</div>
+                                    <div class="flex-cell c-inv">Yr.Inv</div>
+                                    <div class="flex-cell c-pct">%</div>
+                                </div>
+                                <!-- Lumpsum -->
+                                <div class="group-lum">
+                                    <div class="flex-cell c-val">Value</div>
+                                    <div class="flex-cell c-inv">T.Inv</div>
+                                    <div class="flex-cell c-pct">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Table Body -->
+                        <div class="flex-tbody" id="resultsTableBody">
+                            <!-- Rows injected by JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
 
-    <!-- Main Workspace -->
-    <main class="flex-1 w-full max-w-[1600px] mx-auto p-2 md:p-4 relative z-10 flex flex-col lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
-        
-        <!-- PRINT HEADER (Hidden by default) -->
-        <div id="printHeader" class="hidden text-center mb-8">
-            <h1 class="text-3xl font-bold text-black mb-2">PRORESUME ANALYZER REPORT</h1>
-            <p class="text-gray-500 text-sm">Generated on <span id="printDate"></span></p>
-        </div>
-
-        <!-- HEADER (Screen Only) -->
-        <div class="text-center mb-4 md:mb-6 flex-none z-20 px-2 mt-2 no-print">
-            <h2 class="text-2xl md:text-5xl font-black leading-tight mb-2 font-sans tracking-tight uppercase">
-                <span class="block text-white mb-1">Don't Just Apply.</span>
-                <span class="text-cyan">Dominate the Market.</span>
-            </h2>
-            
-            <!-- Optimized Tagline for Mobile -->
-            <p class="text-[10px] md:text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-sans border-l-2 border-cyan pl-3 md:pl-4 text-left md:text-center md:border-l-0 md:pl-0">
-                Unlock your true career potential. Our advanced diagnostic engine reveals <span class="text-white font-bold">hidden gaps</span> and provides the strategy to <span class="text-acid font-bold">stand out instantly.</span>
-            </p>
-        </div>
-
-        <!-- Panels Container -->
-        <div class="flex-1 w-full flex flex-col lg:flex-row gap-3 md:gap-6 min-h-0">
-
-            <!-- LEFT PANEL: Upload & Console -->
-            <section id="leftPanel" class="w-full lg:w-[35%] flex flex-col gap-3 flex-none h-auto lg:h-full transition-all duration-500">
-                
-                <!-- Upload Zone -->
-                <!-- FIX: increased padding and min-height, reduced text size to prevent cut off -->
-                <div id="dropZone" class="neon-panel interactive w-full rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[140px] lg:flex-1">
-                    
-                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    <!-- 1. Idle State - Optimised for minimal overflow/trimming -->
-                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-10 upload-content">
-                        <div class="relative mb-2 md:mb-6">
-                            <!-- Smaller icon on mobile -->
-                            <div class="w-8 h-8 md:w-20 md:h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
-                                <i class="fa-solid fa-cloud-arrow-up text-base md:text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
-                            </div>
-                        </div>
-                        <!-- Drastically Reduced text sizes on mobile to ensure fit -->
-                        <h2 class="text-sm md:text-xl font-bold text-white mb-1 md:mb-2 font-sans tracking-tight">Upload Resume</h2>
-                        <p class="text-[9px] md:text-xs text-gray-500 font-mono tracking-wide max-w-[200px] md:max-w-[250px] leading-tight">
-                            PDF or DOCX.<br>Drag & drop to analyze.
-                        </p>
-                    </div>
-
-                    <!-- 2. Processing State -->
-                    <div id="uploadProcessing" class="hidden absolute inset-0 bg-black/90 z-20 flex-col items-center justify-center">
-                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-border-dim border-t-cyan rounded-full animate-spin mb-4"></div>
-                        <p class="text-cyan font-mono text-xs animate-pulse tracking-[0.2em]">ANALYZING...</p>
-                    </div>
-
-                    <!-- 3. Preview State -->
-                    <div id="previewContainer" class="hidden absolute inset-0 bg-void flex-col upload-content">
-                        <div class="relative flex-1 w-full overflow-hidden bg-void-deep/50 flex items-center justify-center p-4">
-                            <button id="resetBtn" class="absolute top-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded bg-black border border-border-bright text-white hover:border-white transition-all font-mono text-xs font-bold group">
-                                <i class="fa-solid fa-rotate-right group-hover:rotate-180 transition-transform duration-500"></i>
-                                RESET
-                            </button>
-                            <canvas id="pdfPreviewCanvas" class="max-w-full max-h-full object-contain rounded border border-border-dim"></canvas>
-                            <div id="docxIcon" class="hidden flex-col items-center">
-                                <i class="fa-solid fa-file-word text-6xl text-blue-500 mb-4"></i>
-                                <span class="text-white font-bold font-mono text-sm" id="filenameDisplay">doc.docx</span>
-                            </div>
-                            <!-- FIXED SCANNER -->
-                            <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-                                <div class="w-full h-[20%] bg-cyan/10 absolute animate-scan-vertical border-b border-cyan"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mini Header (Mobile Optimized) -->
-                    <div class="hidden mini-header w-full h-full items-center justify-between px-4 bg-void/50 backdrop-blur-sm border-b border-cyan/20">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-cyan animate-pulse"></div>
-                            <span class="font-mono text-xs text-cyan font-bold truncate max-w-[150px]" id="miniFilename">Resume.pdf</span>
-                        </div>
-                        <button id="expandBtn" class="text-[10px] text-gray-500 font-mono hover:text-white uppercase px-2 py-1 bg-white/5 rounded">EXPAND VIEW</button>
-                    </div>
-
-                    <input type="file" id="fileInput" accept=".pdf,.docx" class="hidden">
-                </div>
-
-                <!-- Terminal -->
-                <!-- HIDDEN on mobile/tablet (lg:flex ensures it only shows on large screens) -->
-                <div class="hidden lg:flex neon-panel rounded-lg min-h-[100px] lg:h-[25%] flex-none flex-col p-3 border-border-dim bg-black">
-                    <div class="flex justify-between items-center border-b border-border-dim pb-2 mb-2">
-                        <span class="text-[10px] font-mono font-bold text-gray-500 tracking-widest">SYSTEM_LOG</span>
-                        <div class="flex gap-1.5">
-                            <div class="w-1.5 h-1.5 rounded-full bg-rose"></div>
-                            <div class="w-1.5 h-1.5 rounded-full bg-cyan"></div>
-                        </div>
-                    </div>
-                    <div id="consoleOutput" class="flex-1 overflow-y-auto max-h-[100px] lg:max-h-none font-mono text-[10px] space-y-1.5 text-gray-500 select-text">
-                        <p class="opacity-50">> System ready. Waiting for input...</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- RIGHT PANEL: Dashboard -->
-            <section id="rightPanel" class="w-full lg:flex-1 flex flex-col gap-4 overflow-hidden relative opacity-50 pointer-events-none transition-all duration-700 h-auto lg:h-full">
-                
-                <!-- Dashboard Header -->
-                <div class="flex-none flex items-center justify-between px-2 gap-3 md:gap-6 bg-void/50 md:bg-transparent rounded p-2 md:p-0 border border-border-dim md:border-none">
-                    <div class="flex-none flex items-center gap-2">
-                        <h2 class="text-lg md:text-3xl font-bold text-white font-sans tracking-tight flex items-center">
-                            <i class="fa-solid fa-square-poll-vertical text-cyan mr-2 md:mr-3"></i>
-                            Report
-                        </h2>
-                    </div>
-
-                    <button id="printBtn" class="md:hidden lg:flex items-center gap-2 px-3 py-1.5 bg-void border border-border-dim rounded hover:border-white transition-all text-xs font-mono text-gray-300">
-                        <i class="fa-solid fa-print"></i>
-                        <span>EXPORT</span>
-                    </button>
-
-                    <div class="flex-1 flex flex-col items-center justify-center max-w-[120px] md:max-w-none px-2 md:px-8">
-                         <div class="w-full h-2 md:h-2.5 bg-border-dim rounded-full overflow-hidden relative border border-white/5">
-                             <!-- GRADIENT BAR: Red -> Orange -> Yellow -> Green -->
-                             <div id="totalScoreBar" class="h-full w-0 transition-all duration-1000 relative" style="background: linear-gradient(90deg, #FF0055, #FFB800, #FFFF00, #00FF9D);"></div>
-                         </div>
-                    </div>
-
-                    <div class="flex-none text-right flex flex-col items-end pr-1 md:pr-4">
-                        <div class="text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-0.5">Total Score</div>
-                        <div class="text-3xl md:text-5xl font-black text-white leading-none tracking-tighter transition-colors duration-500" id="totalScore">00</div>
-                    </div>
-                </div>
-
-                <!-- Scrollable Content -->
-                <!-- Mobile: Native body scroll, Desktop: Internal scroll -->
-                <div class="flex-1 lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1 pb-4 space-y-4" id="dashboardContent">
-                    
-                    <!-- METRICS GRID -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
-                        <div class="report-card accent-top-cyan p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
-                            <div class="flex justify-between items-end">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-robot text-cyan text-sm md:text-base"></i>
-                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">ATS PARSE</span>
-                                </div>
-                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="atsScore">0%</div>
-                            </div>
-                            <div class="h-1 w-full bg-border-dim mt-2">
-                                <div id="atsBar" class="h-full bg-cyan w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-
-                        <div class="report-card accent-top-purple p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
-                            <div class="flex justify-between items-end">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-chart-line text-purple text-sm md:text-base"></i>
-                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">IMPACT</span>
-                                </div>
-                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="quantScore">0%</div>
-                            </div>
-                            <div class="h-1 w-full bg-border-dim mt-2">
-                                <div id="quantBar" class="h-full bg-purple w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-
-                        <div class="report-card accent-top-rose p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
-                            <div class="flex justify-between items-end">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-bolt text-rose text-sm md:text-base"></i>
-                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">VERBS</span>
-                                </div>
-                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="verbScore">0%</div>
-                            </div>
-                            <div class="h-1 w-full bg-border-dim mt-2">
-                                <div id="verbBar" class="h-full bg-rose w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-
-                        <div class="report-card accent-top-acid p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
-                            <div class="flex justify-between items-end">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-microchip text-acid text-sm md:text-base"></i>
-                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">SKILLS</span>
-                                </div>
-                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="skillScore">0%</div>
-                            </div>
-                            <div class="h-1 w-full bg-border-dim mt-2">
-                                <div id="skillBar" class="h-full bg-acid w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-
-                        <div class="report-card accent-top-white p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
-                            <div class="flex justify-between items-end">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-align-left text-white text-sm md:text-base"></i>
-                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">FORMAT</span>
-                                </div>
-                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="formatScore">0%</div>
-                            </div>
-                            <div class="h-1 w-full bg-border-dim mt-2">
-                                <div id="formatBar" class="h-full bg-white w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-
-                        <div class="report-card accent-top-amber p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
-                            <div class="flex justify-between items-end">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-layer-group text-amber text-sm md:text-base"></i>
-                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">LENGTH</span>
-                                </div>
-                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="depthScore">0%</div>
-                            </div>
-                            <div class="h-1 w-full bg-border-dim mt-2">
-                                <div id="depthBar" class="h-full bg-amber w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Analysis List -->
-                    <div class="report-card accent-top-cyan p-3 md:p-4 flex-1 bg-panel-bg border-border-dim min-h-[300px]">
-                        <div class="flex items-center justify-between mb-2 border-b border-border-dim pb-1">
-                            <h3 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-list-check text-cyan"></i>
-                                CRITICAL ANALYSIS
-                            </h3>
-                            <span class="text-[9px] md:text-[10px] bg-white/5 px-2 py-0.5 rounded text-gray-500 font-mono">ACTIONABLE ITEMS</span>
-                        </div>
-                        <div id="recommendationList" class="flex flex-col font-mono text-xs md:text-sm space-y-0.5">
-                            <div class="py-4 text-center opacity-50 italic text-gray-500">
-                                <i class="fa-solid fa-terminal text-cyan mr-2"></i> Awaiting data stream...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="w-full h-8 flex-none z-50 border-t border-border-dim bg-panel-bg flex items-center justify-between px-4 no-print">
-        <div class="flex items-center gap-4 text-[9px] md:text-[10px] text-gray-500 font-mono">
-            <span>© 2025 PRORESUME ANALYZER.</span>
-            <span id="timeDisplay" class="hidden md:inline text-gray-600"></span>
-        </div>
-        <div class="flex gap-4 text-[9px] md:text-[10px] font-mono">
-            <button onclick="showModal('about')" class="text-gray-500 hover:text-white transition-colors">ABOUT</button>
-            <button onclick="showModal('tips')" class="text-gray-500 hover:text-acid transition-colors">TIPS</button>
-            <button onclick="showModal('faq')" class="text-gray-500 hover:text-cyan transition-colors">FAQ</button>
-            <button onclick="showModal('privacy')" class="text-gray-500 hover:text-cyan transition-colors">PRIVACY</button>
-            <button onclick="showModal('contact')" class="text-gray-500 hover:text-purple transition-colors">CONTACT</button>
-        </div>
-    </footer>
-
-    <!-- Modal Overlay -->
-    <div id="modalOverlay" class="fixed inset-0 z-[100] bg-black/90 hidden items-center justify-center p-4">
-        <div class="neon-panel w-full max-w-2xl rounded p-6 md:p-8 transform transition-all scale-95 opacity-0 max-h-[85vh] overflow-y-auto border border-border-dim" id="modalContent">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors z-50">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            <h2 id="modalTitle" class="text-xl md:text-2xl font-bold text-white mb-6 font-sans border-b border-border-dim pb-3"></h2>
-            <div id="modalBody" class="text-xs md:text-sm text-gray-300 font-mono space-y-4 leading-relaxed"></div>
-        </div>
+        </main>
     </div>
 
-    <!-- JS Logic (STRICTLY PRESERVED) -->
     <script>
-        // --- Core Elements ---
-        const els = {
-            dropZone: document.getElementById('dropZone'),
-            fileInput: document.getElementById('fileInput'),
-            uploadIdle: document.getElementById('uploadIdle'),
-            uploadProcessing: document.getElementById('uploadProcessing'),
-            previewContainer: document.getElementById('previewContainer'),
-            consoleOutput: document.getElementById('consoleOutput'),
-            rightPanel: document.getElementById('rightPanel'),
-            leftPanel: document.getElementById('leftPanel'),
-            totalScore: document.getElementById('totalScore'),
-            totalScoreBar: document.getElementById('totalScoreBar'),
-            recList: document.getElementById('recommendationList'),
-            resetBtn: document.getElementById('resetBtn'),
-            pdfCanvas: document.getElementById('pdfPreviewCanvas'),
-            docxIcon: document.getElementById('docxIcon'),
-            filenameDisplay: document.getElementById('filenameDisplay'),
-            miniFilename: document.getElementById('miniFilename'),
-            expandBtn: document.getElementById('expandBtn'),
-            modal: document.getElementById('modalOverlay'),
-            modalContent: document.getElementById('modalContent'),
-            timeDisplay: document.getElementById('timeDisplay'),
-            printBtn: document.getElementById('printBtn')
+        // --- Elements ---
+        const inputs = {
+            initialSip: document.getElementById('initialSip'),
+            lumpsumAmount: document.getElementById('lumpsumAmount'),
+            duration: document.getElementById('duration'),
+            returnRate: document.getElementById('returnRate'),
+            goalAmount: document.getElementById('goalAmount'),
+            stepUpAmount: document.getElementById('stepUpAmount'),
+            stepUpFrequency: document.getElementById('stepUpFrequency'),
+            stepUpPercentage: document.getElementById('stepUpPercentage')
+        };
+        
+        const form = document.getElementById('sipForm');
+        const themeToggle = document.getElementById('themeToggle');
+        const chips = document.querySelectorAll('.chip');
+        const resetBtn = document.getElementById('resetBtn');
+        const tableBody = document.getElementById('resultsTableBody');
+
+        const DEFAULTS = {
+            initialSip: 7000, lumpsumAmount: 500000, duration: 30, returnRate: 24,
+            stepUpAmount: 1000, stepUpFrequency: 12, stepUpPercentage: 15, goalAmount: 10
         };
 
-        let isMobile = window.innerWidth < 1024;
-        let isAnalyzed = false;
-
-        // --- Clock ---
-        setInterval(() => {
-            const now = new Date();
-            if(els.timeDisplay) els.timeDisplay.innerText = now.toISOString().split('T')[0] + ' ' + now.toLocaleTimeString('en-GB');
-            // Update print date if printing
-            const printDate = document.getElementById('printDate');
-            if(printDate) printDate.innerText = now.toLocaleDateString();
-        }, 1000);
-
-        // --- Event Listeners ---
-        window.addEventListener('resize', () => { isMobile = window.innerWidth < 1024; });
-        
-        els.dropZone.addEventListener('dragover', (e) => { e.preventDefault(); els.dropZone.classList.add('border-cyan'); });
-        els.dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); els.dropZone.classList.remove('border-cyan'); });
-        els.dropZone.addEventListener('drop', (e) => { 
-            e.preventDefault(); 
-            els.dropZone.classList.remove('border-cyan'); 
-            handleFiles(e.dataTransfer.files); 
-        });
-        
-        els.dropZone.addEventListener('click', (e) => {
-            if(isAnalyzed && isMobile) {
-                // Do nothing
-            } else if (els.uploadIdle.style.display !== 'none') {
-                els.fileInput.click(); 
-            }
-        });
-        
-        els.fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-        els.resetBtn.addEventListener('click', (e) => { e.stopPropagation(); resetSystem(); });
-        els.printBtn.addEventListener('click', () => { window.print(); });
-        els.expandBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMobileView(false); });
-        
-        els.dropZone.addEventListener('click', (e) => {
-            if(els.dropZone.classList.contains('upload-minimized')) {
-                toggleMobileView(false);
-            }
-        });
-
         // --- Logic ---
+        function calculate() {
+            let p = parseFloat(inputs.initialSip.value) || 0;
+            let lumpsum = parseFloat(inputs.lumpsumAmount.value) || 0;
+            let n = parseInt(inputs.duration.value) || 0;
+            let r = parseFloat(inputs.returnRate.value) || 0;
+            let goalCr = parseFloat(inputs.goalAmount.value) || 0;
+            let sAmt = parseFloat(inputs.stepUpAmount.value) || 0;
+            let sFreq = parseInt(inputs.stepUpFrequency.value) || 12;
+            let sPerc = parseFloat(inputs.stepUpPercentage.value) || 0;
 
-        async function handleFiles(files) {
-            if (!files.length) return;
-            const file = files[0];
-            const isPDF = file.type === 'application/pdf';
-            const isDoc = file.name.endsWith('.docx');
-
-            if(!isPDF && !isDoc) {
-                log("ERROR: Invalid file format. System requires PDF or DOCX.", "error");
-                return;
-            }
-
-            els.uploadIdle.style.display = 'none';
-            els.uploadProcessing.classList.remove('hidden');
-            els.uploadProcessing.classList.add('flex');
+            if (p > 100000) { inputs.initialSip.value = 100000; p = 100000; }
+            if (lumpsum > 100000000) { inputs.lumpsumAmount.value = 100000000; lumpsum = 100000000; }
+            if (n > 40) { inputs.duration.value = 40; n = 40; }
+            if (r > 30) { inputs.returnRate.value = 30; r = 30; }
+            if (sPerc > 24) { inputs.stepUpPercentage.value = 24; sPerc = 24; }
             
-            log(`Reading filesystem: ${file.name}...`, "info");
+            const goal = goalCr * 10000000;
+            const monthlyRate = r / 100 / 12;
+            const months = n * 12;
 
-            try {
-                let text = "";
+            let regVal = 0, regInv = 0;
+            let fixVal = 0, fixInv = 0, fixCurSip = p;
+            let perVal = 0, perInv = 0, perCurSip = p;
+            let lumVal = lumpsum; // Start with principal
+
+            // Annual Investment Trackers
+            let regYearlyInv = 0;
+            let fixYearlyInv = 0;
+            let perYearlyInv = 0;
+
+            let goalYear = { reg: null, fix: null, per: null, lum: null };
+            let rows = [];
+
+            for (let m = 1; m <= months; m++) {
+                // Returns (Invest at start of month)
+                regVal = (regVal + p) * (1 + monthlyRate);
+                regInv += p;
+                regYearlyInv += p;
+
+                fixVal = (fixVal + fixCurSip) * (1 + monthlyRate);
+                fixInv += fixCurSip;
+                fixYearlyInv += fixCurSip;
+
+                perVal = (perVal + perCurSip) * (1 + monthlyRate);
+                perInv += perCurSip;
+                perYearlyInv += perCurSip;
                 
-                if(isPDF) {
-                    await renderPDF(file);
-                    text = await extractPDFText(file);
-                } else {
-                    renderDocIcon(file);
-                    text = await extractDocText(file);
-                }
+                // Lumpsum Growth
+                lumVal = lumVal * (1 + monthlyRate);
 
-                if(!text || text.length < 50) throw new Error("File appears corrupted or empty.");
-
-                log("Content extracted. Neural analysis engine starting...", "process");
-                await new Promise(r => setTimeout(r, 1200)); 
-
-                finalizeUpload(file.name);
-                analyzeText(text);
-
-            } catch(e) {
-                log(`CRITICAL ERROR: ${e.message}`, "error");
-                resetSystem();
-            }
-        }
-
-        async function renderPDF(file) {
-            const ab = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument(ab).promise;
-            const page = await pdf.getPage(1);
-            const viewport = page.getViewport({ scale: 1.5 });
-            
-            els.pdfCanvas.height = viewport.height;
-            els.pdfCanvas.width = viewport.width;
-            
-            await page.render({
-                canvasContext: els.pdfCanvas.getContext('2d'),
-                viewport: viewport
-            }).promise;
-            
-            els.pdfCanvas.classList.remove('hidden');
-            els.docxIcon.classList.add('hidden');
-            els.docxIcon.classList.remove('flex');
-        }
-
-        function renderDocIcon(file) {
-            els.pdfCanvas.classList.add('hidden');
-            els.docxIcon.classList.remove('hidden');
-            els.docxIcon.classList.add('flex');
-            els.filenameDisplay.innerText = file.name;
-        }
-
-        async function extractPDFText(file) {
-            const ab = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument(ab).promise;
-            let text = "";
-            for(let i=1; i<=Math.min(pdf.numPages, 3); i++) {
-                const p = await pdf.getPage(i);
-                const t = await p.getTextContent();
-                text += t.items.map(s => s.str).join(" ") + " ";
-            }
-            return text;
-        }
-
-        async function extractDocText(file) {
-            const ab = await file.arrayBuffer();
-            const res = await mammoth.extractRawText({arrayBuffer: ab});
-            return res.value;
-        }
-
-        function finalizeUpload(name) {
-            els.uploadProcessing.classList.remove('flex');
-            els.uploadProcessing.classList.add('hidden');
-            els.previewContainer.classList.remove('hidden');
-            els.previewContainer.classList.add('flex');
-            els.miniFilename.innerText = name;
-            
-            els.rightPanel.classList.remove('opacity-50', 'pointer-events-none');
-            // Remove the 'hidden' or 'h-0' constraints
-            els.rightPanel.classList.remove('h-0'); 
-            els.rightPanel.classList.add('opacity-100', 'pointer-events-auto');
-            
-            // Allow natural height on mobile, fixed full height on desktop
-            if(!isMobile) {
-                els.rightPanel.style.height = '100%';
-            } else {
-                els.rightPanel.style.height = 'auto';
-            }
-            
-            isAnalyzed = true;
-
-            if (isMobile) {
-                toggleMobileView(true);
-            }
-        }
-
-        function toggleMobileView(minimizeUpload) {
-            if(!isMobile) return;
-            
-            if(minimizeUpload) {
-                els.dropZone.classList.add('upload-minimized');
-                els.rightPanel.classList.add('flex-1');
-                els.rightPanel.classList.remove('h-0', 'hidden');
-                // Scroll to dashboard on mobile
-                setTimeout(() => {
-                    els.rightPanel.scrollIntoView({behavior: 'smooth', block: 'start'});
-                }, 100);
-            } else {
-                els.dropZone.classList.remove('upload-minimized');
-                els.rightPanel.classList.remove('flex-1');
-            }
-        }
-
-        function analyzeText(text) {
-            const t = text.toLowerCase();
-            const wc = text.split(/\s+/).length;
-
-            const atsKeywords = ['experience', 'education', 'skills', 'summary', 'project', 'certifications', 'languages', 'awards', 'objective', 'employment', 'history', 'work'];
-            
-            const skillsKeywords = [
-                'javascript','python','java','react','sql','aws','docker','figma','agile','git','html','css','node','c++','c#',
-                'typescript','go','ruby','swift','kotlin','php','linux','kubernetes','terraform','azure','gcp',
-                'leadership','management','communication','strategy','planning','budget','analysis','research','writing',
-                'collaboration','customer','sales','marketing','operations','finance','accounting','negotiation','presentation',
-                'teamwork','problem solving','creativity','adaptability','time management','organization'
-            ];
-
-            const actionVerbs = [
-                'led','managed','created','developed','engineered','designed','launched','achieved','improved','increased','decreased',
-                'generated','negotiated','initiated','coordinated','supervised','mentored','analyzed','resolved','implemented',
-                'spearheaded','orchestrated','facilitated','streamlined','maximized','minimized','accelerated','advanced','boosted',
-                'championed','cultivated','delivered','directed','driven','enhanced','established','executed','expanded','guided',
-                'performed','built','produced','demonstrated','completed'
-            ];
-
-            const atsScoreVal = calculateScore(t, atsKeywords, 3);
-            const quantMatches = (text.match(/\d+%|\$\d+|\d+k\+/gi) || []).length;
-            const quantScoreVal = Math.min(quantMatches * 16.6, 100); 
-            const verbMatches = actionVerbs.filter(v => new RegExp(`\\b${v}\\b`, 'i').test(text)).length;
-            const verbScoreVal = Math.min(verbMatches * 12.5, 100);
-            const skillScoreVal = calculateScore(t, skillsKeywords, 6); 
-
-            let formatScoreVal = 0;
-            if(t.includes('@')) formatScoreVal += 30; 
-            if(t.includes('linkedin.com') || t.includes('github.com')) formatScoreVal += 40; 
-            if(t.includes('•') || t.includes('- ') || t.includes('▪')) formatScoreVal += 30; 
-
-            let depthScoreVal = 0;
-            if(wc < 150) depthScoreVal = 40; 
-            else if(wc < 300) depthScoreVal = 80;
-            else if(wc > 1200) depthScoreVal = 85; 
-            else depthScoreVal = 100; 
-
-            const scores = {
-                ats: atsScoreVal,
-                quant: quantScoreVal,
-                verbs: verbScoreVal,
-                skills: skillScoreVal,
-                format: formatScoreVal,
-                depth: depthScoreVal
-            };
-
-            const total = Math.round(
-                (scores.ats * 0.20) + 
-                (scores.quant * 0.20) + 
-                (scores.verbs * 0.20) + 
-                (scores.skills * 0.20) + 
-                (scores.format * 0.10) + 
-                (scores.depth * 0.10)
-            );
-
-            animateCounter(els.totalScore, 0, total);
-            els.totalScoreBar.style.width = total + '%';
-
-            updateBar('ats', scores.ats);
-            updateBar('quant', scores.quant);
-            updateBar('verb', scores.verbs);
-            updateBar('skill', scores.skills);
-            updateBar('format', scores.format);
-            updateBar('depth', scores.depth);
-
-            generateInsightsV3(scores, text, t, atsKeywords, wc);
-            log(`Analysis complete. Optimized Score: ${total}/100`, "success");
-        }
-
-        function calculateScore(text, keywords, divider) {
-            const hit = keywords.filter(k => text.includes(k)).length;
-            return Math.min((hit / divider) * 100, 100);
-        }
-
-        function updateBar(key, val) {
-            document.getElementById(key+'Score').innerText = Math.round(val) + '%';
-            document.getElementById(key+'Bar').style.width = val + '%';
-        }
-
-        function animateCounter(el, start, end) {
-            let current = start;
-            const duration = 2000;
-            const startTime = performance.now();
-
-            function update(time) {
-                const elapsed = time - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                const ease = 1 - Math.pow(1 - progress, 4);
-                
-                current = Math.floor(start + (end - start) * ease);
-                el.innerText = current;
-
-                if(current < 60) el.style.color = '#FF0055'; 
-                else if(current < 85) el.style.color = '#FFB800'; 
-                else el.style.color = '#00FF9D';
-
-                if (progress < 1) requestAnimationFrame(update);
-            }
-            requestAnimationFrame(update);
-        }
-
-        function generateInsightsV3(s, text, lower, atsKeywords, wc) {
-            let insights = [];
-            
-            if(s.ats < 100) {
-                const missing = atsKeywords.filter(k => !lower.includes(k));
-                if(missing.length > 0) {
-                    const critical = missing.filter(k => ['experience','education','skills'].includes(k));
-                    if(critical.length > 0) {
-                        insights.push({
-                            icon: 'fa-triangle-exclamation', 
-                            msg: `CRITICAL: Missing <b class="text-white">"${critical[0].toUpperCase()}"</b> section.`, 
-                            type: 'warn'
-                        });
+                // Step up logic for NEXT month
+                if (m < months) {
+                    if (m % sFreq === 0) {
+                        fixCurSip += sAmt;
                     }
-                    missing.filter(k => !critical.includes(k)).slice(0, 2).forEach(k => {
-                         insights.push({
-                            icon: 'fa-robot', 
-                            msg: `Structure: Add <b class="text-white">"${k.toUpperCase()}"</b> section.`, 
-                            type: 'orange'
-                        });
+                    if (m % 12 === 0) {
+                        perCurSip *= (1 + sPerc / 100);
+                    }
+                }
+
+                if (m % 12 === 0) {
+                    const yr = m / 12;
+                    if (!goalYear.reg && regVal >= goal) goalYear.reg = yr;
+                    if (!goalYear.fix && fixVal >= goal) goalYear.fix = yr;
+                    if (!goalYear.per && perVal >= goal) goalYear.per = yr;
+                    if (!goalYear.lum && lumVal >= goal) goalYear.lum = yr;
+
+                    rows.push({
+                        yr,
+                        reg: { val: regVal, cumInv: regInv, yrInv: regYearlyInv },
+                        fix: { val: fixVal, cumInv: fixInv, yrInv: fixYearlyInv },
+                        per: { val: perVal, cumInv: perInv, yrInv: perYearlyInv },
+                        lum: { val: lumVal, cumInv: lumpsum } // Lumpsum doesn't have yearly inv
                     });
-                }
-            }
-            
-            if(s.quant < 80) {
-                 insights.push({icon: 'fa-chart-pie', msg: `Impact: Quantify achievements (e.g., "Increased sales by <b class="text-white">20%</b>").`, type: 'orange'});
-            }
 
-            if(s.verbs < 70) {
-                insights.push({icon: 'fa-bolt', msg: 'Passive Language: Use stronger verbs like <b class="text-white">"Spearheaded"</b>.', type: 'orange'});
-            }
-
-            if(s.format < 100) {
-                if(!lower.includes('linkedin.com') && !lower.includes('github.com')) {
-                    insights.push({icon: 'fa-link', msg: 'Missing Link: Add <b class="text-white">LinkedIn</b> or Portfolio.', type: 'warn'});
-                }
-                if(!lower.includes('@')) {
-                    insights.push({icon: 'fa-envelope', msg: 'CRITICAL: No email detected.', type: 'warn'});
+                    // Reset Annual Counters
+                    regYearlyInv = 0;
+                    fixYearlyInv = 0;
+                    perYearlyInv = 0;
                 }
             }
 
-            if (wc < 250) {
-                insights.push({icon: 'fa-ruler-horizontal', msg: 'Too Short: Add more detail.', type: 'warn'});
-            } else if (wc > 1300) {
-                 insights.push({icon: 'fa-scissors', msg: 'Too Long: Condense to under 2 pages.', type: 'orange'});
-            }
-
-            if(text.includes('References available')) {
-                insights.push({icon: 'fa-ban', msg: 'Remove <b class="text-white">"References available"</b> phrase.', type: 'orange'});
-            }
-            if(lower.includes('i ') || lower.includes('my ') || lower.includes('me ')) {
-                 insights.push({icon: 'fa-user-slash', msg: 'Avoid first person ("I", "Me").', type: 'orange'});
-            }
-            if(lower.includes('objective')) {
-                insights.push({icon: 'fa-eraser', msg: 'Replace "Objective" with "Professional Summary".', type: 'orange'});
-            }
-            if(!lower.includes('certifications')) {
-                insights.push({icon: 'fa-certificate', msg: 'Consider adding a "Certifications" section.', type: 'good'});
-            }
-            
-            if(insights.length === 0) {
-                 insights.push({icon: 'fa-check-circle', msg: 'ELITE STATUS: Resume is highly optimized.', type: 'good'});
-            }
-
-            insights.sort((a,b) => (a.type === 'warn' ? -1 : 1));
-
-            const colors = { warn: 'text-rose', orange: 'text-amber', good: 'text-acid' };
-            
-            let html = insights.map(item => `
-                <div class="compact-list-item flex items-center gap-2 hover:bg-white/5 transition-colors px-2 rounded">
-                    <i class="fa-solid ${item.icon} ${colors[item.type]} text-[10px] shrink-0 w-4"></i>
-                    <span class="leading-none text-gray-400 text-[11px] md:text-xs py-0.5">${item.msg}</span>
-                </div>
-            `).join('');
-
-            els.recList.innerHTML = html;
+            updateUI({ regVal, regInv, fixVal, fixInv, perVal, perInv, lumVal, lumInv: lumpsum }, goalYear, rows, n);
+            updateChips(r);
         }
 
-        function resetSystem() {
-            els.fileInput.value = '';
-            els.previewContainer.classList.add('hidden');
-            els.previewContainer.classList.remove('flex');
-            els.uploadIdle.style.display = 'flex';
+        function updateUI(finals, goals, rows, years) {
+            // Rank Strategies for Badges & DNA
+            const strategies = [
+                { id: 'regular', name: 'Regular', val: finals.regVal, bar: 'bar-reg' },
+                { id: 'fixed', name: 'Fixed', val: finals.fixVal, bar: 'bar-fix' },
+                { id: 'percent', name: 'Step-Up', val: finals.perVal, bar: 'bar-per' },
+                { id: 'lumpsum', name: 'Lumpsum', val: finals.lumVal, bar: 'bar-lum' }
+            ];
             
-            if(isMobile) {
-                els.dropZone.classList.remove('upload-minimized');
-                els.rightPanel.classList.remove('flex-1');
-                els.rightPanel.classList.add('h-0');
-            }
-            els.rightPanel.classList.add('opacity-50', 'pointer-events-none');
-            if(!isMobile) els.rightPanel.classList.remove('h-0');
+            // Sort for badges
+            const sorted = [...strategies].sort((a, b) => b.val - a.val);
+            const maxVal = sorted[0].val;
 
-            ['ats','quant','verb','skill','format','depth'].forEach(k => {
-                document.getElementById(k+'Bar').style.width = '0%';
-                document.getElementById(k+'Score').innerText = '0%';
+            // Assign Badges
+            strategies.forEach((s) => {
+                const badgeEl = document.getElementById(`badge-${s.id}`);
+                const rank = sorted.findIndex(item => item.id === s.id);
+                let badgeClass = 'base';
+                let icon = '';
+                
+                if (rank === 0) { badgeClass = 'gold'; icon = '🥇'; }
+                else if (rank === 1) { badgeClass = 'silver'; icon = '🥈'; }
+                else if (rank === 2) { badgeClass = 'bronze'; icon = '🥉'; }
+                
+                badgeEl.className = `badge ${badgeClass}`;
+                badgeEl.textContent = `${icon} ${s.name}`;
             });
-            els.totalScore.innerText = '00';
-            els.totalScore.style.color = '#fff';
-            els.totalScoreBar.style.width = '0%';
-            
-            els.recList.innerHTML = '<div class="py-2 opacity-50 italic text-gray-400"><i class="fa-solid fa-terminal text-cyan mr-2"></i> Awaiting data stream...</div>';
-            
-            log('System rebooted. Session terminated.', 'info');
-            isAnalyzed = false;
+
+            // Update DNA Bars
+            strategies.forEach(s => {
+                const width = (s.val / maxVal) * 100;
+                document.getElementById(s.bar).style.width = `${width}%`;
+            });
+
+            // Update Cards
+            updateCard('regular', finals.regVal, finals.regInv, goals.reg, 0, years);
+            updateCard('fixed', finals.fixVal, finals.fixInv, goals.fix, finals.fixVal - finals.regVal, years);
+            updateCard('percent', finals.perVal, finals.perInv, goals.per, finals.perVal - finals.regVal, years);
+            updateCard('lumpsum', finals.lumVal, finals.lumInv, goals.lum, 0, years);
+
+            // Update Table
+            let html = '';
+            rows.forEach(r => {
+                // Calculate Total ROI % based on CUMULATIVE Investment
+                const roiReg = r.reg.cumInv > 0 ? ((r.reg.val - r.reg.cumInv)/r.reg.cumInv * 100).toFixed(0) + '%' : '-';
+                const roiFix = r.fix.cumInv > 0 ? ((r.fix.val - r.fix.cumInv)/r.fix.cumInv * 100).toFixed(0) + '%' : '-';
+                const roiPer = r.per.cumInv > 0 ? ((r.per.val - r.per.cumInv)/r.per.cumInv * 100).toFixed(0) + '%' : '-';
+                const roiLum = r.lum.cumInv > 0 ? ((r.lum.val - r.lum.cumInv)/r.lum.cumInv * 100).toFixed(0) + '%' : '-';
+
+                html += `
+                <div class="flex-row">
+                    <div class="flex-cell w-yr">${r.yr}</div>
+                    
+                    <div class="group-reg">
+                        <div class="flex-cell c-val col-reg">${formatCompact(r.reg.val)}</div>
+                        <div class="flex-cell c-tinv">${formatCompact(r.reg.cumInv)}</div>
+                        <div class="flex-cell c-inv">${formatCompact(r.reg.yrInv)}</div>
+                        <div class="flex-cell c-pct">${roiReg}</div>
+                    </div>
+                    
+                    <div class="group-fix">
+                        <div class="flex-cell c-val col-fix">${formatCompact(r.fix.val)}</div>
+                        <div class="flex-cell c-tinv">${formatCompact(r.fix.cumInv)}</div>
+                        <div class="flex-cell c-inv">${formatCompact(r.fix.yrInv)}</div>
+                        <div class="flex-cell c-pct">${roiFix}</div>
+                    </div>
+                    
+                    <div class="group-per">
+                        <div class="flex-cell c-val col-per">${formatCompact(r.per.val)}</div>
+                        <div class="flex-cell c-tinv">${formatCompact(r.per.cumInv)}</div>
+                        <div class="flex-cell c-inv">${formatCompact(r.per.yrInv)}</div>
+                        <div class="flex-cell c-pct">${roiPer}</div>
+                    </div>
+
+                    <div class="group-lum">
+                        <div class="flex-cell c-val col-lum">${formatCompact(r.lum.val)}</div>
+                        <div class="flex-cell c-inv">${formatCompact(r.lum.cumInv)}</div>
+                        <div class="flex-cell c-pct">${roiLum}</div>
+                    </div>
+                </div>`;
+            });
+            tableBody.innerHTML = html;
         }
 
-        function log(msg, type) {
-            const time = new Date().toLocaleTimeString('en-US', {hour12: false});
-            const colors = { error: 'text-rose', success: 'text-acid', process: 'text-purple', info: 'text-cyan' };
-            const line = document.createElement('div');
-            line.className = 'flex gap-2';
-            line.innerHTML = `<span class="opacity-30">[${time}]</span> <span class="${colors[type] || 'text-gray-400'}">${msg}</span>`;
-            els.consoleOutput.appendChild(line);
-            els.consoleOutput.scrollTop = els.consoleOutput.scrollHeight;
-        }
-
-        // --- Modals System ---
-        function showModal(type) {
-            const content = {
-                about: {
-                    title: '<i class="fa-solid fa-circle-info text-cyan mr-3"></i>About ProResume',
-                    body: `
-                        <div class="space-y-4">
-                            <p class="text-lg text-white font-bold">Mission Directive</p>
-                            <p>ProResume Analyzer was built to democratize career intelligence. In a world guarded by Applicant Tracking Systems (ATS), we provide the tools to break through the algorithmic walls.</p>
-                            <p>Our engine runs entirely in your browser using advanced WebAssembly technology. We believe in <span class="text-cyan">Sovereign Data</span>—your resume never leaves your device.</p>
-                            <div class="p-4 bg-white/5 rounded border border-white/10 mt-4">
-                                <p class="text-xs text-gray-400 uppercase tracking-widest mb-2">System Specs</p>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><span class="text-purple block font-bold">Engine</span> Neural Client-Side</div>
-                                    <div><span class="text-purple block font-bold">Latency</span> < 50ms</div>
-                                    <div><span class="text-purple block font-bold">Privacy</span> Zero-Retention</div>
-                                    <div><span class="text-purple block font-bold">Cost</span> 100% Free</div>
-                                </div>
-                            </div>
-                        </div>
-                    `
-                },
-                contact: {
-                    title: '<i class="fa-solid fa-envelope text-purple mr-3"></i>Contact Engineering',
-                    body: `
-                        <div class="flex flex-col items-center justify-center py-8 space-y-6">
-                            <div class="text-center">
-                                <p class="text-gray-400 mb-2">For bug reports, feature requests, or enterprise integration:</p>
-                                <a href="mailto:hello@proresumeanalyzer.com" class="text-2xl md:text-3xl font-bold text-cyan hover:text-white transition-colors border-b-2 border-cyan/30 hover:border-cyan pb-1">
-                                    hello@proresumeanalyzer.com
-                                </a>
-                            </div>
-                            <div class="flex gap-6 mt-4">
-                                <a href="#" class="w-10 h-10 rounded bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><i class="fa-brands fa-twitter text-white"></i></a>
-                                <a href="#" class="w-10 h-10 rounded bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><i class="fa-brands fa-github text-white"></i></a>
-                                <a href="#" class="w-10 h-10 rounded bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><i class="fa-brands fa-linkedin text-white"></i></a>
-                            </div>
-                        </div>
-                    `
-                },
-                privacy: {
-                    title: '<i class="fa-solid fa-shield-halved text-acid mr-3"></i>Privacy Protocol',
-                    body: `
-                        <div class="space-y-4">
-                            <p class="text-acid font-bold text-lg">>> ZERO_DATA_RETENTION_POLICY_ACTIVE</p>
-                            <p>This system operates on a "Local-First" architecture. Unlike other services that upload your document to a cloud server, ProResume Analyzer processes everything within your browser's secure sandbox.</p>
-                            <ul class="list-disc pl-5 space-y-2 text-gray-400">
-                                <li><strong class="text-white">No Uploads:</strong> Your file binary data never traverses the network.</li>
-                                <li><strong class="text-white">No Storage:</strong> We do not have a database. Refreshing the page wipes all memory.</li>
-                                <li><strong class="text-white">No Tracking:</strong> We do not use persistent cookies to track your identity across sessions.</li>
-                            </ul>
-                            <div class="mt-6 p-4 bg-acid/10 border border-acid/20 rounded">
-                                <p class="text-acid text-xs font-mono">ENCRYPTION STATUS: LOCAL_MEMORY_ONLY</p>
-                            </div>
-                        </div>
-                    `
-                },
-                faq: {
-                    title: '<i class="fa-solid fa-circle-question text-cyan mr-3"></i>Frequently Asked Questions',
-                    body: `
-                        <div class="space-y-4">
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>Is this tool really free?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    Yes. ProResume Analyzer is 100% free to use. We believe in democratizing career tools. There are no hidden paywalls or premium tiers.
-                                </div>
-                            </details>
-                            
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>Is my resume saved?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    Absolutely not. The analysis happens locally on your device. Once you close the tab or refresh, your data is gone forever from our interface.
-                                </div>
-                            </details>
-
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>What is an ATS?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    ATS stands for Applicant Tracking System. It's software used by 99% of Fortune 500 companies to filter resumes before a human ever sees them. Our tool mimics these bots to help you pass.
-                                </div>
-                            </details>
-
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>Why is my "Impact" score low?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    The Impact score looks for quantification. Instead of saying "Managed a team," say "Managed a team of 10, increasing output by 20%." Numbers prove value.
-                                </div>
-                            </details>
-
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>Can I upload Word documents?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    Yes! We support both .PDF and .DOCX formats. However, we highly recommend submitting job applications as PDFs to preserve formatting.
-                                </div>
-                            </details>
-
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>How do I reach a 100% score?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    Focus on: Standard section headers, quantified bullet points, strong action verbs, relevant technical skills, and a clean, readable layout.
-                                </div>
-                            </details>
-
-                            <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-colors">
-                                <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 text-white">
-                                    <span>Is this using AI?</span>
-                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-cyan"></i></span>
-                                </summary>
-                                <div class="text-gray-400 p-4 pt-0 text-sm leading-relaxed">
-                                    Yes. We use heuristic algorithms and natural language processing patterns to identify strengths and weaknesses in your text structure.
-                                </div>
-                            </details>
-                        </div>
-                    `
-                },
-                tips: {
-                    title: '<i class="fa-solid fa-trophy text-acid mr-3"></i>Legendary Tips',
-                    body: `
-                        <div class="space-y-3">
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">1</div>
-                                <div><strong class="text-white block">Reverse Chronology is King</strong> <p class="text-gray-400 text-xs">Always list experience new to old. Recruiters scan top-left first.</p></div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">2</div>
-                                <div><strong class="text-white block">The Bullet Point Protocol</strong> <p class="text-gray-400 text-xs">Banish dense text blocks. Use 3-5 punchy bullets per role.</p></div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">3</div>
-                                <div><strong class="text-white block">Aggressive Quantification</strong> <p class="text-gray-400 text-xs">Numbers are the universal language. If you can't measure it, did it happen?</p></div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">4</div>
-                                <div><strong class="text-white block">Keyword Mirroring</strong> <p class="text-gray-400 text-xs">Read the job description. Use the exact same skill keywords in your resume.</p></div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">5</div>
-                                <div><strong class="text-white block">PDF Integrity</strong> <p class="text-gray-400 text-xs">Always save as PDF (unless told otherwise) to lock your formatting.</p></div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">6</div>
-                                <div><strong class="text-white block">One Page Rule</strong> <p class="text-gray-400 text-xs">Unless you have 10+ years of experience, keep it to one precise page.</p></div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="w-8 h-8 rounded-full bg-acid/20 text-acid flex items-center justify-center font-bold shrink-0">7</div>
-                                <div><strong class="text-white block">Hyperlink Your Proof</strong> <p class="text-gray-400 text-xs">Link your GitHub, Portfolio, or LinkedIn directly in the header.</p></div>
-                            </div>
-                        </div>
-                    `
-                }
-            };
+        function updateCard(type, val, inv, goalYr, gain, years) {
+            const el = (id) => document.getElementById(`summary-${id}-${type}`);
+            const ret = val - inv;
             
-            const data = content[type];
-            if(data) {
-                document.getElementById('modalTitle').innerHTML = data.title;
-                document.getElementById('modalBody').innerHTML = data.body;
-                els.modal.classList.remove('hidden');
-                els.modal.classList.add('flex');
-                setTimeout(() => {
-                    els.modalContent.classList.remove('scale-95', 'opacity-0');
-                    els.modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
+            el('value').textContent = formatCurrency(val);
+            el('invest').textContent = formatCompact(inv);
+            el('returns').textContent = formatCompact(ret);
+            el('cagr').textContent = calcCAGR(inv, val, years).toFixed(2) + '%';
+            
+            if (el('multiplier')) el('multiplier').textContent = (inv > 0 ? (val / inv).toFixed(1) : 0) + 'x';
+            if (el('roi')) el('roi').textContent = (inv > 0 ? ((ret / inv) * 100).toFixed(0) : 0) + '%';
+            
+            const goalEl = el('goal');
+            if (goalYr) {
+                goalEl.textContent = `Year ${goalYr}`;
+                goalEl.className = 'metric-value met-year';
+            } else {
+                goalEl.textContent = 'Not Met';
+                goalEl.className = 'metric-value missed-year';
+            }
+
+            if ((type === 'fixed' || type === 'percent')) {
+                 const gainEl = document.getElementById(`summary-gain-${type}`);
+                 if (gainEl) gainEl.textContent = '(+' + formatCompact(gain) + ')';
             }
         }
 
-        function closeModal() {
-            els.modalContent.classList.remove('scale-100', 'opacity-100');
-            els.modalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                els.modal.classList.add('hidden');
-                els.modal.classList.remove('flex');
-            }, 300);
-        }
+        // --- Utils ---
+        const formatCurrency = (num) => new Intl.NumberFormat('en-IN', {
+            style: 'currency', currency: 'INR', maximumFractionDigits: 0
+        }).format(num);
+
+        const formatCompact = (num) => {
+            if (num >= 10000000) return (num / 10000000).toFixed(2) + 'Cr';
+            if (num >= 100000) return (num / 100000).toFixed(2) + 'L';
+            if (num >= 1000) return (num/1000).toFixed(1) + 'k';
+            return num.toFixed(0);
+        };
+        
+        const calcCAGR = (beg, end, yrs) => {
+            if (beg <= 0 || end <= 0 || yrs <= 0) return 0;
+            return (Math.pow((end / beg), (1 / yrs)) - 1) * 100;
+        };
+
+        const updateChips = (rate) => chips.forEach(c => c.classList.toggle('active', parseFloat(c.dataset.rate) === rate));
+
+        // --- Events ---
+        form.addEventListener('input', calculate);
+        resetBtn.addEventListener('click', () => {
+            inputs.initialSip.value = DEFAULTS.initialSip;
+            inputs.lumpsumAmount.value = DEFAULTS.lumpsumAmount;
+            inputs.duration.value = DEFAULTS.duration;
+            inputs.returnRate.value = DEFAULTS.returnRate;
+            inputs.stepUpAmount.value = DEFAULTS.stepUpAmount;
+            inputs.stepUpFrequency.value = DEFAULTS.stepUpFrequency;
+            inputs.stepUpPercentage.value = DEFAULTS.stepUpPercentage;
+            inputs.goalAmount.value = DEFAULTS.goalAmount;
+            calculate();
+        });
+        chips.forEach(chip => chip.addEventListener('click', () => {
+            inputs.returnRate.value = chip.dataset.rate;
+            calculate();
+        }));
+        themeToggle.addEventListener('change', (e) => {
+            const isDark = e.target.checked;
+            document.body.classList.toggle('dark-theme', isDark);
+            localStorage.setItem('sipTheme', isDark ? 'dark' : 'light');
+        });
 
         // Init
-        log("System initialized. ProResume Engine Online.", "info");
+        const savedTheme = localStorage.getItem('sipTheme') === 'dark';
+        document.body.classList.toggle('dark-theme', savedTheme);
+        themeToggle.checked = savedTheme;
+        calculate();
 
     </script>
 </body>
