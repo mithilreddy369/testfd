@@ -227,21 +227,114 @@
         .upload-minimized .upload-content { opacity: 0; pointer-events: none; display: none !important; }
         .upload-minimized .mini-header { opacity: 1; pointer-events: auto; display: flex !important; }
 
-        /* --- PRINT STYLES --- */
+        /* --- PRINT STYLES (ENHANCED REPORT FORMAT) --- */
         @media print {
-            body { background: white !important; color: black !important; overflow: visible !important; height: auto !important; }
-            nav, footer, .ambient-bg, #leftPanel, #printBtn, #navActions, .no-print { display: none !important; }
-            #rightPanel { width: 100% !important; height: auto !important; opacity: 1 !important; pointer-events: auto !important; display: block !important; padding: 0 !important; }
-            .report-card, .neon-panel { 
+            @page { margin: 1cm; size: A4; }
+            
+            body { 
                 background: white !important; 
-                border: 1px solid #ccc !important; 
+                color: #111 !important; 
+                overflow: visible !important; 
+                height: auto !important;
+                font-size: 12pt;
+            }
+
+            /* Elements to Hide */
+            nav, footer, .ambient-bg, #leftPanel, #printBtn, #navActions, .no-print, #dropZone, #consoleOutput, #modalOverlay { 
+                display: none !important; 
+            }
+
+            /* Main Layout */
+            main { 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                max-width: 100% !important; 
+            }
+
+            /* Report Header (Only visible in Print) */
+            #printHeader {
+                display: block !important;
+                border-bottom: 2px solid #000;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+            }
+
+            #rightPanel { 
+                width: 100% !important; 
+                height: auto !important; 
+                opacity: 1 !important; 
+                pointer-events: auto !important; 
+                display: block !important; 
+                padding: 0 !important; 
+                overflow: visible !important;
+            }
+
+            /* Dashboard Header in Print */
+            #rightPanel > div:first-child {
+                background: transparent !important;
+                border: none !important;
+                color: black !important;
+                margin-bottom: 20px;
+                padding: 0 !important;
+            }
+            #rightPanel h2 { color: black !important; font-size: 18pt !important; }
+            
+            /* Total Score Bar Print Fix */
+            #totalScore { color: black !important; font-size: 32pt !important; }
+            #totalScoreBar { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+                height: 15px !important;
+                border: 1px solid #ccc;
+            }
+            
+            /* Cards */
+            .grid { 
+                display: grid !important; 
+                grid-template-columns: repeat(2, 1fr) !important; 
+                gap: 15px !important; 
+            }
+            
+            .report-card { 
+                background: white !important; 
+                border: 1px solid #ddd !important; 
                 color: black !important; 
                 box-shadow: none !important; 
                 break-inside: avoid;
+                padding: 15px !important;
+                height: auto !important;
+                min-height: 100px;
             }
+
+            /* Print typography adjustments */
             .text-white { color: #000 !important; }
-            .text-gray-300, .text-gray-400, .text-gray-500 { color: #333 !important; }
-            #totalScoreBar, .bg-white\/10 { background: #eee !important; border: 1px solid #ddd; }
+            .text-gray-300, .text-gray-400, .text-gray-500 { color: #444 !important; }
+            .font-mono { font-family: monospace !important; }
+            
+            /* Force Gradient/Color printing */
+            .bg-cyan, .text-cyan { color: #008F99 !important; background-color: #008F99 !important; -webkit-print-color-adjust: exact; }
+            .bg-purple, .text-purple { color: #4A1A75 !important; background-color: #4A1A75 !important; -webkit-print-color-adjust: exact; }
+            .bg-rose, .text-rose { color: #991941 !important; background-color: #991941 !important; -webkit-print-color-adjust: exact; }
+            .bg-acid, .text-acid { color: #038050 !important; background-color: #038050 !important; -webkit-print-color-adjust: exact; }
+            .bg-amber, .text-amber { color: #995F00 !important; background-color: #995F00 !important; -webkit-print-color-adjust: exact; }
+            
+            /* Bars in cards */
+            [id$="Bar"] { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+                height: 8px !important;
+            }
+
+            /* Recommendations List */
+            #recommendationList {
+                border-top: 2px solid #eee;
+                margin-top: 20px;
+                padding-top: 20px;
+            }
+            .compact-list-item {
+                border-bottom: 1px solid #eee !important;
+                padding: 10px 0 !important;
+            }
         }
 
         .compact-list-item {
@@ -308,7 +401,13 @@
     <!-- Main Workspace -->
     <main class="flex-1 w-full max-w-[1600px] mx-auto p-2 md:p-4 relative z-10 flex flex-col lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
         
-        <!-- HEADER -->
+        <!-- PRINT HEADER (Hidden by default) -->
+        <div id="printHeader" class="hidden text-center mb-8">
+            <h1 class="text-3xl font-bold text-black mb-2">PRORESUME ANALYZER REPORT</h1>
+            <p class="text-gray-500 text-sm">Generated on <span id="printDate"></span></p>
+        </div>
+
+        <!-- HEADER (Screen Only) -->
         <div class="text-center mb-4 md:mb-6 flex-none z-20 px-2 mt-2 no-print">
             <h2 class="text-2xl md:text-5xl font-black leading-tight mb-2 font-sans tracking-tight uppercase">
                 <span class="block text-white mb-1">Don't Just Apply.</span>
@@ -327,19 +426,21 @@
             <section id="leftPanel" class="w-full lg:w-[35%] flex flex-col gap-3 flex-none h-auto lg:h-full transition-all duration-500">
                 
                 <!-- Upload Zone -->
-                <div id="dropZone" class="neon-panel interactive w-full rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[120px] lg:flex-1">
+                <!-- Reduced min-height and padding for mobile fit -->
+                <div id="dropZone" class="neon-panel interactive w-full rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[100px] lg:min-h-[120px] lg:flex-1">
                     
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     <!-- 1. Idle State -->
-                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center z-10 upload-content">
-                        <div class="relative mb-3 md:mb-6">
-                            <div class="w-16 h-16 md:w-20 md:h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl md:text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
+                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-3 md:p-6 text-center z-10 upload-content">
+                        <div class="relative mb-2 md:mb-6">
+                            <!-- Smaller icon on mobile -->
+                            <div class="w-12 h-12 md:w-20 md:h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
+                                <i class="fa-solid fa-cloud-arrow-up text-xl md:text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
                             </div>
                         </div>
-                        <h2 class="text-lg md:text-xl font-bold text-white mb-1 md:mb-2 font-sans tracking-tight">Upload Resume</h2>
-                        <p class="text-[10px] md:text-xs text-gray-500 font-mono tracking-wide max-w-[200px] md:max-w-[250px]">
+                        <h2 class="text-base md:text-xl font-bold text-white mb-1 md:mb-2 font-sans tracking-tight">Upload Resume</h2>
+                        <p class="text-[10px] md:text-xs text-gray-500 font-mono tracking-wide max-w-[200px] md:max-w-[250px] leading-tight">
                             PDF or DOCX.<br>Drag & drop to analyze.
                         </p>
                     </div>
@@ -382,7 +483,8 @@
                 </div>
 
                 <!-- Terminal -->
-                <div class="neon-panel rounded-lg min-h-[100px] lg:h-[25%] flex-none flex flex-col p-3 border-border-dim bg-black">
+                <!-- HIDDEN on mobile/tablet (lg:flex ensures it only shows on large screens) -->
+                <div class="hidden lg:flex neon-panel rounded-lg min-h-[100px] lg:h-[25%] flex-none flex-col p-3 border-border-dim bg-black">
                     <div class="flex justify-between items-center border-b border-border-dim pb-2 mb-2">
                         <span class="text-[10px] font-mono font-bold text-gray-500 tracking-widest">SYSTEM_LOG</span>
                         <div class="flex gap-1.5">
@@ -592,6 +694,9 @@
         setInterval(() => {
             const now = new Date();
             if(els.timeDisplay) els.timeDisplay.innerText = now.toISOString().split('T')[0] + ' ' + now.toLocaleTimeString('en-GB');
+            // Update print date if printing
+            const printDate = document.getElementById('printDate');
+            if(printDate) printDate.innerText = now.toLocaleDateString();
         }, 1000);
 
         // --- Event Listeners ---
@@ -947,10 +1052,10 @@
             if(isMobile) {
                 els.dropZone.classList.remove('upload-minimized');
                 els.rightPanel.classList.remove('flex-1');
-                // els.rightPanel.classList.add('h-0'); // Removed h-0 for better mobile stack
+                els.rightPanel.classList.add('h-0');
             }
             els.rightPanel.classList.add('opacity-50', 'pointer-events-none');
-            // if(!isMobile) els.rightPanel.classList.remove('h-0');
+            if(!isMobile) els.rightPanel.classList.remove('h-0');
 
             ['ats','quant','verb','skill','format','depth'].forEach(k => {
                 document.getElementById(k+'Bar').style.width = '0%';
