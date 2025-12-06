@@ -9,7 +9,7 @@
          =============================================== -->
     <title>ProResume Analyzer | Professional Resume Scoring</title>
     
-    <!-- Dynamic Favicon (Matches Logo) -->
+    <!-- Dynamic Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2222%22 y=%2212%22 width=%2256%22 height=%2276%22 rx=%228%22 fill=%22%2300F0FF%22/><rect x=%2234%22 y=%2232%22 width=%2232%22 height=%226%22 rx=%223%22 fill=%22%23000000%22 opacity=%220.5%22/><rect x=%2234%22 y=%2246%22 width=%2232%22 height=%226%22 rx=%223%22 fill=%22%23000000%22 opacity=%220.5%22/><circle cx=%2272%22 cy=%2272%22 r=%2216%22 fill=%22%23050505%22/><circle cx=%2272%22 cy=%2272%22 r=%2213%22 fill=%22%2305FFA1%22/></svg>">
     
     <!-- Primary Meta Tags -->
@@ -100,13 +100,13 @@
                         'panel-bg': '#0A0A0A',
                         'border-dim': '#1F1F1F',
                         'border-bright': '#333333',
-                        // Enhanced Neon Palette (Richer, Deep Contrast)
-                        cyan: { DEFAULT: '#00F0FF', dim: '#00B8C4' }, // Pure Cyan
-                        purple: { DEFAULT: '#9D00FF', dim: '#5D0096' }, // Electric Purple
-                        rose: { DEFAULT: '#FF0055', dim: '#990033' }, // Deep Neon Red
-                        acid: { DEFAULT: '#00FF9D', dim: '#008F58' }, // Minty Acid
-                        amber: { DEFAULT: '#FFB800', dim: '#996F00' }, // Gold
-                        // Custom Logo Colors (Updated to match theme)
+                        // Enhanced Neon Palette
+                        cyan: { DEFAULT: '#00F0FF', dim: '#00B8C4' }, 
+                        purple: { DEFAULT: '#9D00FF', dim: '#5D0096' }, 
+                        rose: { DEFAULT: '#FF0055', dim: '#990033' }, 
+                        acid: { DEFAULT: '#00FF9D', dim: '#008F58' }, 
+                        amber: { DEFAULT: '#FFB800', dim: '#996F00' }, 
+                        // Custom Logo Colors
                         'logo-body': '#00F0FF', 
                         'logo-check': '#00FF9D', 
                     },
@@ -141,12 +141,18 @@
         body { 
             background-color: #050505; 
             color: #E2E8F0; 
-            overflow: hidden; /* CRITICAL FOR 100VH */
+            /* Mobile: Allow native scroll. Desktop: Fixed app layout. */
+            overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Dynamic Viewport Height Fix for Mobile */
-        .h-dvh { height: 100dvh; }
+        /* Desktop App Layout Fixes */
+        @media (min-width: 1024px) {
+            body { 
+                overflow: hidden; 
+                height: 100vh;
+            }
+        }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -160,14 +166,12 @@
             border: 1px solid #1F1F1F;
             position: relative;
             overflow: hidden;
-            /* Sharp edges */
             border-radius: 0.5rem; 
             transition: border-color 0.3s ease;
         }
         
         .neon-panel.interactive:hover {
             border-color: #333;
-            /* REMOVED: box-shadow for glow effect */
         }
 
         /* --- REPORT CARD STYLES --- */
@@ -180,7 +184,7 @@
             transition: none; 
         }
         
-        /* Solid Neon Top Borders (Rich Contrast) */
+        /* Solid Neon Top Borders */
         .accent-top-cyan { border-top: 2px solid #00F0FF; }
         .accent-top-purple { border-top: 2px solid #9D00FF; }
         .accent-top-rose { border-top: 2px solid #FF0055; }
@@ -208,17 +212,20 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Logic for minimizing upload on mobile */
         .upload-minimized {
             flex-grow: 0 !important;
-            flex-basis: 60px !important;
-            min-height: 60px !important;
+            flex-basis: auto !important;
+            min-height: 50px !important;
+            height: 50px !important;
             padding: 0 !important;
             overflow: hidden;
             border-color: #333 !important;
+            margin-bottom: 0.5rem;
         }
         
-        .upload-minimized .upload-content { opacity: 0; pointer-events: none; }
-        .upload-minimized .mini-header { opacity: 1; pointer-events: auto; }
+        .upload-minimized .upload-content { opacity: 0; pointer-events: none; display: none !important; }
+        .upload-minimized .mini-header { opacity: 1; pointer-events: auto; display: flex !important; }
 
         /* --- PRINT STYLES --- */
         @media print {
@@ -244,49 +251,42 @@
             border-bottom: 1px solid #1F1F1F;
         }
         .compact-list-item:last-child { border-bottom: none; }
-        
-        /* REMOVED: .text-gradient-hard and .glow-text for flat, sharp look */
     </style>
 </head>
-<body class="h-dvh flex flex-col selection:bg-cyan selection:text-black">
+<body class="min-h-screen flex flex-col selection:bg-cyan selection:text-black">
 
-    <!-- Ambient Background (Subtle, Darker, No Glow) -->
+    <!-- Ambient Background -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-void ambient-bg">
         <div class="absolute inset-0 bg-cyber-grid opacity-20 animate-grid-move"></div>
         <!-- Very subtle ambient glow center - Reduced opacity -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan/5 blur-[100px] rounded-full pointer-events-none opacity-50"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-cyan/5 blur-[100px] rounded-full pointer-events-none opacity-50"></div>
     </div>
 
     <!-- Navigation -->
-    <nav class="w-full h-16 flex-none z-50 border-b border-border-dim bg-panel-bg/95 backdrop-blur-sm">
+    <nav class="w-full h-14 md:h-16 flex-none z-50 border-b border-border-dim bg-panel-bg/95 backdrop-blur-sm sticky top-0 lg:relative">
         <div class="h-full max-w-[1600px] mx-auto px-4 md:px-6 flex items-center justify-between">
             
             <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
-                <!-- NEW LOGO: MATCHING NEON THEME (Cyan/Black/Green) -->
-                <div class="relative w-10 h-10 group-hover:scale-105 transition-transform duration-300">
+                <!-- LOGO -->
+                <div class="relative w-8 h-8 md:w-10 md:h-10 group-hover:scale-105 transition-transform duration-300">
                     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Document Body: Cyan (Matching Theme) -->
                         <rect x="22" y="12" width="56" height="76" rx="8" fill="#00F0FF" />
-                        <!-- Document Lines: Dark/Black -->
                         <rect x="34" y="32" width="32" height="6" rx="3" fill="#000000" opacity="0.5"/>
                         <rect x="34" y="46" width="32" height="6" rx="3" fill="#000000" opacity="0.5"/>
-                        <!-- Badge Circle Border -->
                         <circle cx="72" cy="72" r="16" fill="#050505" />
-                        <!-- Badge Circle Fill: Acid Green -->
                         <circle cx="72" cy="72" r="13" fill="#05FFA1" />
-                        <!-- Checkmark: Dark -->
                         <path d="M66 72 L69.5 75.5 L78 67" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <div class="flex flex-col justify-center">
-                    <h1 class="text-lg md:text-xl font-bold text-white tracking-tight leading-none font-sans">
+                    <h1 class="text-base md:text-xl font-bold text-white tracking-tight leading-none font-sans">
                         PRORESUME <span class="text-cyan">ANALYZER</span>
                     </h1>
                 </div>
             </div>
 
             <!-- Header Actions -->
-            <div id="navActions" class="flex items-center gap-3">
+            <div id="navActions" class="flex items-center gap-2 md:gap-3">
                 <div class="hidden md:flex gap-3">
                     <button onclick="showModal('faq')" class="flex items-center gap-2 px-3 py-1.5 rounded border border-border-dim bg-void hover:bg-white/5 hover:border-cyan transition-all group">
                         <i class="fa-solid fa-circle-question text-gray-500 group-hover:text-cyan text-xs"></i>
@@ -297,61 +297,56 @@
                         <span class="text-xs font-mono font-bold text-gray-400">TIPS</span>
                     </button>
                 </div>
-                <!-- Removed Shadow/Glow -->
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded bg-cyan/10 border border-cyan/30">
+                <div class="flex items-center gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded bg-cyan/10 border border-cyan/30">
                     <div class="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse"></div>
-                    <span class="text-[10px] md:text-xs font-mono font-bold text-cyan">ONLINE</span>
+                    <span class="text-[9px] md:text-xs font-mono font-bold text-cyan">ONLINE</span>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Workspace -->
-    <main class="flex-1 w-full max-w-[1600px] mx-auto p-2 md:p-4 overflow-hidden relative z-10 flex flex-col">
+    <main class="flex-1 w-full max-w-[1600px] mx-auto p-2 md:p-4 relative z-10 flex flex-col lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
         
-        <!-- HEADER: Reduced Size, Richer Theme (No Glow, Single Color) -->
-        <div class="text-center mb-4 md:mb-6 flex-none z-20 px-4 mt-2 no-print">
-            <h2 class="text-2xl md:text-5xl font-black leading-tight mb-3 font-sans tracking-tight uppercase">
+        <!-- HEADER -->
+        <div class="text-center mb-4 md:mb-6 flex-none z-20 px-2 mt-2 no-print">
+            <h2 class="text-2xl md:text-5xl font-black leading-tight mb-2 font-sans tracking-tight uppercase">
                 <span class="block text-white mb-1">Don't Just Apply.</span>
-                <!-- CHANGED: Single Solid Color -->
                 <span class="text-cyan">Dominate the Market.</span>
             </h2>
             
-            <p class="text-xs md:text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-sans border-l-2 border-cyan pl-4 text-left md:text-center md:border-l-0 md:pl-0">
+            <p class="text-xs md:text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-sans border-l-2 border-cyan pl-3 md:pl-4 text-left md:text-center md:border-l-0 md:pl-0">
                 Unlock your true career potential. Our advanced diagnostic engine reveals <span class="text-white font-bold">hidden gaps</span> and provides the strategy to <span class="text-acid font-bold">stand out instantly.</span>
             </p>
         </div>
 
         <!-- Panels Container -->
-        <div class="flex-1 w-full min-h-0 flex flex-col lg:flex-row gap-3 md:gap-6">
+        <div class="flex-1 w-full flex flex-col lg:flex-row gap-3 md:gap-6 min-h-0">
 
-            <!-- LEFT PANEL -->
-            <section id="leftPanel" class="w-full lg:w-[35%] flex flex-col gap-3 md:gap-4 mobile-panel-transition flex-none lg:h-full h-auto transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]">
+            <!-- LEFT PANEL: Upload & Console -->
+            <section id="leftPanel" class="w-full lg:w-[35%] flex flex-col gap-3 flex-none h-auto lg:h-full transition-all duration-500">
                 
                 <!-- Upload Zone -->
-                <div id="dropZone" class="neon-panel interactive flex-1 rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[140px]">
+                <div id="dropZone" class="neon-panel interactive w-full rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[120px] lg:flex-1">
                     
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                     <!-- 1. Idle State -->
-                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10 upload-content">
-                        <div class="relative mb-6">
-                            <!-- Removed Hover Shadow -->
-                            <div class="w-20 h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
-                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
+                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center z-10 upload-content">
+                        <div class="relative mb-3 md:mb-6">
+                            <div class="w-16 h-16 md:w-20 md:h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl md:text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
                             </div>
                         </div>
-                        <h2 class="text-xl font-bold text-white mb-2 font-sans tracking-tight">Upload Resume</h2>
-                        <p class="text-xs text-gray-500 font-mono tracking-wide max-w-[250px]">
+                        <h2 class="text-lg md:text-xl font-bold text-white mb-1 md:mb-2 font-sans tracking-tight">Upload Resume</h2>
+                        <p class="text-[10px] md:text-xs text-gray-500 font-mono tracking-wide max-w-[200px] md:max-w-[250px]">
                             PDF or DOCX.<br>Drag & drop to analyze.
                         </p>
                     </div>
 
                     <!-- 2. Processing State -->
                     <div id="uploadProcessing" class="hidden absolute inset-0 bg-black/90 z-20 flex-col items-center justify-center">
-                        <!-- Removed Shadow -->
-                        <div class="w-12 h-12 border-2 border-border-dim border-t-cyan rounded-full animate-spin mb-4"></div>
-                        <!-- Removed Glow Text -->
+                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-border-dim border-t-cyan rounded-full animate-spin mb-4"></div>
                         <p class="text-cyan font-mono text-xs animate-pulse tracking-[0.2em]">ANALYZING...</p>
                     </div>
 
@@ -362,7 +357,6 @@
                                 <i class="fa-solid fa-rotate-right group-hover:rotate-180 transition-transform duration-500"></i>
                                 RESET
                             </button>
-                            <!-- Removed Shadow -->
                             <canvas id="pdfPreviewCanvas" class="max-w-full max-h-full object-contain rounded border border-border-dim"></canvas>
                             <div id="docxIcon" class="hidden flex-col items-center">
                                 <i class="fa-solid fa-file-word text-6xl text-blue-500 mb-4"></i>
@@ -370,49 +364,45 @@
                             </div>
                             <!-- FIXED SCANNER -->
                             <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-                                <!-- Removed Box Shadow -->
                                 <div class="w-full h-[20%] bg-cyan/10 absolute animate-scan-vertical border-b border-cyan"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Mini Header (Mobile) -->
-                    <div class="hidden mini-header absolute inset-0 flex items-center justify-between px-4 bg-void border-b border-border-dim">
+                    <!-- Mini Header (Mobile Optimized) -->
+                    <div class="hidden mini-header w-full h-full items-center justify-between px-4 bg-void/50 backdrop-blur-sm border-b border-cyan/20">
                         <div class="flex items-center gap-3">
-                            <!-- Removed Shadow -->
-                            <div class="w-2 h-2 rounded-full bg-cyan"></div>
+                            <div class="w-2 h-2 rounded-full bg-cyan animate-pulse"></div>
                             <span class="font-mono text-xs text-cyan font-bold truncate max-w-[150px]" id="miniFilename">Resume.pdf</span>
                         </div>
-                        <button id="expandBtn" class="text-xs text-gray-500 font-mono hover:text-white uppercase">[EXPAND]</button>
+                        <button id="expandBtn" class="text-[10px] text-gray-500 font-mono hover:text-white uppercase px-2 py-1 bg-white/5 rounded">EXPAND VIEW</button>
                     </div>
 
                     <input type="file" id="fileInput" accept=".pdf,.docx" class="hidden">
                 </div>
 
                 <!-- Terminal -->
-                <div class="neon-panel rounded-lg h-[120px] lg:h-[25%] flex-none flex flex-col p-3 border-border-dim bg-black">
+                <div class="neon-panel rounded-lg min-h-[100px] lg:h-[25%] flex-none flex flex-col p-3 border-border-dim bg-black">
                     <div class="flex justify-between items-center border-b border-border-dim pb-2 mb-2">
                         <span class="text-[10px] font-mono font-bold text-gray-500 tracking-widest">SYSTEM_LOG</span>
                         <div class="flex gap-1.5">
-                            <!-- Removed Shadows -->
                             <div class="w-1.5 h-1.5 rounded-full bg-rose"></div>
                             <div class="w-1.5 h-1.5 rounded-full bg-cyan"></div>
                         </div>
                     </div>
-                    <div id="consoleOutput" class="flex-1 overflow-y-auto font-mono text-[10px] space-y-1.5 text-gray-500 select-text">
+                    <div id="consoleOutput" class="flex-1 overflow-y-auto max-h-[100px] lg:max-h-none font-mono text-[10px] space-y-1.5 text-gray-500 select-text">
                         <p class="opacity-50">> System ready. Waiting for input...</p>
                     </div>
                 </div>
             </section>
 
-            <!-- RIGHT PANEL -->
-            <section id="rightPanel" class="w-full lg:flex-1 flex flex-col gap-4 overflow-hidden relative opacity-50 pointer-events-none transition-all duration-700 h-0 lg:h-full mobile-panel-transition">
+            <!-- RIGHT PANEL: Dashboard -->
+            <section id="rightPanel" class="w-full lg:flex-1 flex flex-col gap-4 overflow-hidden relative opacity-50 pointer-events-none transition-all duration-700 h-auto lg:h-full">
                 
                 <!-- Dashboard Header -->
                 <div class="flex-none flex items-center justify-between px-2 gap-3 md:gap-6 bg-void/50 md:bg-transparent rounded p-2 md:p-0 border border-border-dim md:border-none">
                     <div class="flex-none flex items-center gap-2">
                         <h2 class="text-lg md:text-3xl font-bold text-white font-sans tracking-tight flex items-center">
-                            <!-- Removed Drop Shadow -->
                             <i class="fa-solid fa-square-poll-vertical text-cyan mr-2 md:mr-3"></i>
                             Report
                         </h2>
@@ -423,100 +413,97 @@
                         <span>EXPORT</span>
                     </button>
 
-                    <div class="flex-1 flex flex-col items-center justify-center max-w-[150px] md:max-w-none px-2 md:px-8">
+                    <div class="flex-1 flex flex-col items-center justify-center max-w-[120px] md:max-w-none px-2 md:px-8">
                          <div class="w-full h-2 md:h-2.5 bg-border-dim rounded-full overflow-hidden relative border border-white/5">
                              <!-- GRADIENT BAR: Red -> Orange -> Yellow -> Green -->
                              <div id="totalScoreBar" class="h-full w-0 transition-all duration-1000 relative" style="background: linear-gradient(90deg, #FF0055, #FFB800, #FFFF00, #00FF9D);"></div>
                          </div>
                     </div>
 
-                    <div class="flex-none text-right flex flex-col items-end pr-2 md:pr-4">
+                    <div class="flex-none text-right flex flex-col items-end pr-1 md:pr-4">
                         <div class="text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-0.5">Total Score</div>
-                        <!-- Removed Drop Shadow -->
                         <div class="text-3xl md:text-5xl font-black text-white leading-none tracking-tighter transition-colors duration-500" id="totalScore">00</div>
                     </div>
                 </div>
 
                 <!-- Scrollable Content -->
-                <div class="flex-1 overflow-y-auto overflow-x-hidden pr-1 pb-4 space-y-4" id="dashboardContent">
+                <!-- Mobile: Native body scroll, Desktop: Internal scroll -->
+                <div class="flex-1 lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1 pb-4 space-y-4" id="dashboardContent">
                     
                     <!-- METRICS GRID -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        <div class="report-card accent-top-cyan p-3 flex flex-col justify-between h-[80px]">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+                        <div class="report-card accent-top-cyan p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
                             <div class="flex justify-between items-end">
                                 <div class="flex items-center gap-2">
-                                    <!-- Removed Drop Shadow -->
-                                    <i class="fa-solid fa-robot text-cyan text-base"></i>
-                                    <span class="text-[10px] md:text-xs font-bold font-mono text-gray-400">ATS PARSE</span>
+                                    <i class="fa-solid fa-robot text-cyan text-sm md:text-base"></i>
+                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">ATS PARSE</span>
                                 </div>
-                                <div class="text-lg md:text-2xl font-bold text-white leading-none" id="atsScore">0%</div>
+                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="atsScore">0%</div>
                             </div>
                             <div class="h-1 w-full bg-border-dim mt-2">
-                                <!-- Removed Shadow -->
                                 <div id="atsBar" class="h-full bg-cyan w-0 transition-all duration-1000"></div>
                             </div>
                         </div>
 
-                        <div class="report-card accent-top-purple p-3 flex flex-col justify-between h-[80px]">
+                        <div class="report-card accent-top-purple p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
                             <div class="flex justify-between items-end">
                                 <div class="flex items-center gap-2">
-                                    <!-- Removed Drop Shadow -->
-                                    <i class="fa-solid fa-chart-line text-purple text-base"></i>
-                                    <span class="text-[10px] md:text-xs font-bold font-mono text-gray-400">IMPACT</span>
+                                    <i class="fa-solid fa-chart-line text-purple text-sm md:text-base"></i>
+                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">IMPACT</span>
                                 </div>
-                                <div class="text-lg md:text-2xl font-bold text-white leading-none" id="quantScore">0%</div>
+                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="quantScore">0%</div>
                             </div>
                             <div class="h-1 w-full bg-border-dim mt-2">
                                 <div id="quantBar" class="h-full bg-purple w-0 transition-all duration-1000"></div>
                             </div>
                         </div>
 
-                        <div class="report-card accent-top-rose p-3 flex flex-col justify-between h-[80px]">
+                        <div class="report-card accent-top-rose p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
                             <div class="flex justify-between items-end">
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-bolt text-rose text-base"></i>
-                                    <span class="text-[10px] md:text-xs font-bold font-mono text-gray-400">VERBS</span>
+                                    <i class="fa-solid fa-bolt text-rose text-sm md:text-base"></i>
+                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">VERBS</span>
                                 </div>
-                                <div class="text-lg md:text-2xl font-bold text-white leading-none" id="verbScore">0%</div>
+                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="verbScore">0%</div>
                             </div>
                             <div class="h-1 w-full bg-border-dim mt-2">
                                 <div id="verbBar" class="h-full bg-rose w-0 transition-all duration-1000"></div>
                             </div>
                         </div>
 
-                        <div class="report-card accent-top-acid p-3 flex flex-col justify-between h-[80px]">
+                        <div class="report-card accent-top-acid p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
                             <div class="flex justify-between items-end">
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-microchip text-acid text-base"></i>
-                                    <span class="text-[10px] md:text-xs font-bold font-mono text-gray-400">SKILLS</span>
+                                    <i class="fa-solid fa-microchip text-acid text-sm md:text-base"></i>
+                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">SKILLS</span>
                                 </div>
-                                <div class="text-lg md:text-2xl font-bold text-white leading-none" id="skillScore">0%</div>
+                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="skillScore">0%</div>
                             </div>
                             <div class="h-1 w-full bg-border-dim mt-2">
                                 <div id="skillBar" class="h-full bg-acid w-0 transition-all duration-1000"></div>
                             </div>
                         </div>
 
-                        <div class="report-card accent-top-white p-3 flex flex-col justify-between h-[80px]">
+                        <div class="report-card accent-top-white p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
                             <div class="flex justify-between items-end">
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-align-left text-white text-base"></i>
-                                    <span class="text-[10px] md:text-xs font-bold font-mono text-gray-400">FORMAT</span>
+                                    <i class="fa-solid fa-align-left text-white text-sm md:text-base"></i>
+                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">FORMAT</span>
                                 </div>
-                                <div class="text-lg md:text-2xl font-bold text-white leading-none" id="formatScore">0%</div>
+                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="formatScore">0%</div>
                             </div>
                             <div class="h-1 w-full bg-border-dim mt-2">
                                 <div id="formatBar" class="h-full bg-white w-0 transition-all duration-1000"></div>
                             </div>
                         </div>
 
-                        <div class="report-card accent-top-amber p-3 flex flex-col justify-between h-[80px]">
+                        <div class="report-card accent-top-amber p-2 md:p-3 flex flex-col justify-between h-[70px] md:h-[80px]">
                             <div class="flex justify-between items-end">
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-layer-group text-amber text-base"></i>
-                                    <span class="text-[10px] md:text-xs font-bold font-mono text-gray-400">LENGTH</span>
+                                    <i class="fa-solid fa-layer-group text-amber text-sm md:text-base"></i>
+                                    <span class="text-[9px] md:text-xs font-bold font-mono text-gray-400">LENGTH</span>
                                 </div>
-                                <div class="text-lg md:text-2xl font-bold text-white leading-none" id="depthScore">0%</div>
+                                <div class="text-base md:text-2xl font-bold text-white leading-none" id="depthScore">0%</div>
                             </div>
                             <div class="h-1 w-full bg-border-dim mt-2">
                                 <div id="depthBar" class="h-full bg-amber w-0 transition-all duration-1000"></div>
@@ -525,14 +512,13 @@
                     </div>
 
                     <!-- Analysis List -->
-                    <div class="report-card accent-top-cyan p-3 md:p-4 flex-1 bg-panel-bg border-border-dim">
+                    <div class="report-card accent-top-cyan p-3 md:p-4 flex-1 bg-panel-bg border-border-dim min-h-[300px]">
                         <div class="flex items-center justify-between mb-2 border-b border-border-dim pb-1">
                             <h3 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
-                                <!-- Removed Drop Shadow -->
                                 <i class="fa-solid fa-list-check text-cyan"></i>
                                 CRITICAL ANALYSIS
                             </h3>
-                            <span class="text-[10px] bg-white/5 px-2 py-0.5 rounded text-gray-500 font-mono">ACTIONABLE ITEMS</span>
+                            <span class="text-[9px] md:text-[10px] bg-white/5 px-2 py-0.5 rounded text-gray-500 font-mono">ACTIONABLE ITEMS</span>
                         </div>
                         <div id="recommendationList" class="flex flex-col font-mono text-xs md:text-sm space-y-0.5">
                             <div class="py-4 text-center opacity-50 italic text-gray-500">
@@ -562,14 +548,13 @@
     </footer>
 
     <!-- Modal Overlay -->
-    <!-- Removed Backdrop Blur for sharper look, Removed Shadow -->
     <div id="modalOverlay" class="fixed inset-0 z-[100] bg-black/90 hidden items-center justify-center p-4">
         <div class="neon-panel w-full max-w-2xl rounded p-6 md:p-8 transform transition-all scale-95 opacity-0 max-h-[85vh] overflow-y-auto border border-border-dim" id="modalContent">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors z-50">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
-            <h2 id="modalTitle" class="text-2xl font-bold text-white mb-6 font-sans border-b border-border-dim pb-3"></h2>
-            <div id="modalBody" class="text-sm text-gray-300 font-mono space-y-4 leading-relaxed"></div>
+            <h2 id="modalTitle" class="text-xl md:text-2xl font-bold text-white mb-6 font-sans border-b border-border-dim pb-3"></h2>
+            <div id="modalBody" class="text-xs md:text-sm text-gray-300 font-mono space-y-4 leading-relaxed"></div>
         </div>
     </div>
 
@@ -735,9 +720,16 @@
             els.miniFilename.innerText = name;
             
             els.rightPanel.classList.remove('opacity-50', 'pointer-events-none');
+            // Remove the 'hidden' or 'h-0' constraints
             els.rightPanel.classList.remove('h-0'); 
             els.rightPanel.classList.add('opacity-100', 'pointer-events-auto');
-            els.rightPanel.style.height = 'auto'; 
+            
+            // Allow natural height on mobile, fixed full height on desktop
+            if(!isMobile) {
+                els.rightPanel.style.height = '100%';
+            } else {
+                els.rightPanel.style.height = 'auto';
+            }
             
             isAnalyzed = true;
 
@@ -753,7 +745,10 @@
                 els.dropZone.classList.add('upload-minimized');
                 els.rightPanel.classList.add('flex-1');
                 els.rightPanel.classList.remove('h-0', 'hidden');
-                els.rightPanel.scrollIntoView({behavior: 'smooth'});
+                // Scroll to dashboard on mobile
+                setTimeout(() => {
+                    els.rightPanel.scrollIntoView({behavior: 'smooth', block: 'start'});
+                }, 100);
             } else {
                 els.dropZone.classList.remove('upload-minimized');
                 els.rightPanel.classList.remove('flex-1');
@@ -952,10 +947,10 @@
             if(isMobile) {
                 els.dropZone.classList.remove('upload-minimized');
                 els.rightPanel.classList.remove('flex-1');
-                els.rightPanel.classList.add('h-0');
+                // els.rightPanel.classList.add('h-0'); // Removed h-0 for better mobile stack
             }
             els.rightPanel.classList.add('opacity-50', 'pointer-events-none');
-            if(!isMobile) els.rightPanel.classList.remove('h-0');
+            // if(!isMobile) els.rightPanel.classList.remove('h-0');
 
             ['ats','quant','verb','skill','format','depth'].forEach(k => {
                 document.getElementById(k+'Bar').style.width = '0%';
