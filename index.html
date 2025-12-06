@@ -160,7 +160,7 @@
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 0; }
         ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
 
-        /* NEON PANEL (Rich Grade - No Glow) */
+        /* NEON PANEL */
         .neon-panel {
             background: #0A0A0A;
             border: 1px solid #1F1F1F;
@@ -200,7 +200,7 @@
             mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
 
-        /* Scan Line (Sharp) */
+        /* Scan Line */
         .scan-line {
             width: 100%; height: 1px;
             background: #00F0FF;
@@ -236,7 +236,7 @@
                 color: #111 !important; 
                 overflow: visible !important; 
                 height: auto !important;
-                font-size: 12pt;
+                font-size: 11pt;
             }
 
             /* Elements to Hide */
@@ -249,6 +249,7 @@
                 padding: 0 !important; 
                 margin: 0 !important; 
                 max-width: 100% !important; 
+                height: auto !important;
             }
 
             /* Report Header (Only visible in Print) */
@@ -276,23 +277,25 @@
                 color: black !important;
                 margin-bottom: 20px;
                 padding: 0 !important;
+                justify-content: flex-start !important;
             }
-            #rightPanel h2 { color: black !important; font-size: 18pt !important; }
+            #rightPanel h2 { color: black !important; font-size: 18pt !important; margin-right: 20px; }
             
             /* Total Score Bar Print Fix */
-            #totalScore { color: black !important; font-size: 32pt !important; }
+            #totalScore { color: black !important; font-size: 28pt !important; }
             #totalScoreBar { 
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important; 
-                height: 15px !important;
+                height: 10px !important;
                 border: 1px solid #ccc;
             }
             
             /* Cards */
             .grid { 
                 display: grid !important; 
-                grid-template-columns: repeat(2, 1fr) !important; 
-                gap: 15px !important; 
+                grid-template-columns: repeat(3, 1fr) !important; 
+                gap: 10px !important; 
+                margin-bottom: 20px !important;
             }
             
             .report-card { 
@@ -301,9 +304,9 @@
                 color: black !important; 
                 box-shadow: none !important; 
                 break-inside: avoid;
-                padding: 15px !important;
+                padding: 10px !important;
                 height: auto !important;
-                min-height: 100px;
+                min-height: 80px;
             }
 
             /* Print typography adjustments */
@@ -322,18 +325,19 @@
             [id$="Bar"] { 
                 -webkit-print-color-adjust: exact !important; 
                 print-color-adjust: exact !important; 
-                height: 8px !important;
+                height: 5px !important;
             }
 
             /* Recommendations List */
             #recommendationList {
-                border-top: 2px solid #eee;
-                margin-top: 20px;
-                padding-top: 20px;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+                padding-top: 10px;
             }
             .compact-list-item {
                 border-bottom: 1px solid #eee !important;
-                padding: 10px 0 !important;
+                padding: 8px 0 !important;
+                page-break-inside: avoid;
             }
         }
 
@@ -351,12 +355,11 @@
     <!-- Ambient Background -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-void ambient-bg">
         <div class="absolute inset-0 bg-cyber-grid opacity-20 animate-grid-move"></div>
-        <!-- Very subtle ambient glow center - Reduced opacity -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-cyan/5 blur-[100px] rounded-full pointer-events-none opacity-50"></div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="w-full h-14 md:h-16 flex-none z-50 border-b border-border-dim bg-panel-bg/95 backdrop-blur-sm sticky top-0 lg:relative">
+    <!-- Navigation (Height increased for mobile fit) -->
+    <nav class="w-full h-16 flex-none z-50 border-b border-border-dim bg-panel-bg/95 backdrop-blur-sm sticky top-0 lg:relative">
         <div class="h-full max-w-[1600px] mx-auto px-4 md:px-6 flex items-center justify-between">
             
             <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
@@ -414,7 +417,8 @@
                 <span class="text-cyan">Dominate the Market.</span>
             </h2>
             
-            <p class="text-xs md:text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-sans border-l-2 border-cyan pl-3 md:pl-4 text-left md:text-center md:border-l-0 md:pl-0">
+            <!-- Optimized Tagline for Mobile -->
+            <p class="text-[10px] md:text-sm text-gray-400 leading-relaxed max-w-2xl mx-auto font-sans border-l-2 border-cyan pl-3 md:pl-4 text-left md:text-center md:border-l-0 md:pl-0">
                 Unlock your true career potential. Our advanced diagnostic engine reveals <span class="text-white font-bold">hidden gaps</span> and provides the strategy to <span class="text-acid font-bold">stand out instantly.</span>
             </p>
         </div>
@@ -426,21 +430,22 @@
             <section id="leftPanel" class="w-full lg:w-[35%] flex flex-col gap-3 flex-none h-auto lg:h-full transition-all duration-500">
                 
                 <!-- Upload Zone -->
-                <!-- Reduced min-height and padding for mobile fit -->
-                <div id="dropZone" class="neon-panel interactive w-full rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[100px] lg:min-h-[120px] lg:flex-1">
+                <!-- FIX: increased padding and min-height, reduced text size to prevent cut off -->
+                <div id="dropZone" class="neon-panel interactive w-full rounded-lg relative group cursor-pointer transition-all border-border-dim hover:border-cyan flex flex-col overflow-hidden min-h-[140px] lg:flex-1">
                     
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                    <!-- 1. Idle State -->
-                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-3 md:p-6 text-center z-10 upload-content">
+                    <!-- 1. Idle State - Optimised for minimal overflow/trimming -->
+                    <div id="uploadIdle" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-10 upload-content">
                         <div class="relative mb-2 md:mb-6">
                             <!-- Smaller icon on mobile -->
-                            <div class="w-12 h-12 md:w-20 md:h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
-                                <i class="fa-solid fa-cloud-arrow-up text-xl md:text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
+                            <div class="w-8 h-8 md:w-20 md:h-20 rounded bg-void border border-border-bright flex items-center justify-center group-hover:border-cyan transition-all duration-300">
+                                <i class="fa-solid fa-cloud-arrow-up text-base md:text-3xl text-gray-500 group-hover:text-cyan transition-colors"></i>
                             </div>
                         </div>
-                        <h2 class="text-base md:text-xl font-bold text-white mb-1 md:mb-2 font-sans tracking-tight">Upload Resume</h2>
-                        <p class="text-[10px] md:text-xs text-gray-500 font-mono tracking-wide max-w-[200px] md:max-w-[250px] leading-tight">
+                        <!-- Drastically Reduced text sizes on mobile to ensure fit -->
+                        <h2 class="text-sm md:text-xl font-bold text-white mb-1 md:mb-2 font-sans tracking-tight">Upload Resume</h2>
+                        <p class="text-[9px] md:text-xs text-gray-500 font-mono tracking-wide max-w-[200px] md:max-w-[250px] leading-tight">
                             PDF or DOCX.<br>Drag & drop to analyze.
                         </p>
                     </div>
