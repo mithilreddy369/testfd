@@ -1,1023 +1,823 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wealth Strategy Analyzer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            
-            --primary: #4F46E5;       /* Indigo 600 */
-            --primary-light: #818CF8;
-            --primary-dark: #4338CA;
-            --secondary: #64748B;     /* Slate 500 */
-            --bg-app: #F8FAFC;        /* Slate 50 */
-            --bg-panel: #FFFFFF;      /* White */
-            --bg-sidebar: #0F172A;    /* Slate 900 */
-            --text-main: #1E293B;     /* Slate 800 */
-            --text-muted: #94A3B8;    /* Slate 400 */
-            --text-on-dark: #F8FAFC;  /* Slate 50 */
-            --border: #E2E8F0;        /* Slate 200 */
-            --success: #10B981;       /* Emerald 500 */
-            --danger: #EF4444;        /* Red 500 */
-            --accent-purple: #8B5CF6; /* Violet 500 */
-            --accent-orange: #F97316; /* Orange 500 */
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Global Market Pulse</title>
+  <meta name="description" content="Real-time dashboard for Global Indices, NSE Sectors, Commodities, Forex, Stocks, and News." />
 
-            /* Table Background Tints */
-            --tint-reg: #F1F5F9;
-            --tint-fix: #F3E8FF;
-            --tint-per: #DCFCE7;
-            --tint-lum: #FFEDD5;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        body.dark-theme {
-            --primary: #6366F1;
-            --primary-light: #A5B4FC;
-            --primary-dark: #4338CA;
-            --secondary: #94A3B8;
-            --bg-app: #020617;
-            --bg-panel: #1E293B;
-            --bg-sidebar: #020617;
-            --text-main: #F1F5F9;
-            --text-muted: #64748B;
-            --text-on-dark: #E2E8F0;
-            --border: #334155;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  <style>
+    :root {
+      /* Dark Theme (Default) - Ultra Dark Luxury Polish Palette */
+      --bg-body: #070A10; 
+      --bg-card: #10172A; 
+      --primary: #FFFFFF; 
+      --secondary: #CCCCCC; 
+      --tertiary: #555E70; 
+      --accent: #FFC72C; 
+      --alpha-green: #00E676; 
+      --alpha-red: #FF5252; 
+      --border: #2C3647; 
+      --header-bg: #10172A; 
+      
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
 
-            /* Dark Tints */
-            --tint-reg: #0F172A;
-            --tint-fix: #2E1065;
-            --tint-per: #064E3B;
-            --tint-lum: #431407;
-        }
+    /* Light Theme Override */
+    .light-mode {
+      --bg-body: #F6F8FA; 
+      --bg-card: #ffffff;
+      --primary: #1B2430;
+      --secondary: #475569;
+      --tertiary: #94a3b8;
+      --accent: #0A60B3; 
+      --alpha-green: #10b981;
+      --alpha-red: #ef4444;
+      --border: #DBE1E8; 
+      --header-bg: #ffffff;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--primary);
+      line-height: 1.3;
+      -webkit-font-smoothing: antialiased;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden; 
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.4s, color 0.4s;
+    }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-app);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            font-size: 13px;
-        }
+    /* --- Container & Layout --- */
+    .container {
+      width: 100%;
+      height: 100%;
+      padding: 0.5vh 1vw; 
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5vh; 
+    }
 
-        /* --- Layout --- */
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 260px 1fr; /* Fixed sidebar width */
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-        }
+    .dashboard-header {
+      background-color: var(--header-bg); 
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0; 
+      height: 6vh; 
+      min-height: 48px;
+      border: 1px solid var(--border); 
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.05);
+      transition: all 0.4s ease;
+    }
+    .light-mode .dashboard-header { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+    
+    .brand-area { display: flex; align-items: center; gap: 12px; }
+    .page-title { font-family: var(--font-serif); font-size: 1.8rem; color: var(--accent); margin: 0; line-height: 1; font-weight: 700; }
+    .user-name { font-size: 1.0rem; color: var(--secondary); font-weight: 500; margin-left: 20px; padding-left: 20px; border-left: 1px solid var(--tertiary); line-height: 1.5; opacity: 0.85; }
 
-        /* --- Sidebar --- */
-        .sidebar {
-            background-color: var(--bg-sidebar);
-            color: var(--text-on-dark);
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid var(--border);
-            height: 100%;
-            overflow-y: hidden; 
-            z-index: 10;
-        }
+    .system-status { text-align: right; display: flex; align-items: center; gap: 0.75rem; }
+    .theme-btn { background: var(--bg-body); border: 1px solid var(--tertiary); color: var(--secondary); cursor: pointer; padding: 6px; border-radius: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+    .theme-btn:hover { background: var(--tertiary); color: var(--primary); transform: translateY(-1px); }
 
-        .sidebar-header {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-sidebar);
-            flex-shrink: 0;
-        }
-        
-        .sidebar-header h1 { font-size: 0.85rem; font-weight: 700; color: white; letter-spacing: 0.02em; }
+    .reload-timer { font-family: var(--font-mono); font-size: 0.75rem; color: var(--alpha-green); background: rgba(0, 230, 118, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(0, 230, 118, 0.3); min-width: 100px; text-align: center; font-weight: 500; }
+    .last-updated { font-family: var(--font-mono); font-size: 0.75rem; color: var(--secondary); display: flex; align-items: center; gap: 5px; }
+    .live-dot { width: 6px; height: 6px; background: var(--alpha-green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
 
-        .sidebar-content { 
-            padding: 0.75rem 1rem; 
-            overflow-y: auto;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.2) transparent;
-        }
+    /* --- New Split Body Layout --- */
+    .dashboard-body {
+      display: flex;
+      flex: 1;
+      gap: 0.5vw;
+      overflow: hidden;
+      min-height: 0;
+    }
+    
+    .left-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5vh;
+      overflow: hidden;
+      min-width: 0; 
+    }
 
-        .sidebar-footer {
-            padding: 0.75rem 1rem;
-            background: rgba(0,0,0,0.2);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            flex-shrink: 0;
-        }
+    .right-panel {
+      width: 23vw;
+      min-width: 300px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Compact Inputs */
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
+    /* --- Left Panel Grid Rows --- */
+    .asset-grid-custom, .market-split, .row-3-split {
+      display: grid;
+      /* Using 2.6fr for the big boxes so 3 internal columns fit perfectly alongside the 3 single columns */
+      grid-template-columns: 1fr 1fr 1fr 2.6fr; 
+      gap: 0.5vw; 
+      flex: 1; 
+      min-height: 0;
+      overflow: hidden;
+    }
 
-        .input-group { margin-bottom: 0.5rem; }
-        .input-group label {
-            display: block; font-size: 0.6rem; text-transform: uppercase;
-            letter-spacing: 0.05em; font-weight: 600; color: var(--text-muted);
-            margin-bottom: 0.2rem;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .input-group input, .input-group select {
-            width: 100%; background-color: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); color: white;
-            padding: 0.35rem 0.5rem; border-radius: 6px;
-            font-family: inherit; font-size: 0.75rem; transition: all 0.2s;
-        }
-        .input-group input:focus, .input-group select:focus {
-            outline: none; border-color: var(--primary);
-            background-color: rgba(255,255,255,0.1);
-        }
+    /* Internal 3-Column Spreads */
+    .crypto-split-container, .global-stocks-grid, .stocks-grid-3col { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr 1fr; 
+      gap: 0.5rem; 
+      height: 100%; 
+    }
+    .col-vertical { display: flex; flex-direction: column; height: 100%; }
 
-        .section-title {
-            color: var(--primary-light); font-size: 0.65rem; font-weight: 700;
-            margin: 0.5rem 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;
-        }
-        .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+    /* --- Component Boxes --- */
+    .asset-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border); 
+      border-radius: 4px; 
+      padding: 0.75rem; 
+      display: flex; 
+      flex-direction: column;
+      height: 100%; 
+      overflow: hidden; 
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.05);
+    }
+    .light-mode .asset-box { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
 
-        .scenario-chips { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.25rem; margin-bottom: 0.5rem; }
-        .chip {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);
-            padding: 0.25rem; font-size: 0.6rem; border-radius: 4px;
-            cursor: pointer; text-align: center; transition: all 0.2s;
-        }
-        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .asset-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.4rem; border-bottom: 1px solid var(--tertiary);
+      padding-bottom: 0.4rem; height: 1.5rem; flex-shrink: 0;
+    }
+    .asset-title { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em; }
 
-        .reset-btn {
-            width: 100%; background: transparent; border: 1px dashed rgba(255,255,255,0.3);
-            color: var(--text-muted); padding: 0.4rem; border-radius: 6px;
-            cursor: pointer; font-size: 0.7rem; margin-top: 0.5rem; transition: 0.2s;
-        }
-        .reset-btn:hover { border-color: var(--text-on-dark); color: var(--text-on-dark); }
-        
-        /* Strategy DNA Visual Widget (Sidebar Footer) */
-        .dna-panel {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 0.75rem;
-        }
-        .dna-title {
-            font-size: 0.65rem; font-weight: 700; color: var(--text-muted); 
-            text-transform: uppercase; margin-bottom: 0.75rem; letter-spacing: 0.05em;
-            display: flex; justify-content: space-between;
-        }
-        .dna-row {
-            margin-bottom: 0.6rem;
-        }
-        .dna-row:last-child { margin-bottom: 0; }
-        
-        .dna-label {
-            display: flex; justify-content: space-between; font-size: 0.7rem; 
-            color: var(--text-on-dark); margin-bottom: 0.25rem; font-weight: 600;
-        }
-        .dna-bar-bg {
-            height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;
-        }
-        .dna-bar-fill {
-            height: 100%; border-radius: 3px; width: 0; transition: width 1s ease-out;
-        }
-        
-        .fill-reg { background-color: var(--secondary); }
-        .fill-fix { background-color: var(--accent-purple); }
-        .fill-per { background-color: var(--success); }
-        .fill-lum { background-color: var(--accent-orange); }
+    .asset-row {
+      display: flex; justify-content: space-between; align-items: center;
+      height: 14.28%; 
+      border-bottom: 1px solid rgba(128,128,128,0.1); width: 100%;
+    }
+    .asset-row:hover { background-color: rgba(255, 255, 255, 0.04); }
+    .light-mode .asset-row:hover { background-color: rgba(0, 0, 0, 0.03); }
+    .asset-row:last-child { border-bottom: none; }
 
-        /* --- Main Panel --- */
-        .main-panel {
-            display: flex; flex-direction: column;
-            height: 100%; overflow: hidden; padding: 0.75rem; gap: 0.75rem;
-            background: var(--bg-app);
-        }
+    /* Text Formatting */
+    .u-symbol { font-weight: 600; font-size: 0.7rem !important; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .u-symbol img { width: 14px; height: 14px; border-radius: 50%; }
+    .u-price { font-family: var(--font-mono); font-weight: 500; font-size: 0.75rem !important; display: block; line-height: 1.1; }
+    .u-change { font-family: var(--font-mono); font-size: 0.6rem !important; display: block; line-height: 1.1; margin-top: 1px; }
+    .u-sub { font-size: 0.6rem !important; color: var(--tertiary); margin-left: 4px; }
+    .text-green { color: var(--alpha-green); }
+    .text-red { color: var(--alpha-red); }
 
-        /* Summary Cards */
-        .summary-grid {
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.75rem;
-            flex-shrink: 0;
-        }
+    /* --- News Sidebar Styling --- */
+    .news-container { display: flex; flex-direction: column; overflow: hidden; height: 100%; padding-right: 2px; }
+    
+    .news-item {
+      padding: 0.4rem 0.2rem;
+      border-bottom: 1px solid rgba(128,128,128,0.1);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item:hover { background-color: rgba(255, 255, 255, 0.03); }
+    .light-mode .news-item:hover { background-color: rgba(0, 0, 0, 0.02); }
+    
+    .news-headline {
+      font-size: 0.72rem;
+      color: var(--primary);
+      font-weight: 500;
+      line-height: 1.35;
+      flex: 1;
+      transition: color 0.2s;
+      /* Allow up to 3 lines, then truncate with ... */
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-item:hover .news-headline { color: var(--accent); }
 
-        .card {
-            background: var(--bg-panel); border-radius: var(--radius);
-            padding: 0.75rem; box-shadow: var(--shadow);
-            border: 1px solid var(--border); position: relative;
-            display: flex; flex-direction: column;
-            min-height: 120px;
-        }
-        
-        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-        .card.regular::before { background: var(--secondary); }
-        .card.fixed::before { background: var(--accent-purple); }
-        .card.percent::before { background: var(--success); }
-        .card.lumpsum::before { background: var(--accent-orange); }
-
-        .card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 0.5rem; padding-bottom: 0.4rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .card-header h3 { font-size: 0.8rem; font-weight: 700; color: var(--text-main); white-space: nowrap; }
-        
-        .badge { 
-            font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; 
-            font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
-        }
-        .badge.gold { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
-        .badge.silver { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
-        .badge.bronze { background: #FFEDD5; color: #9A3412; border: 1px solid #FDBA74; }
-        .badge.base { background: var(--bg-app); color: var(--text-muted); }
-
-        /* Metrics */
-        .card-metrics {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 0.5rem;
-            font-size: 0.75rem; flex: 1;
-        }
-
-        .metric-item { display: flex; flex-direction: column; overflow: hidden; justify-content: center; }
-        .metric-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0; white-space: nowrap; line-height: 1.2; }
-        .metric-value { font-weight: 600; color: var(--text-main); font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-        
-        .main-val { grid-column: span 2; margin-bottom: 0.25rem; }
-        .main-val-container { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;}
-        .highlight { font-weight: 800; font-size: 1.1rem; color: var(--primary); }
-        .gain-badge { font-size: 0.75rem; font-weight: 700; color: var(--success); }
-        
-        .card.percent .highlight { color: var(--success); }
-        .card.fixed .highlight { color: var(--accent-purple); }
-        .card.regular .highlight { color: var(--secondary); }
-        .card.lumpsum .highlight { color: var(--accent-orange); }
-
-        .met-year { color: var(--success); font-weight: 700; }
-        .missed-year { color: var(--danger); font-size: 0.7rem; }
-
-        /* --- Table Section (Flexbox Auto-fit) --- */
-        .table-wrapper {
-            background: var(--bg-panel); border-radius: var(--radius);
-            border: 1px solid var(--border); box-shadow: var(--shadow);
-            flex: 1; /* Fills remaining vertical space */
-            display: flex; flex-direction: column;
-            overflow: hidden;
-            min-height: 0;
-        }
-
-        .table-header-title {
-            padding: 0.5rem 0.75rem; font-weight: 700; font-size: 0.75rem;
-            border-bottom: 1px solid var(--border); background: var(--bg-app);
-            color: var(--text-main); flex-shrink: 0;
-        }
-
-        .auto-size-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: var(--bg-panel);
-        }
-
-        .flex-table {
-            display: flex; flex-direction: column;
-            height: 100%; width: 100%; font-size: 0.75rem;
-        }
-
-        .flex-thead {
-            flex-shrink: 0; background: var(--bg-app); border-bottom: 1px solid var(--border);
-        }
-
-        .flex-row { display: flex; width: 100%; align-items: center; }
-
-        .flex-tbody {
-            display: flex; flex-direction: column; flex: 1;
-            overflow: hidden; 
-        }
-
-        .flex-tbody .flex-row { flex: 1; min-height: 0; }
-
-        .flex-cell {
-            flex: 1; padding: 0 0.4rem; text-align: right;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            color: var(--text-main); display: flex; align-items: center; justify-content: flex-end;
-            height: 100%; font-variant-numeric: tabular-nums;
-            border-bottom: 1px solid rgba(100, 116, 139, 0.1); 
-        }
-        
-        .w-yr { 
-            width: 32px; flex: none; justify-content: center; 
-            font-weight: 700; border-right: 1px solid var(--border); 
-            background: var(--bg-app); color: var(--text-muted); 
-        }
-        
-        /* Modified Flex Groups for 4 Columns */
-        .group-reg { flex: 4; background-color: var(--tint-reg); display: flex; height: 100%; }
-        .group-fix { flex: 4; background-color: var(--tint-fix); display: flex; border-left: 1px solid var(--border); height: 100%; }
-        .group-per { flex: 4; background-color: var(--tint-per); display: flex; border-left: 1px solid var(--border); height: 100%; }
-        /* Lumpsum stays 3 columns */
-        .group-lum { flex: 3; background-color: var(--tint-lum); display: flex; border-left: 1px solid var(--border); height: 100%; }
-
-        .flex-thead .flex-row { height: 28px; } 
-        .flex-thead .flex-cell { font-weight: 600; color: var(--text-muted); font-size: 0.7rem; justify-content: center; border-bottom: none; }
-        
-        /* Revised Cell Widths for 4-Col Layout */
-        .c-val { flex: 1.4; font-weight: 600; }
-        .c-tinv { flex: 1.2; color: var(--text-muted); font-size: 0.7rem; } /* New Total Inv */
-        .c-inv { flex: 1; color: var(--text-muted); font-size: 0.7rem; } /* Yearly Inv */
-        .c-pct { flex: 0.9; color: var(--text-muted); font-size: 0.7rem; }
-
-        .col-reg { color: var(--secondary); }
-        .col-fix { color: var(--accent-purple); }
-        .col-per { color: var(--success); }
-        .col-lum { color: var(--accent-orange); }
-
-        .group-lum .flex-cell:last-child { padding-right: 1rem; }
-
-        /* Theme Toggle */
-        .theme-toggle-label { position: relative; display: inline-block; width: 32px; height: 18px; }
-        .theme-toggle-label input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(14px); }
-
-        /* --- RESPONSIVE DESIGN --- */
-        
-        /* Tablet Portrait (Vertical Layout) */
-        @media (max-width: 1024px) {
-            .summary-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        /* Mobile (Full Stack) */
-        @media (max-width: 768px) {
-            body { 
-                overflow: auto; /* Enable Scroll for mobile */
-                height: auto;
-                font-size: 14px; /* Larger font for readability */
-            }
-            .dashboard-container { 
-                display: flex; 
-                flex-direction: column; 
-                height: auto; 
-                overflow: visible;
-            }
-            .sidebar { 
-                height: auto; 
-                border-right: none; 
-                border-bottom: 1px solid var(--border);
-                overflow: visible;
-            }
-            .sidebar-content { padding: 1rem; }
-            .sidebar-footer { border-top: 1px solid var(--border); }
-            
-            .main-panel { 
-                height: auto; 
-                padding: 1rem;
-                overflow: visible;
-            }
-            
-            .summary-grid { 
-                grid-template-columns: 1fr; /* Stack cards */
-                gap: 1rem;
-            }
-            
-            .table-wrapper { 
-                height: 600px; /* Fixed height for table scrolling */
-                margin-bottom: 2rem;
-            }
-            
-            /* Table Adjustments for Mobile */
-            .flex-tbody { overflow-y: auto; display: block; } 
-            .flex-tbody .flex-row { height: 40px; flex: none; }
-            .flex-thead { position: sticky; top: 0; z-index: 10; }
-            
-            /* Simplify table on mobile if needed */
-            .c-tinv, .c-inv, .c-pct { display: none; } /* Show only value on tiny screens */
-            .flex-cell { font-size: 0.85rem; }
-            .c-val { flex: 1; text-align: center; }
-            .group-reg, .group-fix, .group-per, .group-lum { flex: 1; justify-content: center; }
-        }
-
-        /* Tiny Phone Adjustment to show minimal data */
-        @media (min-width: 480px) and (max-width: 768px) {
-             .c-tinv { display: flex; } /* Show Total Inv on larger phones */
-        }
-    </style>
+    /* --- Responsive --- */
+    @media (max-width: 1024px) {
+      body { height: auto; overflow-y: auto; }
+      .dashboard-body { flex-direction: column; overflow: visible; height: auto; }
+      .left-panel { overflow: visible; }
+      .right-panel { width: 100%; height: 500px; flex-shrink: 0; }
+      .asset-grid-custom, .market-split, .row-3-split { grid-template-columns: 1fr 1fr; gap: 1rem; min-height: 250px; }
+      .asset-grid-custom .asset-box:nth-child(4), .market-split .asset-box:nth-child(4), .row-3-split .asset-box:nth-child(4) { grid-column: span 2; }
+      .brand-area { flex-wrap: wrap; }
+      .user-name { margin-left: 0; padding-left: 0; border-left: none; }
+    }
+    @media (max-width: 768px) {
+      .asset-grid-custom, .market-split, .row-3-split { grid-template-columns: 1fr; }
+      .asset-grid-custom .asset-box:nth-child(4), .market-split .asset-box:nth-child(4), .row-3-split .asset-box:nth-child(4) { grid-column: span 1; }
+      .crypto-split-container, .global-stocks-grid, .stocks-grid-3col { grid-template-columns: 1fr; gap: 1rem; }
+      .right-panel { height: 400px; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h1>Wealth Strategy Analyzer</h1>
-                <label class="theme-toggle-label">
-                    <input type="checkbox" id="themeToggle">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            
-            <div class="sidebar-content">
-                <form id="sipForm">
-                    <div class="section-title" style="margin-top:0">Monthly Investment</div>
-                    <div class="input-row">
-                        <div class="input-group">
-                            <label>Amount (₹)</label>
-                            <input type="number" id="initialSip" value="7000" min="500" max="100000" step="500">
-                        </div>
-                        <div class="input-group">
-                            <label>Lumpsum (₹)</label>
-                            <input type="number" id="lumpsumAmount" value="500000" min="0" max="100000000" step="5000">
-                        </div>
-                    </div>
-                    
-                    <div class="section-title">Investment Profile</div>
-                    <div class="input-row">
-                        <div class="input-group">
-                            <label>Years</label>
-                            <input type="number" id="duration" value="30" max="40" min="1">
-                        </div>
-                        <div class="input-group">
-                            <label>Return %</label>
-                            <input type="number" id="returnRate" value="24" max="30">
-                        </div>
-                    </div>
-                    
-                    <div class="scenario-chips">
-                        <div class="chip" data-rate="12">12%</div>
-                        <div class="chip active" data-rate="24">24%</div>
-                        <div class="chip" data-rate="30">30%</div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>Goal Target (Cr)</label>
-                        <input type="number" id="goalAmount" value="10" step="0.5">
-                    </div>
-
-                    <div class="section-title">Top-Up Configuration</div>
-                    <div class="input-row">
-                        <div class="input-group">
-                            <label>Top-Up (₹)</label>
-                            <input type="number" id="stepUpAmount" value="1000" step="500">
-                        </div>
-                         <div class="input-group">
-                            <label>Freq.</label>
-                            <select id="stepUpFrequency">
-                                <option value="6">Half-Yr</option>
-                                <option value="12" selected>Yearly</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>% Step-Up</label>
-                        <input type="number" id="stepUpPercentage" value="15" max="24">
-                    </div>
-                    <button type="button" id="resetBtn" class="reset-btn">Reset Defaults</button>
-                </form>
-            </div>
-
-            <!-- Strategy DNA (Visual Comparison) -->
-            <div class="sidebar-footer">
-                <div class="dna-panel">
-                    <div class="dna-title">
-                        <span>Strategy DNA</span>
-                        <span style="opacity:0.6; font-weight:400">Wealth Potential</span>
-                    </div>
-                    
-                    <div class="dna-row">
-                        <div class="dna-label"><span>Regular SIP</span></div>
-                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-reg" id="bar-reg"></div></div>
-                    </div>
-                    <div class="dna-row">
-                        <div class="dna-label"><span>Fixed Top-Up</span></div>
-                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-fix" id="bar-fix"></div></div>
-                    </div>
-                    <div class="dna-row">
-                        <div class="dna-label"><span>% Step-Up</span></div>
-                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-per" id="bar-per"></div></div>
-                    </div>
-                    <div class="dna-row">
-                        <div class="dna-label"><span>Lumpsum</span></div>
-                        <div class="dna-bar-bg"><div class="dna-bar-fill fill-lum" id="bar-lum"></div></div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Panel -->
-        <main class="main-panel">
-            
-            <!-- Cards Section -->
-            <div class="summary-grid">
-                <!-- Regular SIP Card -->
-                <div class="card regular">
-                    <div class="card-header">
-                        <h3>Regular SIP</h3>
-                        <span class="badge" id="badge-regular">Regular</span>
-                    </div>
-                    <div class="card-metrics">
-                        <div class="metric-item main-val">
-                            <span class="metric-label">Final Value</span>
-                            <div class="main-val-container">
-                                <span class="metric-value highlight" id="summary-value-regular">₹0</span>
-                            </div>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Invested</span>
-                            <span class="metric-value" id="summary-invest-regular">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Returns</span>
-                            <span class="metric-value" id="summary-returns-regular">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">CAGR</span>
-                            <span class="metric-value" id="summary-cagr-regular">0%</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Multiplier</span>
-                            <span class="metric-value" id="summary-multiplier-regular">0x</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">ROI</span>
-                            <span class="metric-value" id="summary-roi-regular">0%</span>
-                        </div>
-                         <div class="metric-item">
-                            <span class="metric-label">Goal Met</span>
-                            <span class="metric-value" id="summary-goal-regular">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Fixed Top-Up Card -->
-                <div class="card fixed">
-                    <div class="card-header">
-                        <h3>Fixed Top-Up</h3>
-                        <span class="badge" id="badge-fixed">Fixed</span>
-                    </div>
-                    <div class="card-metrics">
-                        <div class="metric-item main-val">
-                            <span class="metric-label">Final Value</span>
-                            <div class="main-val-container">
-                                <span class="metric-value highlight" id="summary-value-fixed">₹0</span>
-                                <span class="gain-badge" id="summary-gain-fixed"></span>
-                            </div>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Invested</span>
-                            <span class="metric-value" id="summary-invest-fixed">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Returns</span>
-                            <span class="metric-value" id="summary-returns-fixed">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">CAGR</span>
-                            <span class="metric-value" id="summary-cagr-fixed">0%</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Multiplier</span>
-                            <span class="metric-value" id="summary-multiplier-fixed">0x</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">ROI</span>
-                            <span class="metric-value" id="summary-roi-fixed">0%</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Goal Met</span>
-                            <span class="metric-value" id="summary-goal-fixed">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Percent Step-Up Card -->
-                <div class="card percent">
-                    <div class="card-header">
-                        <h3>% Step-Up</h3>
-                        <span class="badge" id="badge-percent">Step-Up</span>
-                    </div>
-                    <div class="card-metrics">
-                        <div class="metric-item main-val">
-                            <span class="metric-label">Final Value</span>
-                            <div class="main-val-container">
-                                <span class="metric-value highlight" id="summary-value-percent">₹0</span>
-                                <span class="gain-badge" id="summary-gain-percent"></span>
-                            </div>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Invested</span>
-                            <span class="metric-value" id="summary-invest-percent">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Returns</span>
-                            <span class="metric-value" id="summary-returns-percent">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">CAGR</span>
-                            <span class="metric-value" id="summary-cagr-percent">0%</span>
-                        </div>
-                         <div class="metric-item">
-                            <span class="metric-label">Multiplier</span>
-                            <span class="metric-value" id="summary-multiplier-percent">0x</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">ROI</span>
-                            <span class="metric-value" id="summary-roi-percent">0%</span>
-                        </div>
-                         <div class="metric-item">
-                            <span class="metric-label">Goal Met</span>
-                            <span class="metric-value" id="summary-goal-percent">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Lumpsum Card -->
-                <div class="card lumpsum">
-                    <div class="card-header">
-                        <h3>Lumpsum</h3>
-                        <span class="badge" id="badge-lumpsum">Lumpsum</span>
-                    </div>
-                    <div class="card-metrics">
-                        <div class="metric-item main-val">
-                            <span class="metric-label">Final Value</span>
-                             <div class="main-val-container">
-                                <span class="metric-value highlight" id="summary-value-lumpsum">₹0</span>
-                             </div>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Invested</span>
-                            <span class="metric-value" id="summary-invest-lumpsum">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Returns</span>
-                            <span class="metric-value" id="summary-returns-lumpsum">₹0</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">CAGR</span>
-                            <span class="metric-value" id="summary-cagr-lumpsum">0%</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">Multiplier</span>
-                            <span class="metric-value" id="summary-multiplier-lumpsum">0x</span>
-                        </div>
-                        <div class="metric-item">
-                            <span class="metric-label">ROI</span>
-                            <span class="metric-value" id="summary-roi-lumpsum">0%</span>
-                        </div>
-                         <div class="metric-item">
-                            <span class="metric-label">Goal Met</span>
-                            <span class="metric-value" id="summary-goal-lumpsum">-</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Table Section -->
-            <div class="table-wrapper">
-                <div class="table-header-title">Yearly Projection (Auto-fits Screen)</div>
-                <div class="auto-size-container">
-                    <div class="flex-table super-dense">
-                        <!-- Table Header -->
-                        <div class="flex-thead">
-                            <div class="flex-row">
-                                <div class="flex-cell w-yr">Yr</div>
-                                <div class="group-reg"><div class="flex-cell" style="flex:1; justify-content:center;">Regular SIP</div></div>
-                                <div class="group-fix"><div class="flex-cell" style="flex:1; justify-content:center;">Fixed Top-Up</div></div>
-                                <div class="group-per"><div class="flex-cell" style="flex:1; justify-content:center;">% Step-Up</div></div>
-                                <div class="group-lum"><div class="flex-cell" style="flex:1; justify-content:center;">Lumpsum</div></div>
-                            </div>
-                            <div class="flex-row" style="border-top:1px solid rgba(0,0,0,0.05)">
-                                <div class="flex-cell w-yr"></div>
-                                <!-- Regular -->
-                                <div class="group-reg">
-                                    <div class="flex-cell c-val">Value</div>
-                                    <div class="flex-cell c-tinv">T.Inv</div>
-                                    <div class="flex-cell c-inv">Yr.Inv</div>
-                                    <div class="flex-cell c-pct">%</div>
-                                </div>
-                                <!-- Fixed -->
-                                <div class="group-fix">
-                                    <div class="flex-cell c-val">Value</div>
-                                    <div class="flex-cell c-tinv">T.Inv</div>
-                                    <div class="flex-cell c-inv">Yr.Inv</div>
-                                    <div class="flex-cell c-pct">%</div>
-                                </div>
-                                <!-- Percent -->
-                                <div class="group-per">
-                                    <div class="flex-cell c-val">Value</div>
-                                    <div class="flex-cell c-tinv">T.Inv</div>
-                                    <div class="flex-cell c-inv">Yr.Inv</div>
-                                    <div class="flex-cell c-pct">%</div>
-                                </div>
-                                <!-- Lumpsum -->
-                                <div class="group-lum">
-                                    <div class="flex-cell c-val">Value</div>
-                                    <div class="flex-cell c-inv">T.Inv</div>
-                                    <div class="flex-cell c-pct">%</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Table Body -->
-                        <div class="flex-tbody" id="resultsTableBody">
-                            <!-- Rows injected by JS -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="dashboard-header">
+      <div class="brand-area">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--alpha-green)">
+          <path d="M22 7 L13.5 15.5 L8.5 10.5 L2 17" /><path d="M16 7 L22 7 L22 13" />
+        </svg>
+        <h1 class="page-title">Global Market Pulse</h1>
+        <span class="user-name">Mithilesh Reddy's Dashboard</span>      
+      </div>
+      <div class="system-status">
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle Theme">
+          <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg id="icon-sun" style="display:none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <div class="reload-timer" id="countdown">Auto-refresh: 60s</div>
+        <div class="last-updated"><span class="live-dot"></span><span id="update-time">Syncing...</span></div>
+      </div>
     </div>
 
-    <script>
-        // --- Elements ---
-        const inputs = {
-            initialSip: document.getElementById('initialSip'),
-            lumpsumAmount: document.getElementById('lumpsumAmount'),
-            duration: document.getElementById('duration'),
-            returnRate: document.getElementById('returnRate'),
-            goalAmount: document.getElementById('goalAmount'),
-            stepUpAmount: document.getElementById('stepUpAmount'),
-            stepUpFrequency: document.getElementById('stepUpFrequency'),
-            stepUpPercentage: document.getElementById('stepUpPercentage')
-        };
+    <!-- MAIN BODY -->
+    <div class="dashboard-body">
+      
+      <!-- LEFT PANEL (MARKETS) -->
+      <div class="left-panel">
         
-        const form = document.getElementById('sipForm');
-        const themeToggle = document.getElementById('themeToggle');
-        const chips = document.querySelectorAll('.chip');
-        const resetBtn = document.getElementById('resetBtn');
-        const tableBody = document.getElementById('resultsTableBody');
+        <!-- ROW 1 -->
+        <div class="asset-grid-custom">
+          <!-- Forex -->
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Forex</span></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 USD/INR</span><div style="text-align:right"><span class="u-price" id="p-usdinr">--</span><span class="u-change" id="c-usdinr">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇪🇺 EUR/USD</span><div style="text-align:right"><span class="u-price" id="p-eurusd">--</span><span class="u-change" id="c-eurusd">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇬🇧 GBP/INR</span><div style="text-align:right"><span class="u-price" id="p-gbpinr">--</span><span class="u-change" id="c-gbpinr">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇯🇵 JPY/INR</span><div style="text-align:right"><span class="u-price" id="p-jpyinr">--</span><span class="u-change" id="c-jpyinr">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇦🇺 AUD/USD</span><div style="text-align:right"><span class="u-price" id="p-audusd">--</span><span class="u-change" id="c-audusd">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">💵 DXY Index</span><div style="text-align:right"><span class="u-price" id="p-dxy">--</span><span class="u-change" id="c-dxy">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇨🇳 USD/CNY</span><div style="text-align:right"><span class="u-price" id="p-usdcny">--</span><span class="u-change" id="c-usdcny">--</span></div></div>
+          </div>
 
-        const DEFAULTS = {
-            initialSip: 7000, lumpsumAmount: 500000, duration: 30, returnRate: 24,
-            stepUpAmount: 1000, stepUpFrequency: 12, stepUpPercentage: 15, goalAmount: 10
-        };
+          <!-- Commodities -->
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Commodities</span></div>
+            <div class="asset-row"><span class="u-symbol">🌕 Gold <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-gold">--</span><span class="u-change" id="c-gold">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">⚪ Silver <span class="u-sub">Spot</span></span><div style="text-align:right"><span class="u-price" id="p-silver">--</span><span class="u-change" id="c-silver">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🛢️ WTI Crude</span><div style="text-align:right"><span class="u-price" id="p-wti">--</span><span class="u-change" id="c-wti">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🛢️ Brent Oil</span><div style="text-align:right"><span class="u-price" id="p-brent">--</span><span class="u-change" id="c-brent">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🥉 Copper</span><div style="text-align:right"><span class="u-price" id="p-copper">--</span><span class="u-change" id="c-copper">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🔥 Nat Gas</span><div style="text-align:right"><span class="u-price" id="p-ng">--</span><span class="u-change" id="c-ng">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">⚙️ Aluminum</span><div style="text-align:right"><span class="u-price" id="p-ali">--</span><span class="u-change" id="c-ali">--</span></div></div>
+          </div>
 
-        // --- Logic ---
-        function calculate() {
-            let p = parseFloat(inputs.initialSip.value) || 0;
-            let lumpsum = parseFloat(inputs.lumpsumAmount.value) || 0;
-            let n = parseInt(inputs.duration.value) || 0;
-            let r = parseFloat(inputs.returnRate.value) || 0;
-            let goalCr = parseFloat(inputs.goalAmount.value) || 0;
-            let sAmt = parseFloat(inputs.stepUpAmount.value) || 0;
-            let sFreq = parseInt(inputs.stepUpFrequency.value) || 12;
-            let sPerc = parseFloat(inputs.stepUpPercentage.value) || 0;
+          <!-- Bonds & VIX -->
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Global Bonds</span></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 US 30Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us30">--</span><span class="u-change" id="c-us30">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 US 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us10">--</span><span class="u-change" id="c-us10">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 US 5Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us5">--</span><span class="u-change" id="c-us5">--</span></div></div>
+            <div style="height: 0.5rem;"></div>
+            <div class="asset-header"><span class="asset-title">Volatility (VIX)</span></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 US VIX</span><div style="text-align:right"><span class="u-price" id="p-vix">--</span><span class="u-change" id="c-vix">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇮🇳 Nifty VIX</span><div style="text-align:right"><span class="u-price" id="p-invix">--</span><span class="u-change" id="c-invix">--</span></div></div>
+          </div>
 
-            if (p > 100000) { inputs.initialSip.value = 100000; p = 100000; }
-            if (lumpsum > 100000000) { inputs.lumpsumAmount.value = 100000000; lumpsum = 100000000; }
-            if (n > 40) { inputs.duration.value = 40; n = 40; }
-            if (r > 30) { inputs.returnRate.value = 30; r = 30; }
-            if (sPerc > 24) { inputs.stepUpPercentage.value = 24; sPerc = 24; }
-            
-            const goal = goalCr * 10000000;
-            const monthlyRate = r / 100 / 12;
-            const months = n * 12;
+          <!-- Crypto (Restored to 3 Columns) -->
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Digital Assets</span></div>
+            <div class="crypto-split-container">
+              <div class="col-vertical" id="crypto-col-1"></div>
+              <div class="col-vertical" id="crypto-col-2"></div>
+              <div class="col-vertical" id="crypto-col-3"></div>
+            </div>
+          </div>
+        </div>
 
-            let regVal = 0, regInv = 0;
-            let fixVal = 0, fixInv = 0, fixCurSip = p;
-            let perVal = 0, perInv = 0, perCurSip = p;
-            let lumVal = lumpsum; // Start with principal
+        <!-- ROW 2 -->
+        <div class="market-split">
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Global Markets</span></div>
+            <div id="global-indices-body" class="col-vertical"></div>
+          </div>
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Indian Markets</span></div>
+            <div id="nse-indices-body-1" class="col-vertical"></div>
+          </div>
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">NSE Sector Market</span></div>
+            <div id="nse-indices-body-2" class="col-vertical"></div>
+          </div>
+          
+          <!-- Global Stocks (Restored to 3 Columns) -->
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Global Stocks (Mega Cap)</span></div>
+            <div class="global-stocks-grid">
+               <div id="global-stocks-body-1" class="col-vertical"></div>
+               <div id="global-stocks-body-2" class="col-vertical"></div>
+               <div id="global-stocks-body-3" class="col-vertical"></div>
+            </div>
+          </div>
+        </div>
 
-            // Annual Investment Trackers
-            let regYearlyInv = 0;
-            let fixYearlyInv = 0;
-            let perYearlyInv = 0;
+        <!-- ROW 3 -->
+        <div class="row-3-split">
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Capital Markets</span></div>
+            <div id="sector-1-body" class="col-vertical"></div>
+          </div>
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Auto Sector</span></div>
+            <div id="sector-2-body" class="col-vertical"></div>
+          </div>
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">IT Sector</span></div>
+            <div id="sector-3-body" class="col-vertical"></div>
+          </div>
 
-            let goalYear = { reg: null, fix: null, per: null, lum: null };
-            let rows = [];
+          <!-- Stocks Watch (Restored to 3 Columns) -->
+          <div class="asset-box">
+            <div class="asset-header"><span class="asset-title">Stocks Watch</span></div>
+            <div class="stocks-grid-3col">
+              <div class="col-vertical" id="stocks-col-1"></div>
+              <div class="col-vertical" id="stocks-col-2"></div>
+              <div class="col-vertical" id="stocks-col-3"></div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
 
-            for (let m = 1; m <= months; m++) {
-                // Returns (Invest at start of month)
-                regVal = (regVal + p) * (1 + monthlyRate);
-                regInv += p;
-                regYearlyInv += p;
+      <!-- RIGHT PANEL (FULL HEIGHT NEWS) -->
+      <div class="right-panel">
+        <div class="asset-box">
+          <div class="asset-header">
+            <span class="asset-title">News Headlines</span>
+            <span style="font-size:0.65rem; color:var(--alpha-green); font-weight:600; letter-spacing:1px; display:flex; align-items:center; gap:4px;">
+              <span class="live-dot" style="width:5px; height:5px;"></span> LIVE
+            </span>
+          </div>
+          <div class="news-container" id="unified-news-body">
+              <div style="text-align:center; padding: 20px; color: var(--tertiary); font-size: 0.8rem;">Aggregating live updates...</div>
+          </div>
+        </div>
+      </div>
 
-                fixVal = (fixVal + fixCurSip) * (1 + monthlyRate);
-                fixInv += fixCurSip;
-                fixYearlyInv += fixCurSip;
+    </div>
+  </div>
 
-                perVal = (perVal + perCurSip) * (1 + monthlyRate);
-                perInv += perCurSip;
-                perYearlyInv += perCurSip;
-                
-                // Lumpsum Growth
-                lumVal = lumVal * (1 + monthlyRate);
+  <script>
+    const REFRESH_INTERVAL = 60;
+    let timeLeft = REFRESH_INTERVAL;
+    const marketCache = {};
 
-                // Step up logic for NEXT month
-                if (m < months) {
-                    if (m % sFreq === 0) {
-                        fixCurSip += sAmt;
-                    }
-                    if (m % 12 === 0) {
-                        perCurSip *= (1 + sPerc / 100);
-                    }
-                }
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      document.getElementById('icon-moon').style.display = isLight ? 'none' : 'block';
+      document.getElementById('icon-sun').style.display = isLight ? 'block' : 'none';
+    }
 
-                if (m % 12 === 0) {
-                    const yr = m / 12;
-                    if (!goalYear.reg && regVal >= goal) goalYear.reg = yr;
-                    if (!goalYear.fix && fixVal >= goal) goalYear.fix = yr;
-                    if (!goalYear.per && perVal >= goal) goalYear.per = yr;
-                    if (!goalYear.lum && lumVal >= goal) goalYear.lum = yr;
+    // --- CONFIG: Stock Lists ---
+    // Restored 21 Stocks to fill 3 Columns
+    const STOCK_LIST_MAIN = [
+      { sym: "RELIANCE.NS", name: "🇮🇳 Reliance" }, { sym: "BHARTIARTL.NS", name: "🇮🇳 Airtel" },
+      { sym: "TATAELXSI.NS", name: "🇮🇳 Tata Elxsi" }, { sym: "JWL.NS", name: "🇮🇳 Jupiter Wag" },
+      { sym: "MOSCHIP.NS", name: "🇮🇳 Moschip" },  { sym: "IDEAFORGE.NS", name: "🇮🇳 ideaForge" }, { sym: "GICRE.NS", name: "🇮🇳 GIC Re" },
+      
+      { sym: "AUBANK.NS", name: "🇮🇳 AU Bank" }, { sym: "VBL.NS", name: "🇮🇳 Varun Bev" },
+      { sym: "TITAGARH.NS", name: "🇮🇳 Titagarh" }, { sym: "WONDERLA.NS", name: "🇮🇳 Wonderla" },
+      { sym: "HERITGFOOD.NS", name: "🇮🇳 Heritage" },  { sym: "WAAREEENER.NS", name: "🇮🇳 Waaree En" }, { sym: "TRENT.NS", name: "🇮🇳 Trent" },
+      
+      { sym: "KAYNES.NS", name: "🇮🇳 Kaynes Tech" }, { sym: "NEWGEN.NS", name: "🇮🇳 Newgen Soft" },
+      { sym: "MAZDOCK.NS", name: "🇮🇳 Mazagon" }, { sym: "COCHINSHIP.NS", name: "🇮🇳 Cochin Ship" }, 
+      { sym: "AMBER.NS", name: "🇮🇳 Amber Ent" }, { sym: "SIEMENS.NS", name: "🇮🇳 Siemens" }, { sym: "APARINDS.NS", name: "🇮🇳 Apar Inds" }
+    ];
 
-                    rows.push({
-                        yr,
-                        reg: { val: regVal, cumInv: regInv, yrInv: regYearlyInv },
-                        fix: { val: fixVal, cumInv: fixInv, yrInv: fixYearlyInv },
-                        per: { val: perVal, cumInv: perInv, yrInv: perYearlyInv },
-                        lum: { val: lumVal, cumInv: lumpsum } // Lumpsum doesn't have yearly inv
-                    });
+    const STOCK_LIST_CAPITAL = [
+      { sym: "GROWW.NS", name: "🇮🇳 Groww" }, { sym: "ANGELONE.NS", name: "🇮🇳 Angel One" },
+      { sym: "CDSL.NS", name: "🇮🇳 CDSL" }, { sym: "BSE.NS", name: "🇮🇳 BSE" },
+      { sym: "HDFCAMC.NS", name: "🇮🇳 HDFC AMC" }, { sym: "NAM-INDIA.NS", name: "🇮🇳 Nippon Life" }, { sym: "CAMS.NS", name: "🇮🇳 CAMS" }
+    ];
 
-                    // Reset Annual Counters
-                    regYearlyInv = 0;
-                    fixYearlyInv = 0;
-                    perYearlyInv = 0;
-                }
-            }
+    const STOCK_LIST_AUTO = [
+      { sym: "MARUTI.NS", name: "🇮🇳 Maruti" }, { sym: "TMPV.NS", name: "🇮🇳 Tata Motors PV" },
+      { sym: "M&M.NS", name: "🇮🇳 M&M" }, { sym: "BAJAJ-AUTO.NS", name: "🇮🇳 Bajaj Auto" },
+      { sym: "EICHERMOT.NS", name: "🇮🇳 Eicher" }, { sym: "HEROMOTOCO.NS", name: "🇮🇳 Hero Moto" }, { sym: "TVSMOTOR.NS", name: "🇮🇳 TVS Motor" }
+    ];
 
-            updateUI({ regVal, regInv, fixVal, fixInv, perVal, perInv, lumVal, lumInv: lumpsum }, goalYear, rows, n);
-            updateChips(r);
+    const STOCK_LIST_IT = [
+      { sym: "TCS.NS", name: "🇮🇳 TCS" }, { sym: "INFY.NS", name: "🇮🇳 Infosys" },
+      { sym: "HCLTECH.NS", name: "🇮🇳 HCL Tech" }, { sym: "WIPRO.NS", name: "🇮🇳 Wipro" },
+      { sym: "TECHM.NS", name: "🇮🇳 Tech M" }, { sym: "LTIM.NS", name: "🇮🇳 LTIM" }, { sym: "PERSISTENT.NS", name: "🇮🇳 Persistent" }
+    ];
+
+    async function updateMarketData() {
+      timeLeft = REFRESH_INTERVAL;
+      const now = new Date();
+      document.getElementById('update-time').innerText = `🇮🇳 ${now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })} • ${now.toLocaleTimeString()}`;
+      
+      fetchForex();
+      fetchBondsAndVix();
+      fetchCrypto();
+      fetchRealCommodities();
+      fetchRealIndices();
+      fetchStocks();
+      fetchNewsData(); 
+    }
+
+    // --- STOCKS FETCHER ---
+    async function fetchStocks() {
+      const allLists = [...STOCK_LIST_MAIN, ...STOCK_LIST_CAPITAL, ...STOCK_LIST_AUTO, ...STOCK_LIST_IT];
+      const symbols = allLists.map(s => s.sym);
+      const data = await fetchYahooData(symbols);
+      if (data && Object.keys(data).length > 0) Object.assign(marketCache, data);
+
+      renderIndicesList('sector-1-body', STOCK_LIST_CAPITAL, '₹');
+      renderIndicesList('sector-2-body', STOCK_LIST_AUTO, '₹');
+      renderIndicesList('sector-3-body', STOCK_LIST_IT, '₹');
+
+      let colsHtml = ['', '', ''];
+      STOCK_LIST_MAIN.forEach((stock, index) => {
+          const d = marketCache[stock.sym];
+          const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
+          const chg = d ? d.chg : 0;
+          const color = chg >= 0 ? "text-green" : "text-red";
+          const sign = chg > 0 ? "+" : "";
+
+          const rowHtml = `
+            <div class="asset-row">
+              <span class="u-symbol">${stock.name}</span>
+              <div style="text-align:right">
+                <span class="u-price">₹${price}</span>
+                <span class="u-change ${color}">${d ? sign + chg.toFixed(2) + "%" : "--"}</span>
+              </div>
+            </div>`;
+          
+          if (index < 7) colsHtml[0] += rowHtml;
+          else if (index < 14) colsHtml[1] += rowHtml;
+          else colsHtml[2] += rowHtml;
+      });
+
+      document.getElementById('stocks-col-1').innerHTML = colsHtml[0];
+      document.getElementById('stocks-col-2').innerHTML = colsHtml[1];
+      document.getElementById('stocks-col-3').innerHTML = colsHtml[2];
+    }
+
+    // --- BONDS & VIX ---
+    async function fetchBondsAndVix() {
+        const bondSyms = ["^TYX", "^TNX", "^FVX", "^VIX", "^INDIAVIX"];
+        const data = await fetchYahooData(bondSyms);
+        if(data) Object.assign(marketCache, data);
+        
+        const bondMap = { "^TYX": "us30", "^TNX": "us10", "^FVX": "us5" };
+        for (const [sym, id] of Object.entries(bondMap)) {
+            const d = marketCache[sym];
+            if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '', '%', true); 
         }
 
-        function updateUI(finals, goals, rows, years) {
-            // Rank Strategies for Badges & DNA
-            const strategies = [
-                { id: 'regular', name: 'Regular', val: finals.regVal, bar: 'bar-reg' },
-                { id: 'fixed', name: 'Fixed', val: finals.fixVal, bar: 'bar-fix' },
-                { id: 'percent', name: 'Step-Up', val: finals.perVal, bar: 'bar-per' },
-                { id: 'lumpsum', name: 'Lumpsum', val: finals.lumVal, bar: 'bar-lum' }
-            ];
+        const vixMap = { "^VIX": "vix", "^INDIAVIX": "invix" };
+        for (const [sym, id] of Object.entries(vixMap)) {
+            const d = marketCache[sym];
+            if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '', '%', false); 
+        }
+    }
+
+    // --- INDICES & GLOBAL STOCKS ---
+    async function fetchRealIndices() {
+      const globalSyms = ["^GSPC", "^IXIC", "^DJI", "^N225", "^GDAXI", "^FTSE", "^HSI"];
+      
+      const gsSyms1 = ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA"];
+      const gsNames1 = ["🇺🇸 Apple", "🇺🇸 Microsoft", "🇺🇸 Nvidia", "🇺🇸 Google", "🇺🇸 Amazon", "🇺🇸 Meta", "🇺🇸 Tesla"];
+      
+      const gsSyms2 = ["AVGO", "NFLX", "ADBE", "COST", "PEP", "TSM", "ASML"];
+      const gsNames2 = ["🇺🇸 Broadcom", "🇺🇸 Netflix", "🇺🇸 Adobe", "🇺🇸 Costco", "🇺🇸 Pepsi", "🇹🇼 TSMC", "🇳🇱 ASML"];
+
+      const gsSyms3 = ["TM", "SONY", "LVMUY", "SAP", "AZN", "NVO", "SHEL"];
+      const gsNames3 = ["🇯🇵 Toyota", "🇯🇵 Sony", "🇫🇷 LVMH", "🇩🇪 SAP", "🇬🇧 AstraZeneca", "🇩🇰 Novo", "🇬🇧 Shell"];
+
+      const nseSyms1 = ["^NSEI", "^CNX100", "NIFTYMIDCAP150.NS", "NIFTYSMLCAP250.NS", "^CRSLDX", "NIFTY_MICROCAP250.NS", "NIFTY_TOTAL_MKT.NS"];
+      const nseSyms2 = ["^NSEBANK", "^CNXIT", "^CNXPHARMA", "^CNXREALTY", "^CNXFIN", "^CNXAUTO", "^CNXFMCG"];
+      
+      const allSyms = [...globalSyms, ...gsSyms1, ...gsSyms2, ...gsSyms3, ...nseSyms1, ...nseSyms2];
+      const data = await fetchYahooData(allSyms);
+      if(data) Object.assign(marketCache, data);
+
+      renderIndicesList('global-indices-body', [
+        { name: "🇺🇸 S&P 500", sym: "^GSPC" }, { name: "🇺🇸 Nasdaq 100", sym: "^IXIC" },
+        { name: "🇺🇸 Dow Jones", sym: "^DJI" }, { name: "🇯🇵 Nikkei 225", sym: "^N225" },
+        { name: "🇩🇪 DAX", sym: "^GDAXI" }, { name: "🇬🇧 FTSE 100", sym: "^FTSE" },
+        { name: "🇭🇰 Hang Seng", sym: "^HSI" }
+      ]);
+
+      renderIndicesList('global-stocks-body-1', gsSyms1.map((s, i) => ({name: gsNames1[i], sym: s})), '$');
+      renderIndicesList('global-stocks-body-2', gsSyms2.map((s, i) => ({name: gsNames2[i], sym: s})), '$');
+      renderIndicesList('global-stocks-body-3', gsSyms3.map((s, i) => ({name: gsNames3[i], sym: s})), '$');
+
+      renderIndicesList('nse-indices-body-1', [
+        { name: "🇮🇳 Nifty 50", sym: "^NSEI" }, { name: "🇮🇳 Nifty 100", sym: "^CNX100" },
+        { name: "🇮🇳 Midcap 150", sym: "NIFTYMIDCAP150.NS" }, { name: "🇮🇳 Smallcap 250", sym: "NIFTYSMLCAP250.NS" },
+        { name: "🇮🇳 Nifty 500", sym: "^CRSLDX" }, { name: "🇮🇳 Microcap 250", sym: "NIFTY_MICROCAP250.NS" },
+        { name: "🇮🇳 Total Mkt", sym: "NIFTY_TOTAL_MKT.NS" }
+      ]);
+
+      renderIndicesList('nse-indices-body-2', [
+        { name: "🏦 Nifty Bank", sym: "^NSEBANK" }, { name: "💻 Nifty IT", sym: "^CNXIT" },
+        { name: "💊 Nifty Pharma", sym: "^CNXPHARMA" }, { name: "🏗️ Nifty Realty", sym: "^CNXREALTY" },
+        { name: "💰 Fin Service", sym: "^CNXFIN" }, { name: "🚗 Nifty Auto", sym: "^CNXAUTO" },
+        { name: "🛒 Nifty FMCG", sym: "^CNXFMCG" }
+      ]);
+    }
+
+    function renderIndicesList(elementId, items, curr='') {
+      let html = '';
+      items.forEach(item => {
+        const d = marketCache[item.sym];
+        const price = d ? d.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : "---";
+        const chg = d ? d.chg : 0;
+        const color = chg >= 0 ? "text-green" : "text-red";
+        const sign = chg > 0 ? "+" : "";
+
+        html += `
+          <div class="asset-row">
+            <span class="u-symbol">${item.name}</span>
+            <div style="text-align:right">
+              <span class="u-price">${curr}${price}</span>
+              <span class="u-change ${color}">${d ? sign + chg.toFixed(2) + "%" : "--"}</span>
+            </div>
+          </div>`;
+      });
+      document.getElementById(elementId).innerHTML = html;
+    }
+
+    // --- CRYPTO MAP & RENDER ---
+    // Enforcing explicitly where MYST and DPR go (Column 2) replacing Shib/Ton
+    const cryptoLayout = [
+      ['bitcoin','ethereum','binancecoin','solana','ripple','dogecoin','cardano'], // Col 1
+      ['avalanche-2','polkadot','chainlink','litecoin','tron','deeper-network','mysterium'], // Col 2
+      ['bitcoin-cash','uniswap','near','aptos','arbitrum','stellar','cosmos'] // Col 3
+    ];
+
+    async function fetchCrypto() {
+        const allIds = cryptoLayout.flat().join(',');
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${allIds}&sparkline=false`);
+        const data = await res.json();
+        
+        if (!data || data.length === 0) return;
+        
+        const coinMap = {};
+        data.forEach(c => coinMap[c.id] = c);
+
+        for(let i=1; i<=3; i++) {
+            let colHtml = '';
+            cryptoLayout[i-1].forEach(id => {
+                const item = coinMap[id];
+                if(item) {
+                    const price = item.current_price;
+                    const chg = item.price_change_percentage_24h;
+                    const color = chg >= 0 ? "text-green" : "text-red";
+                    const sign = chg > 0 ? "+" : "";
+                    
+                    let pStr = "---";
+                    if (price) {
+                        if(price < 1) pStr = price.toFixed(4);
+                        else if(price > 1000) pStr = price.toLocaleString(undefined, {maximumFractionDigits: 0});
+                        else pStr = price.toLocaleString(undefined, {maximumFractionDigits: 2});
+                    }
+
+                    colHtml += `
+                    <div class="asset-row">
+                        <span class="u-symbol">
+                          <img src="${item.image}" alt=""> 
+                          ${item.name} <span class="u-sub">${item.symbol.toUpperCase()}</span>
+                        </span>
+                        <div style="text-align:right">
+                        <span class="u-price">$${pStr}</span>
+                        <span class="u-change ${color}">${sign}${chg ? chg.toFixed(2) + "%" : "--"}</span>
+                        </div>
+                    </div>`;
+                }
+            });
+            document.getElementById(`crypto-col-${i}`).innerHTML = colHtml;
+        }
+    }
+
+    // --- Forex/Cmdty ---
+    async function fetchForex() {
+      const forexSyms = ["INR=X", "EURUSD=X", "GBPINR=X", "JPYINR=X", "AUDUSD=X", "DX-Y.NYB", "CNY=X"];
+      const data = await fetchYahooData(forexSyms);
+      if(data) Object.assign(marketCache, data);
+
+      const map = {
+          "INR=X": { id: "usdinr", curr: "₹" }, "EURUSD=X": { id: "eurusd", curr: "$" },
+          "GBPINR=X": { id: "gbpinr", curr: "₹" }, "JPYINR=X": { id: "jpyinr", curr: "₹" },
+          "AUDUSD=X": { id: "audusd", curr: "$" }, "DX-Y.NYB": { id: "dxy", curr: ""  }, "CNY=X": { id: "usdcny", curr: "¥" }
+      };
+
+      for (const [sym, info] of Object.entries(map)) {
+          const d = marketCache[sym];
+          if(d) { updateUI(`p-${info.id}`, `c-${info.id}`, d.price, d.chg, info.curr); }
+      }
+    }
+
+    async function fetchRealCommodities() {
+      const symbols = ["GC=F", "SI=F", "CL=F", "BZ=F", "HG=F", "NG=F", "ALI=F"];
+      const data = await fetchYahooData(symbols);
+      if(data) Object.assign(marketCache, data);
+      
+      const map = { "GC=F": "gold", "SI=F": "silver", "CL=F": "wti", "BZ=F": "brent", "HG=F": "copper", "NG=F": "ng", "ALI=F": "ali" };
+      for (const [sym, id] of Object.entries(map)) {
+        const d = marketCache[sym];
+        if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '$');
+      }
+    }
+
+    // --- FULL COLUMN UNIFIED NEWS ENGINE ---
+    const analyzeImpact = (title) => {
+      const text = title.toLowerCase();
+      const noiseRegex = /\b(target price|buy rating|sell rating|q[1-4] results|q[1-4] earnings|dividend|ipo|stock to watch|shares rise|shares fall|profit jumps|profit falls|sensex surges|nifty dips)\b|\b(up|down|rises|falls|jumps|plunges|surges|dips) \d+%/i;
+      if (noiseRegex.test(text)) return -10;
+      return 0; 
+    };
+
+    const extractWords = (str) => str.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 3);
+
+    const isDuplicate = (title1, title2) => {
+      const w1 = extractWords(title1);
+      const w2 = extractWords(title2);
+      if (w1.length === 0 || w2.length === 0) return false;
+      const intersection = w1.filter(word => w2.includes(word));
+      return (intersection.length / Math.min(w1.length, w2.length)) > 0.6;
+    };
+
+    const cleanTitle = (title) => title.replace(/\s-\s[^-]+$/, '').trim();
+
+    const parseDate = (dateString) => {
+      if (!dateString) return new Date();
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dateString)) return new Date(dateString.replace(' ', 'T') + 'Z');
+      return new Date(dateString);
+    };
+
+    const getTimeAgo = (dateString) => {
+      if (!dateString) return '';
+      const pubDate = parseDate(dateString);
+      const diffInSeconds = Math.floor((new Date() - pubDate) / 1000);
+      
+      if (diffInSeconds < 0) return 'Just now'; 
+      if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+      const diffInMinutes = Math.floor(diffInSeconds / 60);
+      if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+      const diffInHours = Math.floor(diffInMinutes / 60);
+      if (diffInHours < 24) return `${diffInHours}h ago`;
+      return `${Math.floor(diffInHours / 24)}d ago`;
+    };
+
+    async function fetchNewsData() {
+        const globalSources = [
+            'https://feeds.bbci.co.uk/news/business/rss.xml',
+            'https://news.google.com/rss/search?q=source:reuters+AND+(economy+OR+world+OR+markets+OR+fed+OR+bank)&hl=en-US&gl=US&ceid=US:en',
+            'https://news.google.com/rss/search?q=source:bloomberg+AND+(economy+OR+world+OR+markets+OR+macro)&hl=en-US&gl=US&ceid=US:en'
+        ];
+        const indiaSources = [
+            'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms',
+            'https://www.business-standard.com/rss/economy-policy-102.rss',
+            'https://www.moneycontrol.com/rss/economy.xml'
+        ];
+
+        const fetchFeeds = async (sources, type) => {
+            const allItems = [];
+            const fetchPromises = sources.map(async (url) => {
+                try {
+                    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=10`;
+                    const response = await fetch(proxyUrl);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.status === 'ok') return data.items;
+                    } else {
+                        const fallbackResponse = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`);
+                        if (fallbackResponse.ok) {
+                            const textData = await fallbackResponse.text();
+                            const xml = new DOMParser().parseFromString(textData, "text/xml");
+                            return Array.from(xml.querySelectorAll("item")).map(item => ({
+                                title: item.querySelector("title")?.textContent || '',
+                                link: item.querySelector("link")?.textContent || '#',
+                                pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString()
+                            }));
+                        }
+                    }
+                } catch(e) { return []; }
+                return [];
+            });
+
+            const results = await Promise.all(fetchPromises);
+            results.forEach(items => allItems.push(...(items || [])));
+
+            return allItems.map(item => {
+                const cleanedTitle = cleanTitle(item.title);
+                return {
+                    title: cleanedTitle, link: item.link, pubDate: item.pubDate,
+                    impactScore: analyzeImpact(cleanedTitle), type: type
+                };
+            }).filter(item => item.impactScore >= 0);
+        };
+
+        try {
+            const globalNews = await fetchFeeds(globalSources, 'global');
+            const indiaNews = await fetchFeeds(indiaSources, 'india');
             
-            // Sort for badges
-            const sorted = [...strategies].sort((a, b) => b.val - a.val);
-            const maxVal = sorted[0].val;
+            // Combine and Sort
+            const combinedNews = [...globalNews, ...indiaNews].sort((a, b) => parseDate(b.pubDate) - parseDate(a.pubDate));
 
-            // Assign Badges
-            strategies.forEach((s) => {
-                const badgeEl = document.getElementById(`badge-${s.id}`);
-                const rank = sorted.findIndex(item => item.id === s.id);
-                let badgeClass = 'base';
-                let icon = '';
-                
-                if (rank === 0) { badgeClass = 'gold'; icon = '🥇'; }
-                else if (rank === 1) { badgeClass = 'silver'; icon = '🥈'; }
-                else if (rank === 2) { badgeClass = 'bronze'; icon = '🥉'; }
-                
-                badgeEl.className = `badge ${badgeClass}`;
-                badgeEl.textContent = `${icon} ${s.name}`;
-            });
+            // Deduplicate across unified list
+            const uniqueNews = [];
+            for (const item of combinedNews) {
+                if (!uniqueNews.some(u => isDuplicate(u.title, item.title))) uniqueNews.push(item);
+            }
 
-            // Update DNA Bars
-            strategies.forEach(s => {
-                const width = (s.val / maxVal) * 100;
-                document.getElementById(s.bar).style.width = `${width}%`;
-            });
-
-            // Update Cards
-            updateCard('regular', finals.regVal, finals.regInv, goals.reg, 0, years);
-            updateCard('fixed', finals.fixVal, finals.fixInv, goals.fix, finals.fixVal - finals.regVal, years);
-            updateCard('percent', finals.perVal, finals.perInv, goals.per, finals.perVal - finals.regVal, years);
-            updateCard('lumpsum', finals.lumVal, finals.lumInv, goals.lum, 0, years);
-
-            // Update Table
+            // Render Full Length List (showing 50 items for full height without scroll)
+            const finalNews = uniqueNews.slice(0, 50);
             let html = '';
-            rows.forEach(r => {
-                // Calculate Total ROI % based on CUMULATIVE Investment
-                const roiReg = r.reg.cumInv > 0 ? ((r.reg.val - r.reg.cumInv)/r.reg.cumInv * 100).toFixed(0) + '%' : '-';
-                const roiFix = r.fix.cumInv > 0 ? ((r.fix.val - r.fix.cumInv)/r.fix.cumInv * 100).toFixed(0) + '%' : '-';
-                const roiPer = r.per.cumInv > 0 ? ((r.per.val - r.per.cumInv)/r.per.cumInv * 100).toFixed(0) + '%' : '-';
-                const roiLum = r.lum.cumInv > 0 ? ((r.lum.val - r.lum.cumInv)/r.lum.cumInv * 100).toFixed(0) + '%' : '-';
-
-                html += `
-                <div class="flex-row">
-                    <div class="flex-cell w-yr">${r.yr}</div>
-                    
-                    <div class="group-reg">
-                        <div class="flex-cell c-val col-reg">${formatCompact(r.reg.val)}</div>
-                        <div class="flex-cell c-tinv">${formatCompact(r.reg.cumInv)}</div>
-                        <div class="flex-cell c-inv">${formatCompact(r.reg.yrInv)}</div>
-                        <div class="flex-cell c-pct">${roiReg}</div>
-                    </div>
-                    
-                    <div class="group-fix">
-                        <div class="flex-cell c-val col-fix">${formatCompact(r.fix.val)}</div>
-                        <div class="flex-cell c-tinv">${formatCompact(r.fix.cumInv)}</div>
-                        <div class="flex-cell c-inv">${formatCompact(r.fix.yrInv)}</div>
-                        <div class="flex-cell c-pct">${roiFix}</div>
-                    </div>
-                    
-                    <div class="group-per">
-                        <div class="flex-cell c-val col-per">${formatCompact(r.per.val)}</div>
-                        <div class="flex-cell c-tinv">${formatCompact(r.per.cumInv)}</div>
-                        <div class="flex-cell c-inv">${formatCompact(r.per.yrInv)}</div>
-                        <div class="flex-cell c-pct">${roiPer}</div>
-                    </div>
-
-                    <div class="group-lum">
-                        <div class="flex-cell c-val col-lum">${formatCompact(r.lum.val)}</div>
-                        <div class="flex-cell c-inv">${formatCompact(r.lum.cumInv)}</div>
-                        <div class="flex-cell c-pct">${roiLum}</div>
-                    </div>
-                </div>`;
-            });
-            tableBody.innerHTML = html;
-        }
-
-        function updateCard(type, val, inv, goalYr, gain, years) {
-            const el = (id) => document.getElementById(`summary-${id}-${type}`);
-            const ret = val - inv;
             
-            el('value').textContent = formatCurrency(val);
-            el('invest').textContent = formatCompact(inv);
-            el('returns').textContent = formatCompact(ret);
-            el('cagr').textContent = calcCAGR(inv, val, years).toFixed(2) + '%';
-            
-            if (el('multiplier')) el('multiplier').textContent = (inv > 0 ? (val / inv).toFixed(1) : 0) + 'x';
-            if (el('roi')) el('roi').textContent = (inv > 0 ? ((ret / inv) * 100).toFixed(0) : 0) + '%';
-            
-            const goalEl = el('goal');
-            if (goalYr) {
-                goalEl.textContent = `Year ${goalYr}`;
-                goalEl.className = 'metric-value met-year';
+            if (finalNews.length === 0) {
+                html = '<div style="text-align:center; padding: 20px; color: var(--tertiary); font-size: 0.8rem;">No headlines available right now.</div>';
             } else {
-                goalEl.textContent = 'Not Met';
-                goalEl.className = 'metric-value missed-year';
+                finalNews.forEach(item => {
+                    const flag = item.type === 'global' ? '🌎' : '🇮🇳';
+                    html += `
+                    <a href="${item.link}" target="_blank" class="news-item">
+                        <span class="news-headline">${flag} ${item.title}</span>
+                    </a>`;
+                });
             }
-
-            if ((type === 'fixed' || type === 'percent')) {
-                 const gainEl = document.getElementById(`summary-gain-${type}`);
-                 if (gainEl) gainEl.textContent = '(+' + formatCompact(gain) + ')';
-            }
+            
+            document.getElementById('unified-news-body').innerHTML = html;
+        } catch(e) {
+            console.error("News fetch error", e);
         }
+    }
 
-        // --- Utils ---
-        const formatCurrency = (num) => new Intl.NumberFormat('en-IN', {
-            style: 'currency', currency: 'INR', maximumFractionDigits: 0
-        }).format(num);
+    // --- Yahoo ---
+    async function fetchYahooData(symbols) {
+      const results = {};
+      const fetchOne = async (sym) => {
+        try {
+          const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
+          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&timestamp=${new Date().getTime()}`;
+          const res = await fetch(proxyUrl);
+          const wrapper = await res.json();
+          const data = JSON.parse(wrapper.contents);
+          if(!data.chart || !data.chart.result) return null;
+          const meta = data.chart.result[0].meta;
+          return { price: meta.regularMarketPrice, chg: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100 };
+        } catch(e) { return null; }
+      };
+      
+      const promises = symbols.map(s => fetchOne(s).then(res => ({symbol: s, data: res})));
+      const outcomes = await Promise.all(promises);
+      outcomes.forEach(o => { if(o.data) results[o.symbol] = o.data; });
+      return results;
+    }
 
-        const formatCompact = (num) => {
-            if (num >= 10000000) return (num / 10000000).toFixed(2) + 'Cr';
-            if (num >= 100000) return (num / 100000).toFixed(2) + 'L';
-            if (num >= 1000) return (num/1000).toFixed(1) + 'k';
-            return num.toFixed(0);
-        };
-        
-        const calcCAGR = (beg, end, yrs) => {
-            if (beg <= 0 || end <= 0 || yrs <= 0) return 0;
-            return (Math.pow((end / beg), (1 / yrs)) - 1) * 100;
-        };
+    function updateUI(pId, cId, val, chg, pre, suffix='%', priceSuffix = false) {
+      const elPrice = document.getElementById(pId);
+      const elChg = document.getElementById(cId);
+      if(elPrice && elChg) {
+        const formattedPrice = val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        elPrice.innerText = pre + formattedPrice + (priceSuffix ? '%' : '');
+        elChg.innerText = (chg>=0?"+":"") + chg.toFixed(2) + suffix;
+        elChg.className = "u-change " + (chg>=0 ? "text-green" : "text-red");
+      }
+    }
 
-        const updateChips = (rate) => chips.forEach(c => c.classList.toggle('active', parseFloat(c.dataset.rate) === rate));
+    function timerLoop() {
+      if (timeLeft <= 0) { updateMarketData(); } 
+      else { 
+         const el = document.getElementById('countdown');
+         if(el) el.innerText = "Auto-refresh: " + timeLeft + "s"; 
+         timeLeft--; 
+      }
+    }
 
-        // --- Events ---
-        form.addEventListener('input', calculate);
-        resetBtn.addEventListener('click', () => {
-            inputs.initialSip.value = DEFAULTS.initialSip;
-            inputs.lumpsumAmount.value = DEFAULTS.lumpsumAmount;
-            inputs.duration.value = DEFAULTS.duration;
-            inputs.returnRate.value = DEFAULTS.returnRate;
-            inputs.stepUpAmount.value = DEFAULTS.stepUpAmount;
-            inputs.stepUpFrequency.value = DEFAULTS.stepUpFrequency;
-            inputs.stepUpPercentage.value = DEFAULTS.stepUpPercentage;
-            inputs.goalAmount.value = DEFAULTS.goalAmount;
-            calculate();
-        });
-        chips.forEach(chip => chip.addEventListener('click', () => {
-            inputs.returnRate.value = chip.dataset.rate;
-            calculate();
-        }));
-        themeToggle.addEventListener('change', (e) => {
-            const isDark = e.target.checked;
-            document.body.classList.toggle('dark-theme', isDark);
-            localStorage.setItem('sipTheme', isDark ? 'dark' : 'light');
-        });
-
-        // Init
-        const savedTheme = localStorage.getItem('sipTheme') === 'dark';
-        document.body.classList.toggle('dark-theme', savedTheme);
-        themeToggle.checked = savedTheme;
-        calculate();
-
-    </script>
+    updateMarketData();
+    setInterval(timerLoop, 1000); 
+  </script>
 </body>
 </html>
