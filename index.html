@@ -216,6 +216,14 @@
     }
     .news-item:hover .news-headline { color: var(--accent); }
 
+    .news-time {
+      color: var(--tertiary);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+
     /* --- Responsive --- */
     @media (max-width: 1024px) {
       body { height: auto; overflow-y: auto; }
@@ -291,10 +299,10 @@
 
           <!-- Bonds & VIX -->
           <div class="asset-box">
-            <div class="asset-header"><span class="asset-title">Global Bonds</span></div>
-            <div class="asset-row"><span class="u-symbol">🇺🇸 US 30Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us30">--</span><span class="u-change" id="c-us30">--</span></div></div>
+            <div class="asset-header"><span class="asset-title">Global Bonds (10Y)</span></div>
+            <div class="asset-row"><span class="u-symbol">🇮🇳 IN 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-in10">--</span><span class="u-change" id="c-in10">--</span></div></div>
             <div class="asset-row"><span class="u-symbol">🇺🇸 US 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us10">--</span><span class="u-change" id="c-us10">--</span></div></div>
-            <div class="asset-row"><span class="u-symbol">🇺🇸 US 5Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us5">--</span><span class="u-change" id="c-us5">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇨🇳 CN 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-cn10">--</span><span class="u-change" id="c-cn10">--</span></div></div>
             <div style="height: 0.5rem;"></div>
             <div class="asset-header"><span class="asset-title">Volatility (VIX)</span></div>
             <div class="asset-row"><span class="u-symbol">🇺🇸 US VIX</span><div style="text-align:right"><span class="u-price" id="p-vix">--</span><span class="u-change" id="c-vix">--</span></div></div>
@@ -484,11 +492,11 @@
 
     // --- BONDS & VIX ---
     async function fetchBondsAndVix() {
-        const bondSyms = ["^TYX", "^TNX", "^FVX", "^VIX", "^INDIAVIX"];
+        const bondSyms = ["IN10YT=RR", "^TNX", "CN10YT=RR", "^VIX", "^INDIAVIX"];
         const data = await fetchYahooData(bondSyms);
         if(data) Object.assign(marketCache, data);
         
-        const bondMap = { "^TYX": "us30", "^TNX": "us10", "^FVX": "us5" };
+        const bondMap = { "IN10YT=RR": "in10", "^TNX": "us10", "CN10YT=RR": "cn10" };
         for (const [sym, id] of Object.entries(bondMap)) {
             const d = marketCache[sym];
             if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '', '%', true); 
@@ -634,7 +642,7 @@
 
       for (const [sym, info] of Object.entries(map)) {
           const d = marketCache[sym];
-          if(d) { updateUI(`p-${info.id}`, `c-${info.id}`, d.price, d.chg, info.curr); }
+          if(d) { updateUI(`p-${info.id}`, `c-${id}`, d.price, d.chg, info.curr); }
       }
     }
 
@@ -763,7 +771,7 @@
                     const flag = item.type === 'global' ? '🌎' : '🇮🇳';
                     html += `
                     <a href="${item.link}" target="_blank" class="news-item">
-                        <span class="news-headline">${flag} ${item.title}</span>
+                        <span class="news-headline">${flag} ${item.title}<span class="news-time">&nbsp;• ${getTimeAgo(item.pubDate)}</span></span>
                     </a>`;
                 });
             }
@@ -774,9 +782,10 @@
         }
     }
 
-    // --- Yahoo ---
+    // --- Yahoo Finance Robust Fetching ---
     async function fetchYahooData(symbols) {
       const results = {};
+      
       const fetchOne = async (sym) => {
         try {
           const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
@@ -784,15 +793,27 @@
           const res = await fetch(proxyUrl);
           const wrapper = await res.json();
           const data = JSON.parse(wrapper.contents);
-          if(!data.chart || !data.chart.result) return null;
+          
+          if (!data.chart || !data.chart.result) return null;
+          
           const meta = data.chart.result[0].meta;
-          return { price: meta.regularMarketPrice, chg: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100 };
-        } catch(e) { return null; }
+          return { 
+            price: meta.regularMarketPrice, 
+            chg: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100 
+          };
+        } catch(e) {
+          return null;
+        }
       };
       
+      // Concurrently fetch all individual symbols to prevent batch proxy failures
       const promises = symbols.map(s => fetchOne(s).then(res => ({symbol: s, data: res})));
       const outcomes = await Promise.all(promises);
-      outcomes.forEach(o => { if(o.data) results[o.symbol] = o.data; });
+      
+      outcomes.forEach(o => { 
+        if (o.data) results[o.symbol] = o.data; 
+      });
+      
       return results;
     }
 
