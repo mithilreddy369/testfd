@@ -129,7 +129,6 @@
     /* --- Left Panel Grid Rows --- */
     .asset-grid-custom, .market-split, .row-3-split {
       display: grid;
-      /* Using 2.6fr for the big boxes so 3 internal columns fit perfectly alongside the 3 single columns */
       grid-template-columns: 1fr 1fr 1fr 2.6fr; 
       gap: 0.5vw; 
       flex: 1; 
@@ -186,7 +185,9 @@
     .text-red { color: var(--alpha-red); }
 
     /* --- News Sidebar Styling --- */
-    .news-container { display: flex; flex-direction: column; overflow: hidden; height: 100%; padding-right: 2px; }
+    .news-container { 
+      display: flex; flex-direction: column; overflow: hidden; height: 100%; padding-right: 2px; 
+    }
     
     .news-item {
       padding: 0.4rem 0.2rem;
@@ -208,7 +209,6 @@
       line-height: 1.35;
       flex: 1;
       transition: color 0.2s;
-      /* Allow up to 3 lines, then truncate with ... */
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
@@ -299,17 +299,17 @@
 
           <!-- Bonds & VIX -->
           <div class="asset-box">
-            <div class="asset-header"><span class="asset-title">Global Bonds (10Y)</span></div>
-            <div class="asset-row"><span class="u-symbol">🇮🇳 IN 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-in10">--</span><span class="u-change" id="c-in10">--</span></div></div>
+            <div class="asset-header"><span class="asset-title">US Treasury Yields</span></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 US 5Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us5">--</span><span class="u-change" id="c-us5">--</span></div></div>
             <div class="asset-row"><span class="u-symbol">🇺🇸 US 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us10">--</span><span class="u-change" id="c-us10">--</span></div></div>
-            <div class="asset-row"><span class="u-symbol">🇨🇳 CN 10Y Yld</span><div style="text-align:right"><span class="u-price" id="p-cn10">--</span><span class="u-change" id="c-cn10">--</span></div></div>
+            <div class="asset-row"><span class="u-symbol">🇺🇸 US 30Y Yld</span><div style="text-align:right"><span class="u-price" id="p-us30">--</span><span class="u-change" id="c-us30">--</span></div></div>
             <div style="height: 0.5rem;"></div>
             <div class="asset-header"><span class="asset-title">Volatility (VIX)</span></div>
             <div class="asset-row"><span class="u-symbol">🇺🇸 US VIX</span><div style="text-align:right"><span class="u-price" id="p-vix">--</span><span class="u-change" id="c-vix">--</span></div></div>
             <div class="asset-row"><span class="u-symbol">🇮🇳 Nifty VIX</span><div style="text-align:right"><span class="u-price" id="p-invix">--</span><span class="u-change" id="c-invix">--</span></div></div>
           </div>
 
-          <!-- Crypto (Restored to 3 Columns) -->
+          <!-- Crypto -->
           <div class="asset-box">
             <div class="asset-header"><span class="asset-title">Digital Assets</span></div>
             <div class="crypto-split-container">
@@ -335,7 +335,7 @@
             <div id="nse-indices-body-2" class="col-vertical"></div>
           </div>
           
-          <!-- Global Stocks (Restored to 3 Columns) -->
+          <!-- Global Stocks -->
           <div class="asset-box">
             <div class="asset-header"><span class="asset-title">Global Stocks (Mega Cap)</span></div>
             <div class="global-stocks-grid">
@@ -361,7 +361,7 @@
             <div id="sector-3-body" class="col-vertical"></div>
           </div>
 
-          <!-- Stocks Watch (Restored to 3 Columns) -->
+          <!-- Stocks Watch -->
           <div class="asset-box">
             <div class="asset-header"><span class="asset-title">Stocks Watch</span></div>
             <div class="stocks-grid-3col">
@@ -379,12 +379,12 @@
         <div class="asset-box">
           <div class="asset-header">
             <span class="asset-title">News Headlines</span>
-            <span style="font-size:0.65rem; color:var(--alpha-green); font-weight:600; letter-spacing:1px; display:flex; align-items:center; gap:4px;">
+            <span style="font-size:0.65rem; color:var(--alpha-green); font-weight:600; letter-spacing:1px; display:flex; align-items:center; gap:4px;" title="Cycles providers every 60s">
               <span class="live-dot" style="width:5px; height:5px;"></span> LIVE
             </span>
           </div>
           <div class="news-container" id="unified-news-body">
-              <div style="text-align:center; padding: 20px; color: var(--tertiary); font-size: 0.8rem;">Aggregating live updates...</div>
+              <div style="text-align:center; padding: 20px; color: var(--tertiary); font-size: 0.8rem;">Initializing live headlines...</div>
           </div>
         </div>
       </div>
@@ -405,7 +405,6 @@
     }
 
     // --- CONFIG: Stock Lists ---
-    // Restored 21 Stocks to fill 3 Columns
     const STOCK_LIST_MAIN = [
       { sym: "RELIANCE.NS", name: "🇮🇳 Reliance" }, { sym: "BHARTIARTL.NS", name: "🇮🇳 Airtel" },
       { sym: "TATAELXSI.NS", name: "🇮🇳 Tata Elxsi" }, { sym: "JWL.NS", name: "🇮🇳 Jupiter Wag" },
@@ -449,7 +448,10 @@
       fetchRealCommodities();
       fetchRealIndices();
       fetchStocks();
-      fetchNewsData(); 
+      
+      // Fetches exactly ONE news provider every 60s. 
+      // With 10 providers, each provider is hit exactly once every 10 minutes.
+      fetchOneNewsSource(); 
     }
 
     // --- STOCKS FETCHER ---
@@ -492,11 +494,11 @@
 
     // --- BONDS & VIX ---
     async function fetchBondsAndVix() {
-        const bondSyms = ["IN10YT=RR", "^TNX", "CN10YT=RR", "^VIX", "^INDIAVIX"];
-        const data = await fetchYahooData(bondSyms);
-        if(data) Object.assign(marketCache, data);
+        const yahooSyms = ["^FVX", "^TNX", "^TYX", "^VIX", "^INDIAVIX"];
+        const yahooData = await fetchYahooData(yahooSyms);
+        if(yahooData) Object.assign(marketCache, yahooData);
         
-        const bondMap = { "IN10YT=RR": "in10", "^TNX": "us10", "CN10YT=RR": "cn10" };
+        const bondMap = { "^FVX": "us5", "^TNX": "us10", "^TYX": "us30" };
         for (const [sym, id] of Object.entries(bondMap)) {
             const d = marketCache[sym];
             if(d) updateUI(`p-${id}`, `c-${id}`, d.price, d.chg, '', '%', true); 
@@ -577,11 +579,10 @@
     }
 
     // --- CRYPTO MAP & RENDER ---
-    // Enforcing explicitly where MYST and DPR go (Column 2) replacing Shib/Ton
     const cryptoLayout = [
-      ['bitcoin','ethereum','binancecoin','solana','ripple','dogecoin','cardano'], // Col 1
-      ['avalanche-2','polkadot','chainlink','litecoin','tron','deeper-network','mysterium'], // Col 2
-      ['bitcoin-cash','uniswap','near','aptos','arbitrum','stellar','cosmos'] // Col 3
+      ['bitcoin','ethereum','binancecoin','solana','ripple','dogecoin','cardano'],
+      ['avalanche-2','polkadot','chainlink','litecoin','tron','deeper-network','mysterium'],
+      ['bitcoin-cash','uniswap','near','aptos','arbitrum','stellar','cosmos'] 
     ];
 
     async function fetchCrypto() {
@@ -628,21 +629,20 @@
         }
     }
 
-    // --- Forex/Cmdty ---
     async function fetchForex() {
-      const forexSyms = ["INR=X", "EURUSD=X", "GBPINR=X", "JPYINR=X", "AUDUSD=X", "DX-Y.NYB", "CNY=X"];
+      const forexSyms = ["USDINR=X", "EURUSD=X", "GBPINR=X", "JPYINR=X", "AUDUSD=X", "DX-Y.NYB", "USDCNY=X"];
       const data = await fetchYahooData(forexSyms);
       if(data) Object.assign(marketCache, data);
 
       const map = {
-          "INR=X": { id: "usdinr", curr: "₹" }, "EURUSD=X": { id: "eurusd", curr: "$" },
+          "USDINR=X": { id: "usdinr", curr: "₹" }, "EURUSD=X": { id: "eurusd", curr: "$" },
           "GBPINR=X": { id: "gbpinr", curr: "₹" }, "JPYINR=X": { id: "jpyinr", curr: "₹" },
-          "AUDUSD=X": { id: "audusd", curr: "$" }, "DX-Y.NYB": { id: "dxy", curr: ""  }, "CNY=X": { id: "usdcny", curr: "¥" }
+          "AUDUSD=X": { id: "audusd", curr: "$" }, "DX-Y.NYB": { id: "dxy", curr: ""  }, "USDCNY=X": { id: "usdcny", curr: "¥" }
       };
 
       for (const [sym, info] of Object.entries(map)) {
           const d = marketCache[sym];
-          if(d) { updateUI(`p-${info.id}`, `c-${id}`, d.price, d.chg, info.curr); }
+          if(d) { updateUI(`p-${info.id}`, `c-${info.id}`, d.price, d.chg, info.curr); }
       }
     }
 
@@ -658,7 +658,28 @@
       }
     }
 
-    // --- FULL COLUMN UNIFIED NEWS ENGINE ---
+    // ==========================================
+    // 10-MINUTE ROUND ROBIN NEWS ENGINE
+    // ==========================================
+    const NEWS_SOURCES = [
+      // 7 Indian Providers
+      { url: 'https://www.moneycontrol.com/rss/economy.xml', type: 'india', name: 'Moneycontrol' },
+      { url: 'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms', type: 'india', name: 'Economic Times' },
+      { url: 'https://www.business-standard.com/rss/economy-policy-102.rss', type: 'india', name: 'Business Standard' },
+      { url: 'https://www.livemint.com/rss/markets', type: 'india', name: 'LiveMint' },
+      { url: 'https://www.financialexpress.com/feed/', type: 'india', name: 'Financial Express' },
+      { url: 'https://www.thehindubusinessline.com/portfolio/feeder/default.rss', type: 'india', name: 'Hindu Business Line' },
+      { url: 'https://news.google.com/rss/search?q=source:ndtv+profit+AND+(economy+OR+markets)&hl=en-IN&gl=IN&ceid=IN:en', type: 'india', name: 'NDTV Profit' },
+      // 3 Global Providers
+      { url: 'https://feeds.bbci.co.uk/news/business/rss.xml', type: 'global', name: 'BBC Business' },
+      { url: 'https://news.google.com/rss/search?q=source:reuters+AND+(economy+OR+world+OR+markets)&hl=en-US&gl=US&ceid=US:en', type: 'global', name: 'Reuters' },
+      { url: 'https://news.google.com/rss/search?q=source:bloomberg+AND+(economy+OR+world+OR+markets)&hl=en-US&gl=US&ceid=US:en', type: 'global', name: 'Bloomberg' }
+    ];
+
+    let globalNewsState = [];      // Strictly holds max 30 items
+    let currentNewsSourceIndex = 0; // Tracks which site to query next
+
+    // Core utilities for parsing and deduping
     const analyzeImpact = (title) => {
       const text = title.toLowerCase();
       const noiseRegex = /\b(target price|buy rating|sell rating|q[1-4] results|q[1-4] earnings|dividend|ipo|stock to watch|shares rise|shares fall|profit jumps|profit falls|sensex surges|nifty dips)\b|\b(up|down|rises|falls|jumps|plunges|surges|dips) \d+%/i;
@@ -698,88 +719,114 @@
       return `${Math.floor(diffInHours / 24)}d ago`;
     };
 
-    async function fetchNewsData() {
-        const globalSources = [
-            'https://feeds.bbci.co.uk/news/business/rss.xml',
-            'https://news.google.com/rss/search?q=source:reuters+AND+(economy+OR+world+OR+markets+OR+fed+OR+bank)&hl=en-US&gl=US&ceid=US:en',
-            'https://news.google.com/rss/search?q=source:bloomberg+AND+(economy+OR+world+OR+markets+OR+macro)&hl=en-US&gl=US&ceid=US:en'
-        ];
-        const indiaSources = [
-            'https://economictimes.indiatimes.com/news/economy/rssfeeds/1373380680.cms',
-            'https://www.business-standard.com/rss/economy-policy-102.rss',
-            'https://www.moneycontrol.com/rss/economy.xml'
-        ];
-
-        const fetchFeeds = async (sources, type) => {
-            const allItems = [];
-            const fetchPromises = sources.map(async (url) => {
-                try {
-                    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=10`;
-                    const response = await fetch(proxyUrl);
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.status === 'ok') return data.items;
-                    } else {
-                        const fallbackResponse = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`);
-                        if (fallbackResponse.ok) {
-                            const textData = await fallbackResponse.text();
-                            const xml = new DOMParser().parseFromString(textData, "text/xml");
-                            return Array.from(xml.querySelectorAll("item")).map(item => ({
-                                title: item.querySelector("title")?.textContent || '',
-                                link: item.querySelector("link")?.textContent || '#',
-                                pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString()
-                            }));
-                        }
-                    }
-                } catch(e) { return []; }
-                return [];
-            });
-
-            const results = await Promise.all(fetchPromises);
-            results.forEach(items => allItems.push(...(items || [])));
-
-            return allItems.map(item => {
-                const cleanedTitle = cleanTitle(item.title);
-                return {
-                    title: cleanedTitle, link: item.link, pubDate: item.pubDate,
-                    impactScore: analyzeImpact(cleanedTitle), type: type
-                };
-            }).filter(item => item.impactScore >= 0);
-        };
-
+    // Safely fetches a single RSS feed via proxy
+    async function fetchFeed(url, type) {
         try {
-            const globalNews = await fetchFeeds(globalSources, 'global');
-            const indiaNews = await fetchFeeds(indiaSources, 'india');
+            const cacheBustedUrl = url + (url.includes('?') ? '&' : '?') + '_cb=' + new Date().getTime();
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(cacheBustedUrl)}&count=10`;
+            const response = await fetch(proxyUrl);
             
-            // Combine and Sort
-            const combinedNews = [...globalNews, ...indiaNews].sort((a, b) => parseDate(b.pubDate) - parseDate(a.pubDate));
-
-            // Deduplicate across unified list
-            const uniqueNews = [];
-            for (const item of combinedNews) {
-                if (!uniqueNews.some(u => isDuplicate(u.title, item.title))) uniqueNews.push(item);
-            }
-
-            // Render Full Length List (showing 50 items for full height without scroll)
-            const finalNews = uniqueNews.slice(0, 50);
-            let html = '';
-            
-            if (finalNews.length === 0) {
-                html = '<div style="text-align:center; padding: 20px; color: var(--tertiary); font-size: 0.8rem;">No headlines available right now.</div>';
-            } else {
-                finalNews.forEach(item => {
-                    const flag = item.type === 'global' ? '🌎' : '🇮🇳';
-                    html += `
-                    <a href="${item.link}" target="_blank" class="news-item">
-                        <span class="news-headline">${flag} ${item.title}<span class="news-time">&nbsp;• ${getTimeAgo(item.pubDate)}</span></span>
-                    </a>`;
-                });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === 'ok') {
+                    return data.items.map(item => ({
+                        title: cleanTitle(item.title), link: item.link, pubDate: item.pubDate, type: type, impactScore: analyzeImpact(cleanTitle(item.title))
+                    })).filter(item => item.impactScore >= 0);
+                }
             }
             
-            document.getElementById('unified-news-body').innerHTML = html;
-        } catch(e) {
-            console.error("News fetch error", e);
+            // Fallback Proxy
+            const fallbackResponse = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(cacheBustedUrl)}`);
+            if (fallbackResponse.ok) {
+                const textData = await fallbackResponse.text();
+                const xml = new DOMParser().parseFromString(textData, "text/xml");
+                return Array.from(xml.querySelectorAll("item")).map(item => ({
+                    title: cleanTitle(item.querySelector("title")?.textContent || ''),
+                    link: item.querySelector("link")?.textContent || '#',
+                    pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString(),
+                    type: type,
+                    impactScore: analyzeImpact(cleanTitle(item.querySelector("title")?.textContent || ''))
+                })).filter(item => item.impactScore >= 0);
+            }
+        } catch(e) { /* ignore to continue loop smoothly */ }
+        return [];
+    }
+
+    // UI Renderer for News List
+    function renderNews() {
+        let html = '';
+        if (globalNewsState.length === 0) {
+            html = '<div style="text-align:center; padding: 20px; color: var(--tertiary); font-size: 0.8rem;">No headlines available right now.</div>';
+        } else {
+            globalNewsState.forEach(item => {
+                const flag = item.type === 'global' ? '🌎' : '🇮🇳';
+                html += `
+                <a href="${item.link}" target="_blank" class="news-item">
+                    <span class="news-headline">${flag} ${item.title}<span class="news-time">&nbsp;• ${getTimeAgo(item.pubDate)}</span></span>
+                </a>`;
+            });
         }
+        document.getElementById('unified-news-body').innerHTML = html;
+    }
+
+    // Runs once every 60s (Triggered by updateMarketData): Grabs 1 site, pushes max 3 new items, trims list to 30
+    async function fetchOneNewsSource() {
+        const source = NEWS_SOURCES[currentNewsSourceIndex];
+        currentNewsSourceIndex = (currentNewsSourceIndex + 1) % NEWS_SOURCES.length; // Cycle index
+        
+        const newItems = await fetchFeed(source.url, source.type);
+        newItems.sort((a, b) => parseDate(b.pubDate) - parseDate(a.pubDate));
+        
+        let addedCount = 0;
+        let newlyAdded = [];
+
+        // Pick up to 3 non-duplicate items from the provider
+        for (const item of newItems) {
+            if (addedCount >= 3) break; // Maximum 3 limit per provider
+            
+            const isDup = globalNewsState.some(existing => isDuplicate(existing.title, item.title));
+            if (!isDup) {
+                newlyAdded.push(item);
+                addedCount++;
+            }
+        }
+
+        if (newlyAdded.length > 0) {
+            // Push new items to the top (FIFO)
+            globalNewsState.unshift(...newlyAdded);
+            
+            // Remove from the bottom if it exceeds exactly 30 items
+            if (globalNewsState.length > 30) {
+                globalNewsState = globalNewsState.slice(0, 30);
+            }
+        }
+        
+        // Always render to update the "X mins ago" timestamps
+        renderNews();
+    }
+
+    // Initial Population: Runs ONLY ONCE on page load
+    async function initNews() {
+        const fetchPromises = NEWS_SOURCES.map(source => fetchFeed(source.url, source.type));
+        const results = await Promise.all(fetchPromises);
+        
+        let allItems = [];
+        results.forEach(items => {
+            // Take 3 from each provider
+            allItems.push(...items.slice(0, 3));
+        });
+
+        allItems.sort((a, b) => parseDate(b.pubDate) - parseDate(a.pubDate));
+
+        // Deduplicate and fill list up to max 30
+        for (const item of allItems) {
+            if (globalNewsState.length >= 30) break;
+            if (!globalNewsState.some(existing => isDuplicate(existing.title, item.title))) {
+                globalNewsState.push(item);
+            }
+        }
+        
+        renderNews();
     }
 
     // --- Yahoo Finance Robust Fetching ---
@@ -828,15 +875,20 @@
       }
     }
 
+    // Core Timing Loop
     function timerLoop() {
-      if (timeLeft <= 0) { updateMarketData(); } 
-      else { 
+      // Market Data & News cycle Tick (Runs every 60s)
+      if (timeLeft <= 0) { 
+          updateMarketData(); 
+      } else { 
          const el = document.getElementById('countdown');
          if(el) el.innerText = "Auto-refresh: " + timeLeft + "s"; 
          timeLeft--; 
       }
     }
 
+    // Startup Sequence
+    initNews();
     updateMarketData();
     setInterval(timerLoop, 1000); 
   </script>
