@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Global Market Pulse</title>
   <meta name="description" content="Real-time dashboard for Global Indices, NSE Sectors, Commodities, Forex, Stocks, and News." />
+  
+  <!-- Trend-Up Arrow Favicon (matches the header SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFC72C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 7 L13.5 15.5 L8.5 10.5 L2 17' /%3E%3Cpath d='M16 7 L22 7 L22 13' /%3E%3C/svg%3E">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -398,7 +401,10 @@
   <script>
     const REFRESH_INTERVAL = 60;
     let timeLeft = REFRESH_INTERVAL;
+    
+    // --- CACHES ---
     const marketCache = {};
+    const historyCache = {}; // Safely stores the 1m, 3m, 1y historical baseline prices
     const prevPrices = {}; 
 
     // --- REAL-TIME INDIAN CLOCK ---
@@ -446,7 +452,6 @@
       { name: "⚙️ Aluminum", sym: "ALI=F", curr: "$" }
     ];
 
-    // Restored 5Y yield to top of the list
     const YIELDS_LIST = [
       { name: "🇺🇸 US 5Y Yld", sym: "^FVX", curr: "", sfx: "%" },
       { name: "🇺🇸 US 10Y Yld", sym: "^TNX", curr: "", sfx: "%" },
@@ -479,7 +484,6 @@
       { name: "🛒 Nifty FMCG", sym: "^CNXFMCG" }
     ];
 
-    // Global Stocks (9 US, 5 Global) - Replaced NVO with LLY
     const GS_1 = [
       { name: "🇺🇸 Apple", sym: "AAPL", curr: "$" }, { name: "🇺🇸 Microsoft", sym: "MSFT", curr: "$" }, 
       { name: "🇺🇸 Nvidia", sym: "NVDA", curr: "$" }, { name: "🇺🇸 Google", sym: "GOOGL", curr: "$" }, 
@@ -575,7 +579,9 @@
       return { text: "EXTREME FEAR 🔴", color: "var(--alpha-red)" };
     }
 
-    // Bulletproof Yahoo Data Fetcher with strict 1D change anchor
+    // ==========================================
+    // THE FINAL PERFECTED DATA FETCHER 
+    // ==========================================
     async function fetchAllYahooData() {
         const allSyms = [
             ...FOREX_LIST, ...COMMODITIES_LIST, ...YIELDS_LIST, ...VIX_LIST, 
@@ -628,47 +634,66 @@
 
     async function fetchYahooData(symbols) {
       const results = {};
+      
       const fetchOne = async (sym) => {
         try {
-          const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1y`;
-          const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&timestamp=${new Date().getTime()}`;
-          const res = await fetch(proxyUrl);
-          const wrapper = await res.json();
-          const data = JSON.parse(wrapper.contents);
+          // --- 1. ALWAYS FETCH 1D DATA --- 
+          // (This guarantees the exact same flawless 1-day change calculation as index 21)
+          const url1D = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
+          const proxyUrl1D = `https://api.allorigins.win/get?url=${encodeURIComponent(url1D)}&timestamp=${new Date().getTime()}`;
+          const res1D = await fetch(proxyUrl1D);
+          const wrap1D = await res1D.json();
+          const data1D = JSON.parse(wrap1D.contents);
           
-          if (!data.chart || !data.chart.result) return null;
+          if (!data1D.chart || !data1D.chart.result) return null;
           
-          const meta = data.chart.result[0].meta;
-          const indicators = data.chart.result[0].indicators;
-          const closes = indicators.quote && indicators.quote[0] ? indicators.quote[0].close : null;
-          const currentPrice = meta.regularMarketPrice;
+          const meta1D = data1D.chart.result[0].meta;
+          const currentPrice = meta1D.regularMarketPrice;
           
-          let ret1m = null, ret3m = null, ret1y = null;
-          let prevClose = meta.regularMarketPreviousClose || meta.previousClose;
-          
-          if (closes && closes.length > 0) {
-              const validCloses = closes.filter(c => c !== null);
-              const N = validCloses.length;
-              if (N > 0) {
-                  // Monthly/Yearly Returns
-                  const old1m = validCloses[Math.max(0, N - 21)];
-                  const old3m = validCloses[Math.max(0, N - 63)];
-                  const old1y = validCloses[0];
-                  
-                  if(old1m) ret1m = ((currentPrice - old1m)/old1m)*100;
-                  if(old3m) ret3m = ((currentPrice - old3m)/old3m)*100;
-                  if(old1y) ret1y = ((currentPrice - old1y)/old1y)*100;
+          // Index 21 math using exclusively range=1d endpoint data
+          const prevClose1D = meta1D.chartPreviousClose || meta1D.previousClose;
+          let chg1D = 0;
+          if (prevClose1D && currentPrice) {
+              chg1D = ((currentPrice - prevClose1D) / prevClose1D) * 100;
+          }
 
-                  // Fallback for 1-day change if metadata is completely missing
-                  if (!prevClose && N > 1) {
-                      prevClose = validCloses[N - 2];
+          // --- 2. FETCH 1Y DATA (ONLY ONCE) ---
+          // (Caches history so it doesn't slow down subsequent refreshes)
+          if (!historyCache[sym]) {
+              const url1Y = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1y`;
+              const proxyUrl1Y = `https://api.allorigins.win/get?url=${encodeURIComponent(url1Y)}&timestamp=${new Date().getTime()}`;
+              const res1Y = await fetch(proxyUrl1Y);
+              const wrap1Y = await res1Y.json();
+              const data1Y = JSON.parse(wrap1Y.contents);
+              
+              if (data1Y.chart && data1Y.chart.result) {
+                  const indicators = data1Y.chart.result[0].indicators;
+                  if (indicators && indicators.quote && indicators.quote[0] && indicators.quote[0].close) {
+                      const closes = indicators.quote[0].close.filter(c => c !== null);
+                      const N = closes.length;
+                      if (N > 0) {
+                          // Cache historical baseline prices
+                          historyCache[sym] = {
+                              p1m: closes[Math.max(0, N - 21)],
+                              p3m: closes[Math.max(0, N - 63)],
+                              p1y: closes[0]
+                          };
+                      }
                   }
               }
-          } 
+          }
 
-          const chg1D = prevClose ? ((currentPrice - prevClose) / prevClose) * 100 : 0;
-          
+          // --- 3. CALCULATE HISTORICAL RETURNS ---
+          let ret1m = null, ret3m = null, ret1y = null;
+          if (historyCache[sym]) {
+              const hc = historyCache[sym];
+              if (hc.p1m) ret1m = ((currentPrice - hc.p1m) / hc.p1m) * 100;
+              if (hc.p3m) ret3m = ((currentPrice - hc.p3m) / hc.p3m) * 100;
+              if (hc.p1y) ret1y = ((currentPrice - hc.p1y) / hc.p1y) * 100;
+          }
+
           return { price: currentPrice, chg: chg1D, ret1m, ret3m, ret1y };
+          
         } catch(e) {
           return null;
         }
